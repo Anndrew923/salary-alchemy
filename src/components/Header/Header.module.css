@@ -1,0 +1,78 @@
+.header {
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  border-bottom: 2px solid var(--border-gold);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-glow);
+  position: relative;
+}
+
+.header.diamondMode {
+  border-bottom-color: var(--border-diamond);
+  box-shadow: var(--shadow-diamond);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-gold);
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+.diamondMode .title {
+  color: var(--text-diamond);
+}
+
+.level {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.levelLabel {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--text-gold);
+}
+
+.diamondMode .levelLabel {
+  border-color: var(--text-diamond);
+  color: var(--text-diamond);
+}
+
+.localeButton {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--text-gold);
+  color: var(--text-gold);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.localeButton:hover {
+  background-color: var(--text-gold);
+  color: var(--bg-primary);
+}
+
+.diamondMode .localeButton {
+  border-color: var(--text-diamond);
+  color: var(--text-diamond);
+}
+
+.diamondMode .localeButton:hover {
+  background-color: var(--text-diamond);
+  color: var(--bg-primary);
+}

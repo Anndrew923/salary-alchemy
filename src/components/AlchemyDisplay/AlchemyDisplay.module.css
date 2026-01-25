@@ -1,0 +1,69 @@
+.container {
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-glow);
+}
+
+.currentSection {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.amount {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--text-gold);
+  margin-bottom: var(--spacing-sm);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.rate {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+  margin: var(--spacing-md) 0;
+}
+
+.totalSection {
+  text-align: center;
+}
+
+.totalAmount {
+  font-size: 1.8rem;
+  color: var(--text-gold);
+  opacity: 0.8;
+}
+
+.timeDisplay {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--bg-tertiary);
+  text-align: center;
+}
+
+.timeLabel {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.time {
+  font-size: 1.2rem;
+  color: var(--text-gold);
+  font-weight: bold;
+}
