@@ -1,4 +1,13 @@
 {
+  "privacy": {
+    "title": "Alchemist Confidentiality Agreement",
+    "subtitle": "ALCHEMIST CONFIDENTIALITY AGREEMENT",
+    "sectionTitle": "Privacy Commitment",
+    "content": "We use Firebase anonymous authentication technology. Data is encrypted, and the system only records \"nickname\" and \"total earnings\". We never collect real names or geographic locations.",
+    "funnyText": "Don't worry, even if you reach \"Chief Toilet Officer\", your boss will only think you're working hard. On this leaderboard, you're just a legendary code.",
+    "button": "I Agree",
+    "shieldTooltip": "Anonymous Protection Active: Data encrypted and synced to cloud laboratory."
+  },
   "levelup": {
     "1": "The starting point. Right now, you are just a disposable asset.",
     "2": "First step to freedom. You've mastered the art of hiding behind the porcelain throne.",

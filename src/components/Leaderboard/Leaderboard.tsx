@@ -4,6 +4,9 @@ import { db, isFirebaseEnabled } from '../../config/firebase';
 import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { RPG_LEVELS_TW, RPG_LEVELS_EN, LEVEL_TITLES } from '../../utils/constants';
+import PrivacyNoticeModal from '../PrivacyNoticeModal/PrivacyNoticeModal';
+import zhTW from '../../locales/zh-TW.json';
+import enUS from '../../locales/en-US.json';
 import styles from './Leaderboard.module.css';
 
 interface LeaderboardEntry {
@@ -16,11 +19,23 @@ interface LeaderboardEntry {
 }
 
 const Leaderboard = () => {
-  const { locale, uid: currentUid } = useUserStore();
+  const { locale, uid: currentUid, hasSeenPrivacyNotice } = useUserStore();
   const { totalEarned: currentTotalEarned } = useAlchemyStore();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showShieldTooltip, setShowShieldTooltip] = useState(false);
+
+  const translations = locale === 'TW' ? zhTW : enUS;
+  const privacy = translations.privacy;
+
+  // 檢查是否需要顯示隱私協議
+  useEffect(() => {
+    if (!hasSeenPrivacyNotice) {
+      setShowPrivacyModal(true);
+    }
+  }, [hasSeenPrivacyNotice]);
 
   // 根據 totalEarned 計算等級和 tier
   const calculateLevel = useMemo(() => {
@@ -149,7 +164,31 @@ const Leaderboard = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>🌍 Global Leaderboard</h1>
+      {showPrivacyModal && (
+        <PrivacyNoticeModal 
+          onAgree={() => setShowPrivacyModal(false)}
+        />
+      )}
+      
+      <div className={styles.header}>
+        <h1 className={styles.title}>🌍 Global Leaderboard</h1>
+        
+        {/* 匿名保護盾 */}
+        <div 
+          className={styles.shieldContainer}
+          onMouseEnter={() => setShowShieldTooltip(true)}
+          onMouseLeave={() => setShowShieldTooltip(false)}
+          onTouchStart={() => setShowShieldTooltip(true)}
+          onTouchEnd={() => setTimeout(() => setShowShieldTooltip(false), 2000)}
+        >
+          <div className={styles.shieldIcon}>🛡️</div>
+          {showShieldTooltip && (
+            <div className={styles.shieldTooltip}>
+              {privacy.shieldTooltip}
+            </div>
+          )}
+        </div>
+      </div>
       
       {/* 當前用戶資訊 */}
       {currentUid && (

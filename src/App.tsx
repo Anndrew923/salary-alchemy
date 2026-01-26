@@ -8,12 +8,20 @@ import { useUserStore } from './stores/userStore';
 function App() {
   const { uid, setUid } = useUserStore();
 
-  // 應用啟動時，執行無感登入（僅在 Firebase 啟用時）
+  // 應用啟動時，執行無感登入（僅在 Firebase 啟用時，且已看過隱私協議）
   useEffect(() => {
     const initializeAuth = async () => {
       // 如果 Firebase 未啟用，跳過
       if (!isFirebaseEnabled() || !auth) {
         console.log('Firebase not enabled, skipping anonymous sign-in');
+        return;
+      }
+
+      const { hasSeenPrivacyNotice } = useUserStore.getState();
+      
+      // 如果還沒看過隱私協議，不執行自動登入（等待用戶在排行榜頁面同意）
+      if (!hasSeenPrivacyNotice) {
+        console.log('Privacy notice not seen yet, skipping auto sign-in');
         return;
       }
 
