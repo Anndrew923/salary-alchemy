@@ -7,10 +7,14 @@ interface UserState {
   dailyHours: number;
   workingDays: number;
   locale: Locale;
+  uid: string | null;
+  nickname: string;
   setMonthlySalary: (salary: number) => void;
   setDailyHours: (hours: number) => void;
   setWorkingDays: (days: number) => void;
   setLocale: (locale: Locale) => void;
+  setUid: (uid: string) => void;
+  setNickname: (nickname: string) => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -20,10 +24,14 @@ export const useUserStore = create<UserState>()(
       dailyHours: 8, // 預設每日 8 小時
       workingDays: 20, // 預設每月 20 個工作天
       locale: 'TW',
+      uid: null,
+      nickname: 'Anonymous Alchemist',
       setMonthlySalary: (salary) => set({ monthlySalary: salary }),
       setDailyHours: (hours) => set({ dailyHours: hours }),
       setWorkingDays: (days) => set({ workingDays: days }),
       setLocale: (locale) => set({ locale }),
+      setUid: (uid) => set({ uid }),
+      setNickname: (nickname) => set({ nickname }),
     }),
     {
       name: 'salary-alchemy-user',
@@ -32,6 +40,8 @@ export const useUserStore = create<UserState>()(
         dailyHours: state.dailyHours,
         workingDays: state.workingDays,
         locale: state.locale,
+        uid: state.uid,
+        nickname: state.nickname,
       }),
     }
   )

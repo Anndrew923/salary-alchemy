@@ -1,0 +1,128 @@
+.container {
+  padding: var(--spacing-md);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-gold);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-secondary);
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+.currentUser {
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  border: 2px solid var(--text-gold);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-glow);
+}
+
+.currentUserLabel {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.currentUserInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-gold);
+  transition: all 0.2s;
+}
+
+.entry:hover {
+  background-color: var(--bg-secondary);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+.entry.currentUserEntry {
+  border-color: var(--text-gold);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(255, 215, 0, 0.1) 100%);
+}
+
+.rank {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--text-gold);
+  min-width: 40px;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+.tierIcon {
+  font-size: 1.5rem;
+  min-width: 30px;
+  text-align: center;
+}
+
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.nickname {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.levelTitle {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.amount {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: var(--text-gold);
+  font-family: var(--font-mono);
+  text-align: right;
+  min-width: 100px;
+}
+
+.tierBadge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-sm);
+  border: 1px solid currentColor;
+}

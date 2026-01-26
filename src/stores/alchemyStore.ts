@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { doc, setDoc } from 'firebase/firestore';
 import { STORAGE_KEYS } from '../utils/constants';
+import { db } from '../config/firebase';
+import { useUserStore } from './userStore';
 
 interface AlchemyState {
   startTimestamp: number | null;
@@ -9,6 +12,7 @@ interface AlchemyState {
   start: () => void;
   pause: () => void;
   reset: () => void;
+  finishSession: (earned: number) => void;
   calculateEarned: (ratePerSecond: number) => number;
   addToTotal: (amount: number) => void;
   resetTotalEarned: () => void;
@@ -47,6 +51,43 @@ export const useAlchemyStore = create<AlchemyState>()(
         localStorage.removeItem(STORAGE_KEYS.START_TIMESTAMP);
       },
       
+      finishSession: async (earned: number) => {
+        // 結算金額入帳
+        if (earned > 0) {
+          const { totalEarned } = get();
+          const newTotal = totalEarned + earned;
+          set({ totalEarned: newTotal });
+          localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, newTotal.toString());
+          
+          // 同步到 Firestore
+          try {
+            const userState = useUserStore.getState();
+            const uid = userState.uid;
+            const nickname = userState.nickname;
+            
+            if (uid) {
+              await setDoc(
+                doc(db, 'users', uid),
+                {
+                  totalEarned: newTotal,
+                  nickname: nickname,
+                  updatedAt: new Date().toISOString(),
+                },
+                { merge: true }
+              );
+            }
+          } catch (error) {
+            console.error('Failed to sync to Firestore:', error);
+          }
+        }
+        // 重置當前計時
+        set({ 
+          startTimestamp: null,
+          isRunning: false,
+        });
+        localStorage.removeItem(STORAGE_KEYS.START_TIMESTAMP);
+      },
+      
       calculateEarned: (ratePerSecond: number) => {
         const { startTimestamp, isRunning } = get();
         if (!startTimestamp || !isRunning) return 0;
@@ -56,10 +97,34 @@ export const useAlchemyStore = create<AlchemyState>()(
         return ratePerSecond * elapsedSeconds;
       },
       
-      addToTotal: (amount: number) => {
+      addToTotal: async (amount: number) => {
         set((state) => {
           const newTotal = state.totalEarned + amount;
           localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, newTotal.toString());
+          
+          // 同步到 Firestore
+          (async () => {
+            try {
+              const userState = useUserStore.getState();
+              const uid = userState.uid;
+              const nickname = userState.nickname;
+              
+              if (uid) {
+                await setDoc(
+                  doc(db, 'users', uid),
+                  {
+                    totalEarned: newTotal,
+                    nickname: nickname,
+                    updatedAt: new Date().toISOString(),
+                  },
+                  { merge: true }
+                );
+              }
+            } catch (error) {
+              console.error('Failed to sync to Firestore:', error);
+            }
+          })();
+          
           return { totalEarned: newTotal };
         });
       },

@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import Layout from '../Layout/Layout';
 import AlchemyDisplay from '../AlchemyDisplay/AlchemyDisplay';
 import SalaryInput from '../SalaryInput/SalaryInput';
+import Leaderboard from '../Leaderboard/Leaderboard';
 
-type Route = '/' | '/settings';
+type Route = '/' | '/settings' | '/leaderboard';
 
 const Router = () => {
   const [currentRoute, setCurrentRoute] = useState<Route>('/');
@@ -41,6 +42,8 @@ const Router = () => {
             {/* 設定頁面內容 */}
           </div>
         );
+      case '/leaderboard':
+        return <Leaderboard />;
       default:
         return (
           <>

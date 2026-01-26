@@ -1,8 +1,33 @@
 import { useEffect } from 'react';
+import { signInAnonymously } from 'firebase/auth';
 import Router from './components/Router/Router';
 import { STORAGE_KEYS } from './utils/constants';
+import { auth } from './config/firebase';
+import { useUserStore } from './stores/userStore';
 
 function App() {
+  const { uid, setUid } = useUserStore();
+
+  // 應用啟動時，執行無感登入
+  useEffect(() => {
+    const initializeAuth = async () => {
+      // 如果已經有 uid，跳過登入
+      if (uid) {
+        return;
+      }
+
+      try {
+        const userCredential = await signInAnonymously(auth);
+        const userUid = userCredential.user.uid;
+        setUid(userUid);
+        console.log('Anonymous sign-in successful:', userUid);
+      } catch (error) {
+        console.error('Anonymous sign-in failed:', error);
+      }
+    };
+
+    initializeAuth();
+  }, [uid, setUid]);
 
   // 應用啟動時，檢查是否有未完成的計時
   useEffect(() => {
