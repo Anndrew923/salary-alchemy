@@ -94,7 +94,7 @@ const Leaderboard = () => {
         setError(null);
 
         const q = query(
-          collection(db, 'users'),
+          collection(db, 'leaderboard'),
           orderBy('normalizedScore', 'desc'),
           limit(50)
         );

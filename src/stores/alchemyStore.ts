@@ -74,8 +74,9 @@ export const useAlchemyStore = create<AlchemyState>()(
           // EN 模式：score = totalEarned * 15（對應兩倍難度門檻）
           const normalizedScore = locale === 'TW' ? totalEarned : totalEarned * 15;
 
+          // 同步到 leaderboard 集合
           await setDoc(
-            doc(db, 'users', uid),
+            doc(db, 'leaderboard', uid),
             {
               anonymousId: uid,
               nickname: nickname || 'Anonymous Alchemist',
