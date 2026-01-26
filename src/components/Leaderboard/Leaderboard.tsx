@@ -141,22 +141,6 @@ const Leaderboard = () => {
     return colors[tier as keyof typeof colors] || '#888';
   };
 
-  if (loading) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading leaderboard...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.error}>{error}</div>
-      </div>
-    );
-  }
-
   // 計算當前用戶的排名
   const currentUserRank = entries.findIndex(entry => entry.uid === currentUid) + 1;
   const currentUserEntry = entries.find(entry => entry.uid === currentUid);
@@ -169,6 +153,17 @@ const Leaderboard = () => {
           onAgree={() => setShowPrivacyModal(false)}
         />
       )}
+      
+      {loading && (
+        <div className={styles.loading}>Loading leaderboard...</div>
+      )}
+
+      {error && (
+        <div className={styles.error}>{error}</div>
+      )}
+
+      {!loading && !error && (
+        <>
       
       <div className={styles.header}>
         <h1 className={styles.title}>🌍 Global Leaderboard</h1>
@@ -227,6 +222,8 @@ const Leaderboard = () => {
           </div>
         ))}
       </div>
+      </>
+      )}
     </div>
   );
 };
