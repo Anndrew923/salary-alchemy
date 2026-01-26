@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { signInAnonymously } from 'firebase/auth';
 import { Capacitor } from '@capacitor/core';
-import { App } from '@capacitor/app';
 import Router from './components/Router/Router';
 import PrivacyNoticeModal from './components/PrivacyNoticeModal/PrivacyNoticeModal';
 import LandingPage from './components/LandingPage/LandingPage';
@@ -74,19 +73,29 @@ function App() {
       return;
     }
 
-    const backButtonListener = App.addListener('backButton', () => {
-      const currentHash = window.location.hash;
-      // 如果在排行榜頁面，按返回鍵回到主頁
-      if (currentHash.includes('leaderboard')) {
-        window.location.hash = '#/';
-      } else {
-        // 如果已在主頁，按返回鍵退出 App
-        App.exitApp();
-      }
-    });
+    let backButtonListener: any = null;
+
+    const setupBackButton = async () => {
+      const { App: CapacitorApp } = await import('@capacitor/app');
+      
+      backButtonListener = CapacitorApp.addListener('backButton', () => {
+        const currentHash = window.location.hash;
+        // 如果在排行榜頁面，按返回鍵回到主頁
+        if (currentHash.includes('leaderboard')) {
+          window.location.hash = '#/';
+        } else {
+          // 如果已在主頁，按返回鍵退出 App
+          CapacitorApp.exitApp();
+        }
+      });
+    };
+
+    setupBackButton();
 
     return () => {
-      backButtonListener.then(h => h.remove());
+      if (backButtonListener) {
+        backButtonListener.then((h: any) => h.remove());
+      }
     };
   }, []);
 
