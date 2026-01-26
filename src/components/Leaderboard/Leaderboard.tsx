@@ -33,8 +33,9 @@ const Leaderboard = () => {
   const translations = locale === 'TW' ? zhTW : enUS;
   const privacy = translations.privacy;
 
-  // 檢查是否需要顯示隱私協議 - 強制顯示，未簽署前不允許查看排行榜
+  // 組件掛載時，強制攔截：檢查隱私協議狀態
   useEffect(() => {
+    // 強制攔截：如果標記為 false，必須強制開啟 PrivacyNoticeModal
     if (!hasSeenPrivacyNotice) {
       setShowPrivacyModal(true);
     } else {
@@ -43,16 +44,11 @@ const Leaderboard = () => {
     }
   }, [hasSeenPrivacyNotice]);
 
-  // 強化攔截機制：如果已簽署但尚未登入，立即執行 signInAnonymously()
+  // 自動登入補償：如果標記為 true 但 Firebase 尚未登入，立即觸發 signInAnonymously()
   useEffect(() => {
     const performSignIn = async () => {
       // 如果未簽署，等待 Modal 處理
       if (!hasSeenPrivacyNotice) {
-        return;
-      }
-
-      // 如果已經登入，跳過
-      if (currentUid) {
         return;
       }
 
@@ -61,6 +57,15 @@ const Leaderboard = () => {
         return;
       }
 
+      // 檢查 Firebase auth.currentUser 是否為空
+      const isAuthenticated = auth.currentUser !== null;
+      
+      // 如果已經有 uid 且 Firebase 已認證，跳過
+      if (currentUid && isAuthenticated) {
+        return;
+      }
+
+      // 如果標記為 true 但尚未登入（uid 為空或 auth.currentUser 為空），立即觸發登入
       try {
         const userCredential = await signInAnonymously(auth);
         const userUid = userCredential.user.uid;

@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { doc, setDoc } from 'firebase/firestore';
+import { signInAnonymously } from 'firebase/auth';
 import { STORAGE_KEYS, EXCHANGE_RATE } from '../utils/constants';
-import { db, isFirebaseEnabled } from '../config/firebase';
+import { db, auth, isFirebaseEnabled } from '../config/firebase';
 import { useUserStore } from './userStore';
 
 interface AlchemyState {
@@ -59,14 +60,35 @@ export const useAlchemyStore = create<AlchemyState>()(
 
         try {
           const userState = useUserStore.getState();
-          const uid = userState.uid;
+          let uid = userState.uid;
           const nickname = userState.nickname;
           const locale = userState.locale;
           const { totalEarned } = get();
 
-          if (!uid) {
-            console.warn('Cannot sync: user not authenticated');
-            return;
+          // 重試機制：如果執行時未認證，先執行登入再同步
+          if (!uid || (auth && !auth.currentUser)) {
+            // 檢查是否已看過隱私協議
+            if (!userState.hasSeenPrivacyNotice) {
+              console.warn('Cannot sync: privacy notice not seen yet');
+              return;
+            }
+
+            // 如果 Firebase 已啟用，執行匿名登入
+            if (auth) {
+              try {
+                const userCredential = await signInAnonymously(auth);
+                uid = userCredential.user.uid;
+                useUserStore.getState().setUid(uid);
+                useUserStore.getState().setAnonymousId(uid);
+                console.log('syncToCloud: Auto sign-in successful, retrying sync:', uid);
+              } catch (error) {
+                console.error('syncToCloud: Auto sign-in failed:', error);
+                return;
+              }
+            } else {
+              console.warn('Cannot sync: user not authenticated and auth not available');
+              return;
+            }
           }
 
           // 計算 normalizedScore（公平排名算法）
