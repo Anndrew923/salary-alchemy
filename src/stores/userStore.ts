@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Locale } from '../utils/i18n';
-import { EXCHANGE_RATE } from '../utils/constants';
+import { EXCHANGE_RATE, STORAGE_KEYS } from '../utils/constants';
 import { useAlchemyStore } from './alchemyStore';
 
 interface UserState {
@@ -62,7 +62,7 @@ export const useUserStore = create<UserState>()(
         
         // 更新 alchemyStore 中的 totalEarned
         useAlchemyStore.setState({ totalEarned: convertedTotalEarned });
-        localStorage.setItem('alchemy_total_earned', convertedTotalEarned.toString());
+        localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, convertedTotalEarned.toString());
         
         // 更新 locale
         set({ locale: newLocale });
