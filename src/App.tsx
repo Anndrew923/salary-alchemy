@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { signInAnonymously } from 'firebase/auth';
 import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import Router from './components/Router/Router';
 import PrivacyNoticeModal from './components/PrivacyNoticeModal/PrivacyNoticeModal';
 import LandingPage from './components/LandingPage/LandingPage';
@@ -73,37 +74,19 @@ function App() {
       return;
     }
 
-    let backButtonListener: any = null;
-
-    const setupBackButton = async () => {
-      const { App } = await import('@capacitor/app');
-      
-      const handleBackButton = async () => {
-        const currentHash = window.location.hash;
-        
-        // 如果在排行榜頁面，返回首頁
-        if (currentHash === '#leaderboard' || currentHash === '#/leaderboard') {
-          window.location.hash = '#';
-          return;
-        }
-        
-        // 如果已在首頁，退出 App
-        if (currentHash === '' || currentHash === '#' || currentHash === '#/') {
-          await App.exitApp();
-        }
-      };
-
-      App.addListener('backButton', handleBackButton).then((listener) => {
-        backButtonListener = listener;
-      });
-    };
-
-    setupBackButton();
+    const backButtonListener = App.addListener('backButton', () => {
+      const currentHash = window.location.hash;
+      // 如果在排行榜頁面，按返回鍵回到主頁
+      if (currentHash.includes('leaderboard')) {
+        window.location.hash = '#/';
+      } else {
+        // 如果已在主頁，按返回鍵退出 App
+        App.exitApp();
+      }
+    });
 
     return () => {
-      if (backButtonListener) {
-        backButtonListener.remove();
-      }
+      backButtonListener.then(h => h.remove());
     };
   }, []);
 
