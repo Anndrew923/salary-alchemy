@@ -2,14 +2,12 @@
   background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
   border-bottom: 2px solid var(--border-gold);
   padding: var(--spacing-md);
-  padding-top: var(--spacing-xl);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-sm);
   box-shadow: var(--shadow-glow);
   position: relative;
-  min-height: 120px;
 }
 
 .header.diamondMode {
@@ -17,37 +15,37 @@
   box-shadow: var(--shadow-diamond);
 }
 
+.topNav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
 .title {
-  font-size: 1.5rem;
+  font-family: 'Impact', 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
+  font-size: clamp(1.5rem, 8vw, 2.2rem);
   font-weight: bold;
-  color: var(--text-gold);
   text-align: center;
-  letter-spacing: 0.1em;
-  margin-top: var(--spacing-md);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: linear-gradient(to bottom, var(--text-gold), #b8860b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  margin: 0;
+  padding: 0;
+  width: 100%;
   white-space: nowrap;
-  padding: 0 calc(var(--spacing-lg) + 100px);
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-}
-
-@media (max-width: 480px) {
-  .title {
-    font-size: 1.3rem;
-    padding: 0 calc(var(--spacing-lg) + 90px);
-  }
-}
-
-@media (max-width: 360px) {
-  .title {
-    font-size: 1.1rem;
-    padding: 0 calc(var(--spacing-lg) + 70px);
-  }
+  overflow: visible;
 }
 
 .diamondMode .title {
-  color: var(--text-diamond);
+  background: linear-gradient(to bottom, var(--text-diamond), #0099cc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .level {
@@ -193,45 +191,26 @@
 }
 
 .leaderboardButton {
-  position: absolute;
-  top: var(--spacing-xs);
-  left: var(--spacing-sm);
+  position: relative;
   background-color: var(--bg-tertiary);
   border: 1px solid var(--text-gold);
   color: var(--text-gold);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: bold;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  z-index: 10;
   white-space: nowrap;
-  max-width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@media (max-width: 480px) {
-  .leaderboardButton {
-    font-size: 0.65rem;
-    padding: var(--spacing-xs);
-    max-width: 80px;
-  }
 }
 
 @media (max-width: 360px) {
   .leaderboardButton {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     padding: var(--spacing-xs);
-    max-width: 60px;
-  }
-  
-  .leaderboardButton span {
-    display: none;
   }
 }
 
@@ -251,9 +230,7 @@
 }
 
 .localeButton {
-  position: absolute;
-  top: var(--spacing-xs);
-  right: var(--spacing-sm);
+  position: relative;
   background-color: var(--bg-tertiary);
   border: 1px solid var(--text-gold);
   color: var(--text-gold);
@@ -263,7 +240,6 @@
   font-size: 0.75rem;
   font-weight: bold;
   transition: all 0.2s;
-  z-index: 10;
 }
 
 .localeButton:hover {

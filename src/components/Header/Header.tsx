@@ -35,14 +35,23 @@ const Header = () => {
 
   return (
     <header className={`${styles.header} ${isDiamondMode ? styles.diamondMode : ''}`}>
-      <button 
-        className={styles.leaderboardButton}
-        onClick={navigateToLeaderboard}
-        aria-label="Go to leaderboard"
-      >
-        🏆 <span>{locale === 'EN' ? 'Rank' : i18n.leaderboard}</span>
-      </button>
-      <div className={styles.title}>{i18n.appName}</div>
+      <div className={styles.topNav}>
+        <button 
+          className={styles.leaderboardButton}
+          onClick={navigateToLeaderboard}
+          aria-label="Go to leaderboard"
+        >
+          🏆 {i18n.leaderboard}
+        </button>
+        <button 
+          className={styles.localeButton}
+          onClick={toggleLocale}
+          aria-label="Toggle language"
+        >
+          {locale}
+        </button>
+      </div>
+      <h1 className={styles.title}>{i18n.appName}</h1>
       <div className={styles.level}>
         <span 
           className={`${styles.levelLabel} ${styles[`tier${currentTier}`]}`}
@@ -59,13 +68,6 @@ const Header = () => {
           </div>
         )}
       </div>
-      <button 
-        className={styles.localeButton}
-        onClick={toggleLocale}
-        aria-label="Toggle language"
-      >
-        {locale}
-      </button>
     </header>
   );
 };
