@@ -20,10 +20,9 @@ const PrivacyNoticeModal = ({ onAgree }: PrivacyNoticeModalProps) => {
     // 1. 執行 setHasSeenPrivacyNotice(true)
     setHasSeenPrivacyNotice(true);
     
-    // 2. 如果 Firebase 已啟用，執行匿名登入
+    // 2. 如果 Firebase 已啟用，執行匿名登入並等待完成
     if (isFirebaseEnabled() && auth) {
       try {
-        // 3. 執行登入
         const userCredential = await signInAnonymously(auth);
         const userUid = userCredential.user.uid;
         setUid(userUid);
@@ -35,16 +34,20 @@ const PrivacyNoticeModal = ({ onAgree }: PrivacyNoticeModalProps) => {
       }
     }
     
-    // 4. 關閉 Modal
+    // 3. 關閉 Modal
     setPrivacyModalOpen(false);
     
-    // 5. 如果是從排行榜入口觸發的，簽署完後自動導向 #leaderboard
+    // 4. 如果是從排行榜入口觸發的，簽署完後自動導向 #leaderboard
+    // 在登入成功後，檢查 shouldNavigateToLeaderboard 並執行跳轉
     if (shouldNavigateToLeaderboard) {
       setShouldNavigateToLeaderboard(false); // 清除標記
-      window.location.hash = '#leaderboard';
+      // 使用 setTimeout 確保 Modal 關閉動畫完成後再導航
+      setTimeout(() => {
+        window.location.hash = '#leaderboard';
+      }, 100);
     }
     
-    // 6. 通知父組件（觸發排行榜資料抓取）
+    // 5. 通知父組件（觸發排行榜資料抓取）
     onAgree();
   };
 

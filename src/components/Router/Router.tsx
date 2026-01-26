@@ -12,17 +12,22 @@ const Router = () => {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.slice(1) || '/';
+      // 確保能正確偵測到 #leaderboard 並渲染組件
       setCurrentRoute(hash as Route);
     };
 
-    // 初始載入
+    // 初始載入時檢查 hash
     handleHashChange();
 
     // 監聽 hash 變化
     window.addEventListener('hashchange', handleHashChange);
+    
+    // 也監聽 popstate 事件（瀏覽器前進/後退）
+    window.addEventListener('popstate', handleHashChange);
 
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handleHashChange);
     };
   }, []);
 
