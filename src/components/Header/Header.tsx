@@ -6,7 +6,7 @@ import { getI18n } from '../../utils/i18n';
 import styles from './Header.module.css';
 
 const Header = () => {
-  const { level, isDiamondMode, nextLevelThreshold, amountToNextLevel, currentTier } = useRPGLevel();
+  const { level, isDiamondMode, nextLevelThreshold, currentTier } = useRPGLevel();
   const { locale, setLocale } = useUserStore();
   const { totalEarned } = useAlchemyStore();
   const i18n = getI18n(locale);
