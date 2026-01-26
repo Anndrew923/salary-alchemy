@@ -39,7 +39,7 @@ const Leaderboard = () => {
     }
   }, [hasSeenPrivacyNotice]);
 
-  // 根據 totalEarned 計算等級和 tier
+  // 根據 totalEarned 計算等級和 tier（用於當前用戶顯示）
   const calculateLevel = useMemo(() => {
     return (totalEarned: number) => {
       const RPG_LEVELS = locale === 'TW' ? RPG_LEVELS_TW : RPG_LEVELS_EN;
@@ -55,6 +55,22 @@ const Leaderboard = () => {
       return { index: 0, tier: 1 };
     };
   }, [locale]);
+
+  // 根據 normalizedScore 計算等級和 tier（用於排行榜，因為 normalizedScore 已標準化為 TW 模式）
+  const calculateLevelFromNormalizedScore = useMemo(() => {
+    return (normalizedScore: number) => {
+      // normalizedScore 已經標準化，所以始終使用 TW 門檻
+      for (let i = RPG_LEVELS_TW.length - 1; i >= 0; i--) {
+        if (normalizedScore >= RPG_LEVELS_TW[i].threshold) {
+          return {
+            index: i,
+            tier: RPG_LEVELS_TW[i].tier,
+          };
+        }
+      }
+      return { index: 0, tier: 1 };
+    };
+  }, []);
 
   // 獲取等級標題
   const getLevelTitle = useMemo(() => {
@@ -93,7 +109,7 @@ const Leaderboard = () => {
           const userLocale = data.locale || 'TW';
           
           // 根據 normalizedScore 計算 tier（使用 TW 門檻，因為 normalizedScore 已經標準化）
-          const { tier, index: levelIndex } = calculateLevel(normalizedScore);
+          const { tier, index: levelIndex } = calculateLevelFromNormalizedScore(normalizedScore);
           
           leaderboardData.push({
             uid: docSnapshot.id,
@@ -117,7 +133,7 @@ const Leaderboard = () => {
     };
 
     fetchLeaderboard();
-  }, [locale, calculateLevel, getLevelTitle]);
+  }, [locale, calculateLevel, calculateLevelFromNormalizedScore, getLevelTitle]);
 
   const formatCurrency = (amount: number) => {
     if (locale === 'TW') {
