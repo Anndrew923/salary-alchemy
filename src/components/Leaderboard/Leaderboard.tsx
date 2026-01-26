@@ -36,6 +36,9 @@ const Leaderboard = () => {
   useEffect(() => {
     if (!hasSeenPrivacyNotice) {
       setShowPrivacyModal(true);
+    } else {
+      // 已簽署後，確保 modal 關閉
+      setShowPrivacyModal(false);
     }
   }, [hasSeenPrivacyNotice]);
 
