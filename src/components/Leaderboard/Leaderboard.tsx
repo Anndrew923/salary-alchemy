@@ -13,6 +13,8 @@ interface LeaderboardEntry {
   uid: string;
   nickname: string;
   totalEarned: number;
+  normalizedScore: number;
+  locale?: string;
   rank: number;
   tier: number;
   levelTitle: string;
@@ -77,7 +79,7 @@ const Leaderboard = () => {
 
         const q = query(
           collection(db, 'users'),
-          orderBy('totalEarned', 'desc'),
+          orderBy('normalizedScore', 'desc'),
           limit(50)
         );
 
@@ -87,12 +89,18 @@ const Leaderboard = () => {
         querySnapshot.forEach((docSnapshot) => {
           const data = docSnapshot.data();
           const totalEarned = data.totalEarned || 0;
-          const { tier, index: levelIndex } = calculateLevel(totalEarned);
+          const normalizedScore = data.normalizedScore || 0;
+          const userLocale = data.locale || 'TW';
+          
+          // 根據 normalizedScore 計算 tier（使用 TW 門檻，因為 normalizedScore 已經標準化）
+          const { tier, index: levelIndex } = calculateLevel(normalizedScore);
           
           leaderboardData.push({
             uid: docSnapshot.id,
             nickname: data.nickname || 'Anonymous Alchemist',
             totalEarned,
+            normalizedScore,
+            locale: userLocale,
             rank: leaderboardData.length + 1,
             tier,
             levelTitle: getLevelTitle(levelIndex),

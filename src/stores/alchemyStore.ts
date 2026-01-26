@@ -16,6 +16,7 @@ interface AlchemyState {
   calculateEarned: (ratePerSecond: number) => number;
   addToTotal: (amount: number) => Promise<void>;
   resetTotalEarned: () => void;
+  syncToCloud: () => Promise<void>;
 }
 
 export const useAlchemyStore = create<AlchemyState>()(
@@ -51,6 +52,47 @@ export const useAlchemyStore = create<AlchemyState>()(
         localStorage.removeItem(STORAGE_KEYS.START_TIMESTAMP);
       },
       
+      syncToCloud: async () => {
+        if (!isFirebaseEnabled() || !db) {
+          return;
+        }
+
+        try {
+          const userState = useUserStore.getState();
+          const uid = userState.uid;
+          const nickname = userState.nickname;
+          const locale = userState.locale;
+          const { totalEarned } = get();
+
+          if (!uid) {
+            console.warn('Cannot sync: user not authenticated');
+            return;
+          }
+
+          // 計算 normalizedScore（公平排名算法）
+          // TW 模式：score = totalEarned
+          // EN 模式：score = totalEarned * 15（對應兩倍難度門檻）
+          const normalizedScore = locale === 'TW' ? totalEarned : totalEarned * 15;
+
+          await setDoc(
+            doc(db, 'users', uid),
+            {
+              anonymousId: uid,
+              nickname: nickname || 'Anonymous Alchemist',
+              totalEarned: totalEarned,
+              normalizedScore: normalizedScore,
+              locale: locale,
+              updatedAt: new Date().toISOString(),
+            },
+            { merge: true }
+          );
+
+          console.log('Successfully synced to cloud:', { uid, totalEarned, normalizedScore });
+        } catch (error) {
+          console.error('Failed to sync to Firestore:', error);
+        }
+      },
+
       finishSession: async (earned: number) => {
         // 結算金額入帳
         if (earned > 0) {
@@ -59,28 +101,8 @@ export const useAlchemyStore = create<AlchemyState>()(
           set({ totalEarned: newTotal });
           localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, newTotal.toString());
           
-          // 同步到 Firestore（僅在 Firebase 啟用時）
-          if (isFirebaseEnabled() && db) {
-            try {
-              const userState = useUserStore.getState();
-              const uid = userState.uid;
-              const nickname = userState.nickname;
-              
-              if (uid) {
-                await setDoc(
-                  doc(db, 'users', uid),
-                  {
-                    totalEarned: newTotal,
-                    nickname: nickname,
-                    updatedAt: new Date().toISOString(),
-                  },
-                  { merge: true }
-                );
-              }
-            } catch (error) {
-              console.error('Failed to sync to Firestore:', error);
-            }
-          }
+          // 同步到雲端（在 finishSession 成功後觸發）
+          await get().syncToCloud();
         }
         // 重置當前計時
         set({ 
@@ -104,30 +126,10 @@ export const useAlchemyStore = create<AlchemyState>()(
           const newTotal = state.totalEarned + amount;
           localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, newTotal.toString());
           
-          // 同步到 Firestore（僅在 Firebase 啟用時）
-          if (isFirebaseEnabled() && db) {
-            (async () => {
-              try {
-                const userState = useUserStore.getState();
-                const uid = userState.uid;
-                const nickname = userState.nickname;
-                
-                if (uid) {
-                  await setDoc(
-                    doc(db, 'users', uid),
-                    {
-                      totalEarned: newTotal,
-                      nickname: nickname,
-                      updatedAt: new Date().toISOString(),
-                    },
-                    { merge: true }
-                  );
-                }
-              } catch (error) {
-                console.error('Failed to sync to Firestore:', error);
-              }
-            })();
-          }
+          // 同步到雲端
+          get().syncToCloud().catch((error) => {
+            console.error('Failed to sync after addToTotal:', error);
+          });
           
           return { totalEarned: newTotal };
         });
