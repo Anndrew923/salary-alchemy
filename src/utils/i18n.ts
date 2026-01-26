@@ -10,10 +10,11 @@ export interface I18nStrings {
   
   // 薪資輸入
   monthlySalary: string;
-  monthlyHours: string;
   dailyHours: string;
+  workingDays: string;
   perSecond: string;
   perHour: string;
+  modifyParams: string;
   
   // 顯示
   currentEarned: string;
@@ -36,10 +37,11 @@ const translations: Record<Locale, I18nStrings> = {
     reset: '重置',
     settings: '設定',
     monthlySalary: '月薪',
-    monthlyHours: '每月工時',
     dailyHours: '每日工時',
+    workingDays: '工作天數',
     perSecond: '每秒',
     perHour: '每小時',
+    modifyParams: '修改參數',
     currentEarned: '當前煉金',
     totalEarned: '累計煉金',
     runningTime: '運行時間',
@@ -54,10 +56,11 @@ const translations: Record<Locale, I18nStrings> = {
     reset: 'Reset',
     settings: 'Settings',
     monthlySalary: 'Monthly Salary',
-    monthlyHours: 'Monthly Hours',
     dailyHours: 'Daily Hours',
+    workingDays: 'Working Days',
     perSecond: 'Per Second',
     perHour: 'Per Hour',
+    modifyParams: 'Modify Params',
     currentEarned: 'Current Earned',
     totalEarned: 'Total Earned',
     runningTime: 'Running Time',

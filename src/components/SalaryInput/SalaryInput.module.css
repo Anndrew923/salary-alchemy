@@ -4,6 +4,74 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-lg);
+  position: relative;
+}
+
+.expandButton {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  color: var(--text-gold);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: var(--spacing-md);
+}
+
+.expandButton:hover:not(:disabled) {
+  background-color: var(--text-gold);
+  color: var(--bg-primary);
+  box-shadow: var(--shadow-glow);
+}
+
+.expandButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.formSection {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.formSection.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.formSection.expanded {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.collapseButton {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  width: 32px;
+  height: 32px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  color: var(--text-gold);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.collapseButton:hover {
+  background-color: var(--text-gold);
+  color: var(--bg-primary);
+  transform: rotate(90deg);
 }
 
 .formGroup {

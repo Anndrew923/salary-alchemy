@@ -2,7 +2,12 @@ import { useMemo } from 'react';
 import { useUserStore } from '../stores/userStore';
 
 export const useSalaryCalculator = () => {
-  const { monthlySalary, monthlyHours } = useUserStore();
+  const { monthlySalary, dailyHours, workingDays } = useUserStore();
+
+  // 計算每月總工時：每日工時 × 工作天數
+  const monthlyHours = useMemo(() => {
+    return dailyHours * workingDays;
+  }, [dailyHours, workingDays]);
 
   const ratePerSecond = useMemo(() => {
     if (monthlySalary <= 0 || monthlyHours <= 0) return 0;
@@ -19,5 +24,6 @@ export const useSalaryCalculator = () => {
   return {
     ratePerSecond,
     ratePerHour,
+    monthlyHours,
   };
 };
