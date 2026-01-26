@@ -1,13 +1,23 @@
 import { useMemo, useRef, useEffect, useState } from 'react';
 import { useAlchemyStore } from '../stores/alchemyStore';
 import { useUserStore } from '../stores/userStore';
-import { RPG_LEVELS, DIAMOND_THRESHOLD } from '../utils/constants';
+import { RPG_LEVELS_TW, RPG_LEVELS_EN, DIAMOND_THRESHOLD_TW, DIAMOND_THRESHOLD_EN, LEVEL_TITLES } from '../utils/constants';
 
 export const useRPGLevel = () => {
   const { totalEarned } = useAlchemyStore();
   const { locale } = useUserStore();
   const previousLevelIndexRef = useRef<number>(-1);
   const [hasJustLeveledUp, setHasJustLeveledUp] = useState(false);
+
+  // 根據 locale 選取正確的等級配置
+  const RPG_LEVELS = useMemo(() => {
+    return locale === 'TW' ? RPG_LEVELS_TW : RPG_LEVELS_EN;
+  }, [locale]);
+
+  // 根據 locale 選取正確的鑽石門檻
+  const DIAMOND_THRESHOLD = useMemo(() => {
+    return locale === 'TW' ? DIAMOND_THRESHOLD_TW : DIAMOND_THRESHOLD_EN;
+  }, [locale]);
 
   // 使用陣列遍歷判定當前等級
   const currentLevelIndex = useMemo(() => {
@@ -17,7 +27,7 @@ export const useRPGLevel = () => {
       }
     }
     return 0;
-  }, [totalEarned]);
+  }, [totalEarned, RPG_LEVELS]);
 
   // 監控等級變化
   useEffect(() => {
@@ -39,12 +49,13 @@ export const useRPGLevel = () => {
 
   const level = useMemo(() => {
     const levelData = RPG_LEVELS[currentLevelIndex];
+    const titles = locale === 'TW' ? LEVEL_TITLES.TW : LEVEL_TITLES.EN;
     return {
       ...levelData,
-      title: locale === 'TW' ? levelData.title : levelData.titleEn,
+      title: titles[currentLevelIndex],
       index: currentLevelIndex,
     };
-  }, [currentLevelIndex, locale]);
+  }, [currentLevelIndex, RPG_LEVELS, locale]);
 
   const isDiamondMode = useMemo(() => {
     return totalEarned >= DIAMOND_THRESHOLD;
@@ -55,7 +66,7 @@ export const useRPGLevel = () => {
       return null; // 已達最高等級
     }
     return RPG_LEVELS[currentLevelIndex + 1].threshold;
-  }, [currentLevelIndex]);
+  }, [currentLevelIndex, RPG_LEVELS]);
 
   const amountToNextLevel = useMemo(() => {
     if (!nextLevelThreshold) return null;

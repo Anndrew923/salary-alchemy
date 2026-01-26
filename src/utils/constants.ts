@@ -1,21 +1,64 @@
-// RPG 等級系統閾值 (12 階)
-export const RPG_LEVELS = [
-  { threshold: 0, tier: 1, title: '免洗實習生', titleEn: 'Intern' },
-  { threshold: 300, tier: 1, title: '廁所見習生', titleEn: 'Toilet Trainee' },
-  { threshold: 600, tier: 1, title: '試用期小偷', titleEn: 'Probationary Thief' },
-  { threshold: 1200, tier: 2, title: '薪水小偷', titleEn: 'Salary Thief' },
-  { threshold: 2000, tier: 2, title: '帶薪拉屎官', titleEn: 'Paid Pooper' },
-  { threshold: 3000, tier: 2, title: '馬桶管理員', titleEn: 'Toilet Manager' },
-  { threshold: 4500, tier: 3, title: '摸魚專員', titleEn: 'Slack Specialist' },
-  { threshold: 6000, tier: 3, title: '資深冗員', titleEn: 'Senior Loafer' },
-  { threshold: 8000, tier: 3, title: '公司的盲腸', titleEn: 'The Appendix' },
-  { threshold: 12000, tier: 4, title: '薪水強盜', titleEn: 'Salary Bandit' },
-  { threshold: 20000, tier: 4, title: '煉金大師', titleEn: 'Alchemy Master' },
-  { threshold: 30000, tier: 5, title: '首席廁所官 (CTO)', titleEn: 'Chief Toilet Officer' },
+// 等級標題定義
+export const LEVEL_TITLES = {
+  TW: [
+    '免洗實習生',
+    '廁所見習生',
+    '試用期小偷',
+    '薪水小偷',
+    '帶薪拉屎官',
+    '馬桶管理員',
+    '摸魚專員',
+    '資深冗員',
+    '公司的盲腸',
+    '薪水強盜',
+    '煉金大師',
+    '首席廁所官 (CTO)',
+  ],
+  EN: [
+    'Intern',
+    'Toilet Trainee',
+    'Probationary Thief',
+    'Salary Thief',
+    'Paid Pooper',
+    'Toilet Manager',
+    'Slack Specialist',
+    'Senior Loafer',
+    'The Appendix',
+    'Salary Bandit',
+    'Alchemy Master',
+    'Chief Toilet Officer',
+  ],
+};
+
+// RPG 等級系統閾值 (12 階) - 台幣版本
+export const RPG_LEVELS_TW = [
+  { threshold: 0, tier: 1 },
+  { threshold: 300, tier: 1 },
+  { threshold: 600, tier: 1 },
+  { threshold: 1200, tier: 2 },
+  { threshold: 2000, tier: 2 },
+  { threshold: 3000, tier: 2 },
+  { threshold: 4500, tier: 3 },
+  { threshold: 6000, tier: 3 },
+  { threshold: 8000, tier: 3 },
+  { threshold: 12000, tier: 4 },
+  { threshold: 20000, tier: 4 },
+  { threshold: 30000, tier: 5 },
 ] as const;
 
-// 鑽石藍色調觸發閾值
-export const DIAMOND_THRESHOLD = 30000;
+// 邏輯：EN 門檻 = TW 門檻 / 15 (將美金難度提高兩倍，以符合高薪物價)
+export const RPG_LEVELS_EN = RPG_LEVELS_TW.map(lv => ({
+  ...lv,
+  threshold: Math.round(lv.threshold / 15),
+}));
+
+// 鑽石藍色調觸發閾值 (台幣)
+export const DIAMOND_THRESHOLD_TW = 30000;
+// 鑽石藍色調觸發閾值 (美金)
+export const DIAMOND_THRESHOLD_EN = Math.round(DIAMOND_THRESHOLD_TW / 15);
+
+// 向後兼容：保留舊的常數名稱（使用 TW 版本）
+export const DIAMOND_THRESHOLD = DIAMOND_THRESHOLD_TW;
 
 // LocalStorage Keys
 export const STORAGE_KEYS = {

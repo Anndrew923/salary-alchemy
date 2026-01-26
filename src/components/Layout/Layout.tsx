@@ -12,14 +12,14 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const { hasJustLeveledUp, level, currentTier, isDiamondMode } = useRPGLevel();
   const [showLevelUp, setShowLevelUp] = useState(false);
-  const [levelUpData, setLevelUpData] = useState<{ title: string; tier: number } | null>(null);
+  const [levelUpData, setLevelUpData] = useState<{ title: string; tier: number; index: number } | null>(null);
 
   useEffect(() => {
     if (hasJustLeveledUp) {
-      setLevelUpData({ title: level.title, tier: currentTier });
+      setLevelUpData({ title: level.title, tier: currentTier, index: level.index });
       setShowLevelUp(true);
     }
-  }, [hasJustLeveledUp, level.title, currentTier]);
+  }, [hasJustLeveledUp, level.title, level.index, currentTier]);
 
   const handleCloseLevelUp = () => {
     setShowLevelUp(false);
@@ -40,6 +40,7 @@ const Layout = ({ children }: LayoutProps) => {
           onClose={handleCloseLevelUp} 
           levelTitle={levelUpData.title}
           currentTier={levelUpData.tier}
+          levelIndex={levelUpData.index}
         />
       )}
     </div>

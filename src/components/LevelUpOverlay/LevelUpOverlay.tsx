@@ -1,14 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { useUserStore } from '../../stores/userStore';
+import zhTW from '../../locales/zh-TW.json';
+import enUS from '../../locales/en-US.json';
 import styles from './LevelUpOverlay.module.css';
 
 interface LevelUpOverlayProps {
   onClose: () => void;
   levelTitle: string;
   currentTier: number;
+  levelIndex: number;
 }
 
-const LevelUpOverlay = ({ onClose, levelTitle, currentTier }: LevelUpOverlayProps) => {
+const LevelUpOverlay = ({ onClose, levelTitle, currentTier, levelIndex }: LevelUpOverlayProps) => {
+  const { locale } = useUserStore();
 
   useEffect(() => {
     // 觸發震動回饋
@@ -44,6 +49,13 @@ const LevelUpOverlay = ({ onClose, levelTitle, currentTier }: LevelUpOverlayProp
     return () => clearTimeout(timer);
   }, [onClose]);
 
+  // 從翻譯檔讀取毒舌文案
+  const promotionText = useMemo(() => {
+    const translations = locale === 'TW' ? zhTW : enUS;
+    const levelKey = String(levelIndex + 1); // levelIndex 是 0-based，翻譯檔是 1-based
+    return translations.levelup?.[levelKey as keyof typeof translations.levelup] || '';
+  }, [locale, levelIndex]);
+
   const getTierTitle = (tier: number) => {
     const titles = {
       1: { tw: '菜鳥階級', en: 'Rookie Tier' },
@@ -55,19 +67,7 @@ const LevelUpOverlay = ({ onClose, levelTitle, currentTier }: LevelUpOverlayProp
     return titles[tier as keyof typeof titles] || titles[1];
   };
 
-  const getPromotionText = (tier: number) => {
-    const texts = {
-      1: { tw: '你踏出了第一步...但還只是個菜鳥。', en: 'You took the first step... but still a rookie.' },
-      2: { tw: '古銅之光閃耀！你已不再是無名小卒。', en: 'Bronze light shines! You are no longer a nobody.' },
-      3: { tw: '白銀之力覺醒！摸魚的藝術正在精進。', en: 'Silver power awakens! The art of slacking is improving.' },
-      4: { tw: '黃金燃燒！你已成為真正的煉金術師！', en: 'Gold burns! You have become a true alchemist!' },
-      5: { tw: '鑽石閃電！你已達到巔峰，成為傳說中的 CTO！', en: 'Diamond lightning! You have reached the peak, becoming the legendary CTO!' },
-    };
-    return texts[tier as keyof typeof texts] || texts[1];
-  };
-
   const tierInfo = getTierTitle(currentTier);
-  const promotionText = getPromotionText(currentTier);
 
   return (
     <div className={`${styles.overlay} ${styles[`tier${currentTier}`]}`} onClick={onClose}>
@@ -77,10 +77,10 @@ const LevelUpOverlay = ({ onClose, levelTitle, currentTier }: LevelUpOverlayProp
           <div className={styles.circleOuter}></div>
         </div>
         <div className={styles.textContainer}>
-          <h1 className={styles.title}>✨ 晉升！ ✨</h1>
+          <h1 className={styles.title}>✨ {locale === 'TW' ? '晉升！' : 'Level Up!'} ✨</h1>
           <h2 className={styles.levelTitle}>{levelTitle}</h2>
-          <p className={styles.tierLabel}>{tierInfo.tw}</p>
-          <p className={styles.promotionText}>{promotionText.tw}</p>
+          <p className={styles.tierLabel}>{tierInfo[locale === 'TW' ? 'tw' : 'en']}</p>
+          <p className={styles.promotionText}>{promotionText}</p>
         </div>
       </div>
     </div>

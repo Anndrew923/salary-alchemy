@@ -1,4 +1,18 @@
 {
+  "levelup": {
+    "1": "The starting point. Right now, you are just a disposable asset.",
+    "2": "First step to freedom. You've mastered the art of hiding behind the porcelain throne.",
+    "3": "Your skills are verified. Management still hasn't noticed your \"disappearing\" act.",
+    "4": "Officially initiated. The money you earned here can now cover your utility bills.",
+    "5": "Your job title is now a verb. The company literally pays for your bio-break.",
+    "6": "You know the bathroom better than your own desk. This is your true home.",
+    "7": "Professional slacking doesn't need water, just a soundproof stall.",
+    "8": "You've achieved \"irreplaceability\" because no one knows what you do in there.",
+    "9": "You are now the company's appendix. Useless, but cutting you out would hurt.",
+    "10": "It's not theft anymore; it's a daylight robbery of the company's profit margin.",
+    "11": "A miracle occurred. Your bathroom wealth is now impacting the quarterly report.",
+    "12": "Legend born! You've transmuted enough to own the stall. You are the King of Toilets."
+  },
   "exchange": {
     "health_critical": [
       "Emergency Room Co-pay | You earned just enough to pay for the ER. Get up, your anus is screaming.",
