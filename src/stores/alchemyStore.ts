@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { doc, setDoc } from 'firebase/firestore';
-import { STORAGE_KEYS } from '../utils/constants';
+import { STORAGE_KEYS, EXCHANGE_RATE } from '../utils/constants';
 import { db, isFirebaseEnabled } from '../config/firebase';
 import { useUserStore } from './userStore';
 
@@ -70,9 +70,10 @@ export const useAlchemyStore = create<AlchemyState>()(
           }
 
           // 計算 normalizedScore（公平排名算法）
-          // TW 模式：score = totalEarned
-          // EN 模式：score = totalEarned * 15（對應兩倍難度門檻）
-          const normalizedScore = locale === 'TW' ? totalEarned : totalEarned * 15;
+          // 統一轉換回台幣，確保全球社畜在同一個天平上競爭
+          // TW 模式：score = totalEarned（已經是台幣）
+          // EN 模式：score = totalEarned * EXCHANGE_RATE（美金轉台幣）
+          const normalizedScore = locale === 'TW' ? totalEarned : totalEarned * EXCHANGE_RATE;
 
           // 同步到 leaderboard 集合
           await setDoc(

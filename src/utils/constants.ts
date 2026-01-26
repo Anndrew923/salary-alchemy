@@ -60,6 +60,9 @@ export const DIAMOND_THRESHOLD_EN = Math.round(DIAMOND_THRESHOLD_TW / 15);
 // 向後兼容：保留舊的常數名稱（使用 TW 版本）
 export const DIAMOND_THRESHOLD = DIAMOND_THRESHOLD_TW;
 
+// 匯率常數：台幣對美金的匯率
+export const EXCHANGE_RATE = 30;
+
 // LocalStorage Keys
 export const STORAGE_KEYS = {
   START_TIMESTAMP: 'alchemy_start_timestamp',
