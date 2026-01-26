@@ -40,7 +40,7 @@ const Header = () => {
         onClick={navigateToLeaderboard}
         aria-label="Go to leaderboard"
       >
-        🏆 {i18n.leaderboard}
+        🏆 <span>{locale === 'EN' ? 'Rank' : i18n.leaderboard}</span>
       </button>
       <div className={styles.title}>{i18n.appName}</div>
       <div className={styles.level}>

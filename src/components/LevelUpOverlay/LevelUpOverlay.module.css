@@ -146,6 +146,15 @@
   color: var(--text-secondary);
   line-height: 1.6;
   max-width: 300px;
+  padding: 0 var(--spacing-md);
+  word-wrap: break-word;
+}
+
+@media (max-width: 360px) {
+  .promotionText {
+    font-size: 0.9rem;
+    max-width: 280px;
+  }
 }
 
 /* Tier 1 - 菜鳥：灰色細線，微微抖動 */

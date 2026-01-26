@@ -2,12 +2,14 @@
   background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
   border-bottom: 2px solid var(--border-gold);
   padding: var(--spacing-md);
+  padding-top: var(--spacing-xl);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-sm);
   box-shadow: var(--shadow-glow);
   position: relative;
+  min-height: 120px;
 }
 
 .header.diamondMode {
@@ -21,6 +23,18 @@
   color: var(--text-gold);
   text-align: center;
   letter-spacing: 0.1em;
+  margin-top: var(--spacing-md);
+  white-space: nowrap;
+  padding: 0 var(--spacing-lg);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 360px) {
+  .title {
+    font-size: 1.2rem;
+  }
 }
 
 .diamondMode .title {
@@ -171,7 +185,7 @@
 
 .leaderboardButton {
   position: absolute;
-  top: var(--spacing-sm);
+  top: var(--spacing-xs);
   left: var(--spacing-sm);
   background-color: var(--bg-tertiary);
   border: 1px solid var(--text-gold);
@@ -185,6 +199,19 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
+  z-index: 10;
+  white-space: nowrap;
+}
+
+@media (max-width: 360px) {
+  .leaderboardButton {
+    font-size: 0.7rem;
+    padding: var(--spacing-xs);
+  }
+  
+  .leaderboardButton span {
+    display: none;
+  }
 }
 
 .leaderboardButton:hover {
@@ -204,7 +231,7 @@
 
 .localeButton {
   position: absolute;
-  top: var(--spacing-sm);
+  top: var(--spacing-xs);
   right: var(--spacing-sm);
   background-color: var(--bg-tertiary);
   border: 1px solid var(--text-gold);
@@ -215,6 +242,7 @@
   font-size: 0.75rem;
   font-weight: bold;
   transition: all 0.2s;
+  z-index: 10;
 }
 
 .localeButton:hover {
