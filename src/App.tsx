@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { signInAnonymously } from 'firebase/auth';
+import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import Router from './components/Router/Router';
 import PrivacyNoticeModal from './components/PrivacyNoticeModal/PrivacyNoticeModal';
 import { STORAGE_KEYS } from './utils/constants';
@@ -61,6 +63,34 @@ function App() {
         // 目前設定為不自動恢復，用戶需要手動開始
       }
     }
+  }, []);
+
+  // 監聽手機原生返回按鈕（僅在 Native 環境）
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) {
+      return;
+    }
+
+    const handleBackButton = async () => {
+      const currentHash = window.location.hash;
+      
+      // 如果在排行榜頁面，返回首頁
+      if (currentHash === '#leaderboard' || currentHash === '#/leaderboard') {
+        window.location.hash = '#';
+        return;
+      }
+      
+      // 如果已在首頁，退出 App
+      if (currentHash === '' || currentHash === '#' || currentHash === '#/') {
+        await App.exitApp();
+      }
+    };
+
+    const backButtonListener = App.addListener('backButton', handleBackButton);
+
+    return () => {
+      backButtonListener.then(listener => listener.remove());
+    };
   }, []);
 
   return (

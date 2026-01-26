@@ -55,9 +55,10 @@
 .shieldTooltip {
   position: absolute;
   top: 100%;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   margin-top: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: 8px 16px;
   background-color: var(--bg-primary);
   border: 1px solid var(--text-diamond);
   border-radius: var(--radius-sm);
@@ -67,8 +68,6 @@
   z-index: 10000;
   box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
   font-family: var(--font-mono);
-  max-width: 250px;
-  white-space: normal;
   text-align: center;
   animation: fadeInTooltip 0.2s ease-in;
   pointer-events: none;
