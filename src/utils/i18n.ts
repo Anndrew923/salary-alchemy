@@ -3,10 +3,14 @@ export type Locale = 'TW' | 'EN';
 export interface I18nStrings {
   // 通用
   appName: string;
+  leaderboard: string;
   start: string;
   pause: string;
   reset: string;
   settings: string;
+  settle: string;
+  finish: string;
+  discard: string;
   
   // 薪資輸入
   monthlySalary: string;
@@ -44,15 +48,20 @@ export interface I18nStrings {
   receiptTypeHealth: string;
   receiptTypeWealth: string;
   receiptConfirm: string;
+  receiptConfirmButton: string;
 }
 
 const translations: Record<Locale, I18nStrings> = {
   TW: {
     appName: '帶薪煉金術',
+    leaderboard: '排行榜',
     start: '開始煉金',
     pause: '暫停',
     reset: '重置',
     settings: '設定',
+    settle: '煉成',
+    finish: '結束',
+    discard: '放棄',
     monthlySalary: '月薪',
     dailyHours: '每日工時',
     workingDays: '工作天數',
@@ -78,13 +87,18 @@ const translations: Record<Locale, I18nStrings> = {
     receiptTypeHealth: '健康風險',
     receiptTypeWealth: '財富累積',
     receiptConfirm: '確認',
+    receiptConfirmButton: '收入口袋',
   },
   EN: {
     appName: 'Salary Alchemy',
+    leaderboard: 'Leaderboard',
     start: 'Start Alchemy',
     pause: 'Pause',
     reset: 'Reset',
     settings: 'Settings',
+    settle: 'Settle',
+    finish: 'Finish',
+    discard: 'Discard',
     monthlySalary: 'Monthly Salary',
     dailyHours: 'Daily Hours',
     workingDays: 'Working Days',
@@ -110,6 +124,7 @@ const translations: Record<Locale, I18nStrings> = {
     receiptTypeHealth: 'Health Risk',
     receiptTypeWealth: 'Wealth Accumulation',
     receiptConfirm: 'Confirm',
+    receiptConfirmButton: 'Confirm',
   },
 };
 

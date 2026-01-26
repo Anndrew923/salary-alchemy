@@ -169,6 +169,39 @@
   }
 }
 
+.leaderboardButton {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--text-gold);
+  color: var(--text-gold);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: bold;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.leaderboardButton:hover {
+  background-color: var(--text-gold);
+  color: var(--bg-primary);
+}
+
+.diamondMode .leaderboardButton {
+  border-color: var(--text-diamond);
+  color: var(--text-diamond);
+}
+
+.diamondMode .leaderboardButton:hover {
+  background-color: var(--text-diamond);
+  color: var(--bg-primary);
+}
+
 .localeButton {
   position: absolute;
   top: var(--spacing-sm);

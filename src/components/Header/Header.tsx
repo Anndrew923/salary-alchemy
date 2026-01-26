@@ -29,8 +29,19 @@ const Header = () => {
     ? `Next: ${formatCurrency(totalEarned)} / ${formatCurrency(nextLevelThreshold)}`
     : 'Max Level Reached';
 
+  const navigateToLeaderboard = () => {
+    window.location.hash = '#leaderboard';
+  };
+
   return (
     <header className={`${styles.header} ${isDiamondMode ? styles.diamondMode : ''}`}>
+      <button 
+        className={styles.leaderboardButton}
+        onClick={navigateToLeaderboard}
+        aria-label="Go to leaderboard"
+      >
+        🏆 {i18n.leaderboard}
+      </button>
       <div className={styles.title}>{i18n.appName}</div>
       <div className={styles.level}>
         <span 
