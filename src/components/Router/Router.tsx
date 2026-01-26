@@ -11,7 +11,12 @@ const Router = () => {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.slice(1) || '/';
+      let hash = window.location.hash.slice(1) || '/';
+      // 確保 hash 以 / 開頭，以匹配 Route 類型
+      // 例如：#leaderboard -> /leaderboard
+      if (hash && !hash.startsWith('/')) {
+        hash = '/' + hash;
+      }
       // 確保能正確偵測到 #leaderboard 並渲染組件
       setCurrentRoute(hash as Route);
     };
