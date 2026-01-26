@@ -8,16 +8,17 @@ import { useUserStore } from './stores/userStore';
 function App() {
   const { uid, hasSeenPrivacyNotice, setUid, setAnonymousId } = useUserStore();
 
-  // 監聽 hasSeenPrivacyNotice 變化，當它變為 true 且未登入時，自動執行匿名登入
+  // 應用啟動時，檢查標記並執行登入
+  // 若 hasSeenPrivacyNotice 為 true 則執行 signInAnonymously()
+  // 若為 false 則靜默等待，直到用戶進入排行榜頁面觸發 Modal
   useEffect(() => {
     const performAutoSignIn = async () => {
-      // 如果 Firebase 未啟用，跳過
+      // 如果 Firebase 未啟用，靜默跳過
       if (!isFirebaseEnabled() || !auth) {
-        console.log('Firebase not enabled, skipping anonymous sign-in');
         return;
       }
 
-      // 如果還沒看過隱私協議，不執行自動登入（等待用戶同意）
+      // 如果還沒看過隱私協議，靜默等待（不輸出任何 log）
       if (!hasSeenPrivacyNotice) {
         return;
       }

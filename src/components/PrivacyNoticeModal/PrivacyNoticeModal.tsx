@@ -17,29 +17,26 @@ const PrivacyNoticeModal = ({ onAgree }: PrivacyNoticeModalProps) => {
   const privacy = translations.privacy;
 
   const handleAgree = async () => {
-    // 如果 Firebase 已啟用，執行匿名登入
+    // 1. 先設置標記（這會自動寫入 localStorage）
+    setHasSeenPrivacyNotice(true);
+    
+    // 2. 如果 Firebase 已啟用，執行匿名登入
     if (isFirebaseEnabled() && auth) {
       try {
+        // 3. 執行登入
         const userCredential = await signInAnonymously(auth);
         const userUid = userCredential.user.uid;
         setUid(userUid);
         setAnonymousId(userUid);
-        setHasSeenPrivacyNotice(true);
         console.log('Privacy notice agreed, anonymous sign-in successful:', userUid);
-        
-        // 登入成功後，通知父組件（觸發排行榜重新抓取）
-        onAgree();
       } catch (error) {
         console.error('Anonymous sign-in failed:', error);
-        // 即使登入失敗，也標記為已看過（允許用戶繼續使用）
-        setHasSeenPrivacyNotice(true);
-        onAgree();
+        // 即使登入失敗，標記已設置，允許用戶繼續使用
       }
-    } else {
-      // Firebase 未啟用時，僅標記為已看過
-      setHasSeenPrivacyNotice(true);
-      onAgree();
     }
+    
+    // 4. 通知父組件（觸發排行榜資料抓取）
+    onAgree();
   };
 
   // 阻止背景滾動

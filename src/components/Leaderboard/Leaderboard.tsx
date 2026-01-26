@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db, isFirebaseEnabled } from '../../config/firebase';
+import { signInAnonymously } from 'firebase/auth';
+import { db, auth, isFirebaseEnabled } from '../../config/firebase';
 import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { RPG_LEVELS_TW, RPG_LEVELS_EN, LEVEL_TITLES } from '../../utils/constants';
@@ -21,7 +22,7 @@ interface LeaderboardEntry {
 }
 
 const Leaderboard = () => {
-  const { locale, uid: currentUid, hasSeenPrivacyNotice } = useUserStore();
+  const { locale, uid: currentUid, hasSeenPrivacyNotice, setUid, setAnonymousId } = useUserStore();
   const { totalEarned: currentTotalEarned } = useAlchemyStore();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +42,39 @@ const Leaderboard = () => {
       setShowPrivacyModal(false);
     }
   }, [hasSeenPrivacyNotice]);
+
+  // 強化攔截機制：如果已簽署但尚未登入，立即執行 signInAnonymously()
+  useEffect(() => {
+    const performSignIn = async () => {
+      // 如果未簽署，等待 Modal 處理
+      if (!hasSeenPrivacyNotice) {
+        return;
+      }
+
+      // 如果已經登入，跳過
+      if (currentUid) {
+        return;
+      }
+
+      // 如果 Firebase 未啟用，跳過
+      if (!isFirebaseEnabled() || !auth) {
+        return;
+      }
+
+      try {
+        const userCredential = await signInAnonymously(auth);
+        const userUid = userCredential.user.uid;
+        setUid(userUid);
+        setAnonymousId(userUid);
+        console.log('Leaderboard: Auto sign-in successful:', userUid);
+      } catch (error) {
+        console.error('Leaderboard: Auto sign-in failed:', error);
+        // 不阻止應用運行
+      }
+    };
+
+    performSignIn();
+  }, [hasSeenPrivacyNotice, currentUid, setUid, setAnonymousId]);
 
   // 根據 totalEarned 計算等級和 tier（用於當前用戶顯示）
   const calculateLevel = useMemo(() => {
