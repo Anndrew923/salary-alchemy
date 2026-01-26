@@ -1,5 +1,11 @@
 {
   "leaderboard": "Leaderboard",
+  "leaderboardTitle": "🌍 Global Leaderboard",
+  "yourRank": "Your Rank",
+  "loading": "Loading...",
+  "error": "Failed to load leaderboard. Please check Firebase configuration.",
+  "empty": "Leaderboard is currently empty",
+  "privacyNoticeRequired": "Please accept the privacy notice to view the leaderboard...",
   "privacy": {
     "title": "Alchemist Confidentiality Agreement",
     "subtitle": "ALCHEMIST CONFIDENTIALITY AGREEMENT",

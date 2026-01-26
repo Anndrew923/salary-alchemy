@@ -1,5 +1,11 @@
 {
   "leaderboard": "排行榜",
+  "leaderboardTitle": "🌍 全球排行榜",
+  "yourRank": "你的排名",
+  "loading": "載入中...",
+  "error": "載入排行榜失敗，請檢查 Firebase 設定。",
+  "empty": "排行榜目前為空",
+  "privacyNoticeRequired": "請先接受隱私協議以查看排行榜...",
   "privacy": {
     "title": "煉金術士保密協議",
     "subtitle": "ALCHEMIST CONFIDENTIALITY AGREEMENT",

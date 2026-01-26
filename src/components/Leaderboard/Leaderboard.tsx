@@ -5,6 +5,7 @@ import { db, auth, isFirebaseEnabled } from '../../config/firebase';
 import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { RPG_LEVELS_TW, RPG_LEVELS_EN, LEVEL_TITLES } from '../../utils/constants';
+import { formatCurrency, getI18n } from '../../utils/i18n';
 import zhTW from '../../locales/zh-TW.json';
 import enUS from '../../locales/en-US.json';
 import styles from './Leaderboard.module.css';
@@ -18,10 +19,11 @@ interface LeaderboardEntry {
   rank: number;
   tier: number;
   levelTitle: string;
+  updatedAt?: string;
 }
 
 const Leaderboard = () => {
-  const { locale, uid: currentUid, hasSeenPrivacyNotice, setUid, setAnonymousId } = useUserStore();
+  const { locale, uid: currentUid, hasSeenPrivacyNotice, setUid, setAnonymousId, setPrivacyModalOpen, setShouldNavigateToLeaderboard } = useUserStore();
   const { totalEarned: currentTotalEarned } = useAlchemyStore();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,6 +32,16 @@ const Leaderboard = () => {
 
   const translations = locale === 'TW' ? zhTW : enUS;
   const privacy = translations.privacy;
+  const i18n = getI18n(locale);
+
+  // 組件掛載時，強制攔截：檢查隱私協議狀態
+  // 如果用戶直接通過 URL 進入排行榜但未簽署，必須強制開啟 PrivacyNoticeModal
+  useEffect(() => {
+    if (!hasSeenPrivacyNotice) {
+      setShouldNavigateToLeaderboard(true); // 標記簽署後應該導向排行榜
+      setPrivacyModalOpen(true);
+    }
+  }, [hasSeenPrivacyNotice, setPrivacyModalOpen, setShouldNavigateToLeaderboard]);
 
   // 自動登入補償：如果標記為 true 但 Firebase 尚未登入，立即觸發 signInAnonymously()
   useEffect(() => {
@@ -120,7 +132,7 @@ const Leaderboard = () => {
       // 如果 Firebase 未啟用，顯示提示
       if (!isFirebaseEnabled() || !db) {
         setLoading(false);
-        setError('Firebase is not configured. Please set VITE_FIREBASE_* environment variables to enable leaderboard.');
+        setError(translations.error || 'Firebase is not configured. Please set VITE_FIREBASE_* environment variables to enable leaderboard.');
         return;
       }
 
@@ -142,6 +154,7 @@ const Leaderboard = () => {
           const totalEarned = data.totalEarned || 0;
           const normalizedScore = data.normalizedScore || 0;
           const userLocale = data.locale || 'TW';
+          const updatedAt = data.updatedAt || null;
           
           // 根據 normalizedScore 計算 tier（使用 TW 門檻，因為 normalizedScore 已經標準化）
           const { tier, index: levelIndex } = calculateLevelFromNormalizedScore(normalizedScore);
@@ -155,13 +168,14 @@ const Leaderboard = () => {
             rank: leaderboardData.length + 1,
             tier,
             levelTitle: getLevelTitle(levelIndex),
+            updatedAt,
           });
         });
 
         setEntries(leaderboardData);
       } catch (err) {
         console.error('Error fetching leaderboard:', err);
-        setError('Failed to load leaderboard. Please check Firebase configuration.');
+        setError(translations.error || 'Failed to load leaderboard. Please check Firebase configuration.');
       } finally {
         setLoading(false);
       }
@@ -170,11 +184,34 @@ const Leaderboard = () => {
     fetchLeaderboard();
   }, [hasSeenPrivacyNotice, currentUid, locale, calculateLevel, calculateLevelFromNormalizedScore, getLevelTitle]);
 
-  const formatCurrency = (amount: number) => {
-    if (locale === 'TW') {
-      return `NT$${amount.toLocaleString('zh-TW', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-    } else {
-      return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  // 格式化時間顯示（相對時間或絕對時間）
+  const formatTime = (updatedAt: string | null | undefined): string => {
+    if (!updatedAt) return '';
+    
+    try {
+      const updatedTime = new Date(updatedAt);
+      const now = new Date();
+      const diffMs = now.getTime() - updatedTime.getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+      
+      if (diffMins < 1) {
+        return locale === 'TW' ? '剛剛' : 'Just now';
+      } else if (diffMins < 60) {
+        return locale === 'TW' ? `${diffMins}分鐘前` : `${diffMins} min ago`;
+      } else if (diffHours < 24) {
+        return locale === 'TW' ? `${diffHours}小時前` : `${diffHours} hr ago`;
+      } else if (diffDays < 7) {
+        return locale === 'TW' ? `${diffDays}天前` : `${diffDays} days ago`;
+      } else {
+        // 超過一週顯示具體時間
+        const hours = updatedTime.getHours().toString().padStart(2, '0');
+        const minutes = updatedTime.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+      }
+    } catch (e) {
+      return '';
     }
   };
 
@@ -209,11 +246,11 @@ const Leaderboard = () => {
     <div className={styles.container}>
       {/* 未簽署隱私協議時，不顯示任何排行榜內容 */}
       {!hasSeenPrivacyNotice && (
-        <div className={styles.loading}>Please accept the privacy notice to view the leaderboard...</div>
+        <div className={styles.loading}>{translations.privacyNoticeRequired}</div>
       )}
 
       {hasSeenPrivacyNotice && loading && (
-        <div className={styles.loading}>Loading leaderboard...</div>
+        <div className={styles.loading}>{translations.loading}</div>
       )}
 
       {hasSeenPrivacyNotice && error && (
@@ -224,7 +261,7 @@ const Leaderboard = () => {
         <>
       
       <div className={styles.header}>
-        <h1 className={styles.title}>🌍 Global Leaderboard</h1>
+        <h1 className={styles.title}>{translations.leaderboardTitle}</h1>
         
         {/* 匿名保護盾 */}
         <div 
@@ -245,12 +282,12 @@ const Leaderboard = () => {
       
       {/* 當前用戶資訊 */}
       {currentUid && (
-        <div className={styles.currentUser}>
-          <div className={styles.currentUserLabel}>Your Rank</div>
+        <div className={`${styles.currentUser} ${currentTier === 5 ? styles.diamondMode : ''}`}>
+          <div className={styles.currentUserLabel}>{translations.yourRank}</div>
           <div className={styles.currentUserInfo}>
             <span className={styles.rank}>#{currentUserRank || '?'}</span>
-            <span className={styles.nickname}>{currentUserEntry?.nickname || 'You'}</span>
-            <span className={styles.amount}>{formatCurrency(currentTotalEarned)}</span>
+            <span className={styles.nickname}>{currentUserEntry?.nickname || (locale === 'TW' ? '你' : 'You')}</span>
+            <span className={styles.amount}>{formatCurrency(currentTotalEarned, locale)}</span>
             <span 
               className={styles.tierBadge}
               style={{ color: getTierColor(currentTier) }}
@@ -266,7 +303,7 @@ const Leaderboard = () => {
         {entries.map((entry) => (
           <div
             key={entry.uid}
-            className={`${styles.entry} ${entry.uid === currentUid ? styles.currentUserEntry : ''}`}
+            className={`${styles.entry} ${entry.uid === currentUid ? styles.currentUserEntry : ''} ${entry.tier === 5 ? styles.diamondEntry : ''}`}
           >
             <div className={styles.rank}>{entry.rank}</div>
             <div className={styles.tierIcon} style={{ color: getTierColor(entry.tier) }}>
@@ -276,7 +313,7 @@ const Leaderboard = () => {
               <div className={styles.nickname}>{entry.nickname}</div>
               <div className={styles.levelTitle}>{entry.levelTitle}</div>
             </div>
-            <div className={styles.amount}>{formatCurrency(entry.totalEarned)}</div>
+            <div className={styles.amount}>{formatCurrency(entry.totalEarned, entry.locale || locale)}</div>
           </div>
         ))}
       </div>

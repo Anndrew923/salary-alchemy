@@ -64,13 +64,14 @@
   color: var(--text-diamond);
   font-size: 0.75rem;
   white-space: nowrap;
-  z-index: 1000;
+  z-index: 10000;
   box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
   font-family: var(--font-mono);
   max-width: 250px;
   white-space: normal;
   text-align: center;
   animation: fadeInTooltip 0.2s ease-in;
+  pointer-events: none;
 }
 
 @keyframes fadeInTooltip {
@@ -96,12 +97,19 @@
 }
 
 .currentUser {
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
-  border: 2px solid var(--text-gold);
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(20, 20, 20, 0.95) 100%);
+  border: 3px solid var(--text-gold);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-glow), 0 0 20px rgba(255, 215, 0, 0.4);
+  position: relative;
+}
+
+.currentUser.diamondMode {
+  border-color: var(--text-diamond);
+  box-shadow: var(--shadow-diamond), 0 0 20px rgba(0, 191, 255, 0.4);
+  background: linear-gradient(135deg, rgba(0, 30, 50, 0.8) 0%, rgba(20, 20, 20, 0.95) 100%);
 }
 
 .currentUserLabel {
@@ -126,7 +134,9 @@
 }
 
 .entry {
-  display: flex;
+  display: grid;
+  grid-template-columns: 40px 35px 1fr 120px;
+  grid-template-areas: "rank tier info amount";
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -143,50 +153,69 @@
 
 .entry.currentUserEntry {
   border-color: var(--text-gold);
+  border-width: 2px;
   box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(255, 215, 0, 0.1) 100%);
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(255, 215, 0, 0.15) 100%);
+}
+
+.entry.diamondEntry.currentUserEntry {
+  border-color: var(--text-diamond);
+  box-shadow: 0 0 12px rgba(0, 191, 255, 0.5);
+  background: linear-gradient(135deg, rgba(0, 30, 50, 0.6) 0%, rgba(255, 215, 0, 0.1) 100%);
 }
 
 .rank {
+  grid-area: rank;
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--text-gold);
-  min-width: 40px;
   text-align: center;
   font-family: var(--font-mono);
 }
 
 .tierIcon {
+  grid-area: tier;
   font-size: 1.5rem;
-  min-width: 30px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .info {
-  flex: 1;
+  grid-area: info;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .nickname {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .levelTitle {
   font-size: 0.75rem;
   color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .amount {
+  grid-area: amount;
   font-size: 0.9rem;
   font-weight: bold;
   color: var(--text-gold);
   font-family: var(--font-mono);
   text-align: right;
-  min-width: 100px;
+  white-space: nowrap;
 }
 
 .tierBadge {
