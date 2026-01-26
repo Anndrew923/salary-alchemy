@@ -14,7 +14,7 @@ export const STORAGE_KEYS = {
   START_TIMESTAMP: 'alchemy_start_timestamp',
   TOTAL_EARNED: 'alchemy_total_earned',
   MONTHLY_SALARY: 'user_monthly_salary',
-  MONTHLY_HOURS: 'user_monthly_hours',
   DAILY_HOURS: 'user_daily_hours',
+  WORKING_DAYS: 'user_working_days',
   LOCALE: 'user_locale',
 } as const;
