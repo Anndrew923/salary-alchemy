@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { signInAnonymously } from 'firebase/auth';
 import Router from './components/Router/Router';
+import PrivacyNoticeModal from './components/PrivacyNoticeModal/PrivacyNoticeModal';
 import { STORAGE_KEYS } from './utils/constants';
 import { auth, isFirebaseEnabled } from './config/firebase';
 import { useUserStore } from './stores/userStore';
 
 function App() {
-  const { uid, hasSeenPrivacyNotice, setUid, setAnonymousId } = useUserStore();
+  const { uid, hasSeenPrivacyNotice, isPrivacyModalOpen, setUid, setAnonymousId } = useUserStore();
 
   // 監聽 hasSeenPrivacyNotice 的變化，一旦該值轉為 true，立即啟動匿名登入流程
   // 確保資料能即時同步，且這輩子只要簽這一次就好
@@ -62,7 +63,19 @@ function App() {
     }
   }, []);
 
-  return <Router />;
+  return (
+    <>
+      <Router />
+      {/* 全局隱私協議 Modal，由 isPrivacyModalOpen 控制顯示 */}
+      {isPrivacyModalOpen && (
+        <PrivacyNoticeModal 
+          onAgree={() => {
+            // Modal 關閉邏輯在 PrivacyNoticeModal 內部處理
+          }}
+        />
+      )}
+    </>
+  );
 }
 
 export default App;

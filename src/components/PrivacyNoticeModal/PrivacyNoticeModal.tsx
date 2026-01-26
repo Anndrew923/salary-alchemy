@@ -11,13 +11,13 @@ interface PrivacyNoticeModalProps {
 }
 
 const PrivacyNoticeModal = ({ onAgree }: PrivacyNoticeModalProps) => {
-  const { locale, setUid, setAnonymousId, setHasSeenPrivacyNotice } = useUserStore();
+  const { locale, setUid, setAnonymousId, setHasSeenPrivacyNotice, setPrivacyModalOpen, shouldNavigateToLeaderboard, setShouldNavigateToLeaderboard } = useUserStore();
 
   const translations = locale === 'TW' ? zhTW : enUS;
   const privacy = translations.privacy;
 
   const handleAgree = async () => {
-    // 1. 先設置標記（這會自動寫入 localStorage）
+    // 1. 執行 setHasSeenPrivacyNotice(true)
     setHasSeenPrivacyNotice(true);
     
     // 2. 如果 Firebase 已啟用，執行匿名登入
@@ -35,7 +35,16 @@ const PrivacyNoticeModal = ({ onAgree }: PrivacyNoticeModalProps) => {
       }
     }
     
-    // 4. 通知父組件（觸發排行榜資料抓取）
+    // 4. 關閉 Modal
+    setPrivacyModalOpen(false);
+    
+    // 5. 如果是從排行榜入口觸發的，簽署完後自動導向 #leaderboard
+    if (shouldNavigateToLeaderboard) {
+      setShouldNavigateToLeaderboard(false); // 清除標記
+      window.location.hash = '#leaderboard';
+    }
+    
+    // 6. 通知父組件（觸發排行榜資料抓取）
     onAgree();
   };
 

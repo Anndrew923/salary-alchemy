@@ -5,7 +5,6 @@ import { db, auth, isFirebaseEnabled } from '../../config/firebase';
 import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { RPG_LEVELS_TW, RPG_LEVELS_EN, LEVEL_TITLES } from '../../utils/constants';
-import PrivacyNoticeModal from '../PrivacyNoticeModal/PrivacyNoticeModal';
 import zhTW from '../../locales/zh-TW.json';
 import enUS from '../../locales/en-US.json';
 import styles from './Leaderboard.module.css';
@@ -27,22 +26,10 @@ const Leaderboard = () => {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showShieldTooltip, setShowShieldTooltip] = useState(false);
 
   const translations = locale === 'TW' ? zhTW : enUS;
   const privacy = translations.privacy;
-
-  // 組件掛載時，強制攔截：檢查隱私協議狀態
-  useEffect(() => {
-    // 強制攔截：如果標記為 false，必須強制開啟 PrivacyNoticeModal
-    if (!hasSeenPrivacyNotice) {
-      setShowPrivacyModal(true);
-    } else {
-      // 已簽署後，確保 modal 關閉
-      setShowPrivacyModal(false);
-    }
-  }, [hasSeenPrivacyNotice]);
 
   // 自動登入補償：如果標記為 true 但 Firebase 尚未登入，立即觸發 signInAnonymously()
   useEffect(() => {
@@ -220,16 +207,6 @@ const Leaderboard = () => {
 
   return (
     <div className={styles.container}>
-      {/* 強制顯示隱私協議 modal，未簽署前不顯示任何內容 */}
-      {showPrivacyModal && (
-        <PrivacyNoticeModal 
-          onAgree={() => {
-            setShowPrivacyModal(false);
-            // 簽署後會觸發重新抓取（通過 hasSeenPrivacyNotice 和 currentUid 的變化）
-          }}
-        />
-      )}
-      
       {/* 未簽署隱私協議時，不顯示任何排行榜內容 */}
       {!hasSeenPrivacyNotice && (
         <div className={styles.loading}>Please accept the privacy notice to view the leaderboard...</div>

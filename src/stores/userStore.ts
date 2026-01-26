@@ -13,6 +13,8 @@ interface UserState {
   nickname: string;
   hasSeenPrivacyNotice: boolean;
   anonymousId: string | null;
+  isPrivacyModalOpen: boolean;
+  shouldNavigateToLeaderboard: boolean;
   setMonthlySalary: (salary: number) => void;
   setDailyHours: (hours: number) => void;
   setWorkingDays: (days: number) => void;
@@ -21,6 +23,8 @@ interface UserState {
   setNickname: (nickname: string) => void;
   setHasSeenPrivacyNotice: (seen: boolean) => void;
   setAnonymousId: (id: string) => void;
+  setPrivacyModalOpen: (open: boolean) => void;
+  setShouldNavigateToLeaderboard: (should: boolean) => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -34,6 +38,8 @@ export const useUserStore = create<UserState>()(
       nickname: 'Anonymous Alchemist',
       hasSeenPrivacyNotice: false,
       anonymousId: null,
+      isPrivacyModalOpen: false,
+      shouldNavigateToLeaderboard: false,
       setMonthlySalary: (salary) => set({ monthlySalary: salary }),
       setDailyHours: (hours) => set({ dailyHours: hours }),
       setWorkingDays: (days) => set({ workingDays: days }),
@@ -71,6 +77,8 @@ export const useUserStore = create<UserState>()(
       setNickname: (nickname) => set({ nickname }),
       setHasSeenPrivacyNotice: (seen) => set({ hasSeenPrivacyNotice: seen }),
       setAnonymousId: (id) => set({ anonymousId: id }),
+      setPrivacyModalOpen: (open) => set({ isPrivacyModalOpen: open }),
+      setShouldNavigateToLeaderboard: (should) => set({ shouldNavigateToLeaderboard: should }),
     }),
     {
       name: 'salary-alchemy-user',

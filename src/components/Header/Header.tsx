@@ -7,7 +7,7 @@ import styles from './Header.module.css';
 
 const Header = () => {
   const { level, isDiamondMode, nextLevelThreshold, currentTier } = useRPGLevel();
-  const { locale, setLocale } = useUserStore();
+  const { locale, hasSeenPrivacyNotice, setLocale, setPrivacyModalOpen, setShouldNavigateToLeaderboard } = useUserStore();
   const { totalEarned } = useAlchemyStore();
   const i18n = getI18n(locale);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -30,6 +30,13 @@ const Header = () => {
     : 'Max Level Reached';
 
   const navigateToLeaderboard = () => {
+    // 如果 hasSeenPrivacyNotice 為 false，則調用 setPrivacyModalOpen(true) 彈出協議，暫緩導航
+    if (!hasSeenPrivacyNotice) {
+      setShouldNavigateToLeaderboard(true); // 標記簽署後應該導向排行榜
+      setPrivacyModalOpen(true);
+      return;
+    }
+    // 已簽署，直接導航
     window.location.hash = '#leaderboard';
   };
 

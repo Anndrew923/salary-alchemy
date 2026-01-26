@@ -69,7 +69,8 @@ export const useAlchemyStore = create<AlchemyState>()(
           if (!uid || (auth && !auth.currentUser)) {
             // 檢查是否已看過隱私協議
             if (!userState.hasSeenPrivacyNotice) {
-              console.warn('Cannot sync: privacy notice not seen yet');
+              // 如果檢查到 !hasSeenPrivacyNotice，直接調用 setPrivacyModalOpen(true) 彈出協議
+              useUserStore.getState().setPrivacyModalOpen(true);
               return;
             }
 
