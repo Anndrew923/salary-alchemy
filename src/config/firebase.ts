@@ -1,6 +1,13 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
+import { getAuth, Auth } from 'firebase/auth';
+import { getFirestore, Firestore } from 'firebase/firestore';
+
+// 檢查 Firebase 配置是否完整
+const isFirebaseConfigured = () => {
+  const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
+  const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
+  return !!(apiKey && projectId && apiKey !== '' && projectId !== '');
+};
 
 // Firebase 配置（使用環境變數）
 const firebaseConfig = {
@@ -12,13 +19,34 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
 };
 
-// 初始化 Firebase
-const app = initializeApp(firebaseConfig);
+// 初始化 Firebase（僅在配置完整時）
+let app: FirebaseApp | null = null;
+let auth: Auth | null = null;
+let db: Firestore | null = null;
 
-// 初始化 Auth
-export const auth = getAuth(app);
+if (isFirebaseConfigured()) {
+  try {
+    // 避免重複初始化
+    if (getApps().length === 0) {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+    } else {
+      app = getApps()[0];
+      auth = getAuth(app);
+      db = getFirestore(app);
+    }
+    console.log('Firebase initialized successfully');
+  } catch (error) {
+    console.warn('Firebase initialization failed:', error);
+    console.warn('App will continue without Firebase features');
+  }
+} else {
+  console.warn('Firebase not configured. Please set VITE_FIREBASE_* environment variables.');
+  console.warn('App will continue without Firebase features (leaderboard, sync)');
+}
 
-// 初始化 Firestore
-export const db = getFirestore(app);
+export { auth, db };
+export const isFirebaseEnabled = (): boolean => !!(auth && db);
 
 export default app;

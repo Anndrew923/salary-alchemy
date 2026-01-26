@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db } from '../../config/firebase';
+import { db, isFirebaseEnabled } from '../../config/firebase';
 import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { RPG_LEVELS_TW, RPG_LEVELS_EN, LEVEL_TITLES } from '../../utils/constants';
@@ -23,28 +23,39 @@ const Leaderboard = () => {
   const [error, setError] = useState<string | null>(null);
 
   // 根據 totalEarned 計算等級和 tier
-  const calculateLevel = (totalEarned: number) => {
-    const RPG_LEVELS = locale === 'TW' ? RPG_LEVELS_TW : RPG_LEVELS_EN;
-    
-    for (let i = RPG_LEVELS.length - 1; i >= 0; i--) {
-      if (totalEarned >= RPG_LEVELS[i].threshold) {
-        return {
-          index: i,
-          tier: RPG_LEVELS[i].tier,
-        };
+  const calculateLevel = useMemo(() => {
+    return (totalEarned: number) => {
+      const RPG_LEVELS = locale === 'TW' ? RPG_LEVELS_TW : RPG_LEVELS_EN;
+      
+      for (let i = RPG_LEVELS.length - 1; i >= 0; i--) {
+        if (totalEarned >= RPG_LEVELS[i].threshold) {
+          return {
+            index: i,
+            tier: RPG_LEVELS[i].tier,
+          };
+        }
       }
-    }
-    return { index: 0, tier: 1 };
-  };
+      return { index: 0, tier: 1 };
+    };
+  }, [locale]);
 
   // 獲取等級標題
-  const getLevelTitle = (levelIndex: number) => {
-    const titles = locale === 'TW' ? LEVEL_TITLES.TW : LEVEL_TITLES.EN;
-    return titles[levelIndex] || titles[0];
-  };
+  const getLevelTitle = useMemo(() => {
+    return (levelIndex: number) => {
+      const titles = locale === 'TW' ? LEVEL_TITLES.TW : LEVEL_TITLES.EN;
+      return titles[levelIndex] || titles[0];
+    };
+  }, [locale]);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
+      // 如果 Firebase 未啟用，顯示提示
+      if (!isFirebaseEnabled() || !db) {
+        setLoading(false);
+        setError('Firebase is not configured. Please set VITE_FIREBASE_* environment variables to enable leaderboard.');
+        return;
+      }
+
       try {
         setLoading(true);
         setError(null);
@@ -76,14 +87,14 @@ const Leaderboard = () => {
         setEntries(leaderboardData);
       } catch (err) {
         console.error('Error fetching leaderboard:', err);
-        setError('Failed to load leaderboard');
+        setError('Failed to load leaderboard. Please check Firebase configuration.');
       } finally {
         setLoading(false);
       }
     };
 
     fetchLeaderboard();
-  }, [locale]);
+  }, [locale, calculateLevel, getLevelTitle]);
 
   const formatCurrency = (amount: number) => {
     if (locale === 'TW') {

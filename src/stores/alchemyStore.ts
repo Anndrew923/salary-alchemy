@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { doc, setDoc } from 'firebase/firestore';
 import { STORAGE_KEYS } from '../utils/constants';
-import { db } from '../config/firebase';
+import { db, isFirebaseEnabled } from '../config/firebase';
 import { useUserStore } from './userStore';
 
 interface AlchemyState {
@@ -12,9 +12,9 @@ interface AlchemyState {
   start: () => void;
   pause: () => void;
   reset: () => void;
-  finishSession: (earned: number) => void;
+  finishSession: (earned: number) => Promise<void>;
   calculateEarned: (ratePerSecond: number) => number;
-  addToTotal: (amount: number) => void;
+  addToTotal: (amount: number) => Promise<void>;
   resetTotalEarned: () => void;
 }
 
@@ -59,25 +59,27 @@ export const useAlchemyStore = create<AlchemyState>()(
           set({ totalEarned: newTotal });
           localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, newTotal.toString());
           
-          // 同步到 Firestore
-          try {
-            const userState = useUserStore.getState();
-            const uid = userState.uid;
-            const nickname = userState.nickname;
-            
-            if (uid) {
-              await setDoc(
-                doc(db, 'users', uid),
-                {
-                  totalEarned: newTotal,
-                  nickname: nickname,
-                  updatedAt: new Date().toISOString(),
-                },
-                { merge: true }
-              );
+          // 同步到 Firestore（僅在 Firebase 啟用時）
+          if (isFirebaseEnabled() && db) {
+            try {
+              const userState = useUserStore.getState();
+              const uid = userState.uid;
+              const nickname = userState.nickname;
+              
+              if (uid) {
+                await setDoc(
+                  doc(db, 'users', uid),
+                  {
+                    totalEarned: newTotal,
+                    nickname: nickname,
+                    updatedAt: new Date().toISOString(),
+                  },
+                  { merge: true }
+                );
+              }
+            } catch (error) {
+              console.error('Failed to sync to Firestore:', error);
             }
-          } catch (error) {
-            console.error('Failed to sync to Firestore:', error);
           }
         }
         // 重置當前計時
@@ -102,28 +104,30 @@ export const useAlchemyStore = create<AlchemyState>()(
           const newTotal = state.totalEarned + amount;
           localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, newTotal.toString());
           
-          // 同步到 Firestore
-          (async () => {
-            try {
-              const userState = useUserStore.getState();
-              const uid = userState.uid;
-              const nickname = userState.nickname;
-              
-              if (uid) {
-                await setDoc(
-                  doc(db, 'users', uid),
-                  {
-                    totalEarned: newTotal,
-                    nickname: nickname,
-                    updatedAt: new Date().toISOString(),
-                  },
-                  { merge: true }
-                );
+          // 同步到 Firestore（僅在 Firebase 啟用時）
+          if (isFirebaseEnabled() && db) {
+            (async () => {
+              try {
+                const userState = useUserStore.getState();
+                const uid = userState.uid;
+                const nickname = userState.nickname;
+                
+                if (uid) {
+                  await setDoc(
+                    doc(db, 'users', uid),
+                    {
+                      totalEarned: newTotal,
+                      nickname: nickname,
+                      updatedAt: new Date().toISOString(),
+                    },
+                    { merge: true }
+                  );
+                }
+              } catch (error) {
+                console.error('Failed to sync to Firestore:', error);
               }
-            } catch (error) {
-              console.error('Failed to sync to Firestore:', error);
-            }
-          })();
+            })();
+          }
           
           return { totalEarned: newTotal };
         });

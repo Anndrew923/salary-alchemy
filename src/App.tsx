@@ -2,15 +2,21 @@ import { useEffect } from 'react';
 import { signInAnonymously } from 'firebase/auth';
 import Router from './components/Router/Router';
 import { STORAGE_KEYS } from './utils/constants';
-import { auth } from './config/firebase';
+import { auth, isFirebaseEnabled } from './config/firebase';
 import { useUserStore } from './stores/userStore';
 
 function App() {
   const { uid, setUid } = useUserStore();
 
-  // 應用啟動時，執行無感登入
+  // 應用啟動時，執行無感登入（僅在 Firebase 啟用時）
   useEffect(() => {
     const initializeAuth = async () => {
+      // 如果 Firebase 未啟用，跳過
+      if (!isFirebaseEnabled() || !auth) {
+        console.log('Firebase not enabled, skipping anonymous sign-in');
+        return;
+      }
+
       // 如果已經有 uid，跳過登入
       if (uid) {
         return;
@@ -23,6 +29,7 @@ function App() {
         console.log('Anonymous sign-in successful:', userUid);
       } catch (error) {
         console.error('Anonymous sign-in failed:', error);
+        // 不阻止應用運行，只是無法使用 Firebase 功能
       }
     };
 
