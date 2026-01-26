@@ -5,7 +5,7 @@ import { db, auth, isFirebaseEnabled } from '../../config/firebase';
 import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { RPG_LEVELS_TW, RPG_LEVELS_EN, LEVEL_TITLES } from '../../utils/constants';
-import { formatCurrency, getI18n } from '../../utils/i18n';
+import { formatCurrency } from '../../utils/i18n';
 import zhTW from '../../locales/zh-TW.json';
 import enUS from '../../locales/en-US.json';
 import styles from './Leaderboard.module.css';
@@ -32,7 +32,6 @@ const Leaderboard = () => {
 
   const translations = locale === 'TW' ? zhTW : enUS;
   const privacy = translations.privacy;
-  const i18n = getI18n(locale);
 
   // 組件掛載時，強制攔截：檢查隱私協議狀態
   // 如果用戶直接通過 URL 進入排行榜但未簽署，必須強制開啟 PrivacyNoticeModal
@@ -184,37 +183,6 @@ const Leaderboard = () => {
     fetchLeaderboard();
   }, [hasSeenPrivacyNotice, currentUid, locale, calculateLevel, calculateLevelFromNormalizedScore, getLevelTitle]);
 
-  // 格式化時間顯示（相對時間或絕對時間）
-  const formatTime = (updatedAt: string | null | undefined): string => {
-    if (!updatedAt) return '';
-    
-    try {
-      const updatedTime = new Date(updatedAt);
-      const now = new Date();
-      const diffMs = now.getTime() - updatedTime.getTime();
-      const diffMins = Math.floor(diffMs / 60000);
-      const diffHours = Math.floor(diffMs / 3600000);
-      const diffDays = Math.floor(diffMs / 86400000);
-      
-      if (diffMins < 1) {
-        return locale === 'TW' ? '剛剛' : 'Just now';
-      } else if (diffMins < 60) {
-        return locale === 'TW' ? `${diffMins}分鐘前` : `${diffMins} min ago`;
-      } else if (diffHours < 24) {
-        return locale === 'TW' ? `${diffHours}小時前` : `${diffHours} hr ago`;
-      } else if (diffDays < 7) {
-        return locale === 'TW' ? `${diffDays}天前` : `${diffDays} days ago`;
-      } else {
-        // 超過一週顯示具體時間
-        const hours = updatedTime.getHours().toString().padStart(2, '0');
-        const minutes = updatedTime.getMinutes().toString().padStart(2, '0');
-        return `${hours}:${minutes}`;
-      }
-    } catch (e) {
-      return '';
-    }
-  };
-
   const getTierIcon = (tier: number) => {
     const icons = {
       1: '🥉',
@@ -313,7 +281,7 @@ const Leaderboard = () => {
               <div className={styles.nickname}>{entry.nickname}</div>
               <div className={styles.levelTitle}>{entry.levelTitle}</div>
             </div>
-            <div className={styles.amount}>{formatCurrency(entry.totalEarned, entry.locale || locale)}</div>
+            <div className={styles.amount}>{formatCurrency(entry.totalEarned, (entry.locale === 'TW' || entry.locale === 'EN') ? entry.locale : locale)}</div>
           </div>
         ))}
       </div>
