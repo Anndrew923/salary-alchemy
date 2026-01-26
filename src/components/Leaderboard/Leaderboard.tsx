@@ -32,7 +32,7 @@ const Leaderboard = () => {
   const translations = locale === 'TW' ? zhTW : enUS;
   const privacy = translations.privacy;
 
-  // 檢查是否需要顯示隱私協議
+  // 檢查是否需要顯示隱私協議 - 強制顯示，未簽署前不允許查看排行榜
   useEffect(() => {
     if (!hasSeenPrivacyNotice) {
       setShowPrivacyModal(true);
@@ -82,6 +82,12 @@ const Leaderboard = () => {
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
+      // 如果未簽署隱私協議，不抓取數據
+      if (!hasSeenPrivacyNotice) {
+        setLoading(false);
+        return;
+      }
+
       // 如果 Firebase 未啟用，顯示提示
       if (!isFirebaseEnabled() || !db) {
         setLoading(false);
@@ -133,7 +139,7 @@ const Leaderboard = () => {
     };
 
     fetchLeaderboard();
-  }, [locale, calculateLevel, calculateLevelFromNormalizedScore, getLevelTitle]);
+  }, [hasSeenPrivacyNotice, currentUid, locale, calculateLevel, calculateLevelFromNormalizedScore, getLevelTitle]);
 
   const formatCurrency = (amount: number) => {
     if (locale === 'TW') {
@@ -172,21 +178,30 @@ const Leaderboard = () => {
 
   return (
     <div className={styles.container}>
+      {/* 強制顯示隱私協議 modal，未簽署前不顯示任何內容 */}
       {showPrivacyModal && (
         <PrivacyNoticeModal 
-          onAgree={() => setShowPrivacyModal(false)}
+          onAgree={() => {
+            setShowPrivacyModal(false);
+            // 簽署後會觸發重新抓取（通過 hasSeenPrivacyNotice 和 currentUid 的變化）
+          }}
         />
       )}
       
-      {loading && (
+      {/* 未簽署隱私協議時，不顯示任何排行榜內容 */}
+      {!hasSeenPrivacyNotice && (
+        <div className={styles.loading}>Please accept the privacy notice to view the leaderboard...</div>
+      )}
+
+      {hasSeenPrivacyNotice && loading && (
         <div className={styles.loading}>Loading leaderboard...</div>
       )}
 
-      {error && (
+      {hasSeenPrivacyNotice && error && (
         <div className={styles.error}>{error}</div>
       )}
 
-      {!loading && !error && (
+      {hasSeenPrivacyNotice && !loading && !error && (
         <>
       
       <div className={styles.header}>

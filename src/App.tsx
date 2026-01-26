@@ -6,22 +6,19 @@ import { auth, isFirebaseEnabled } from './config/firebase';
 import { useUserStore } from './stores/userStore';
 
 function App() {
-  const { uid, setUid } = useUserStore();
+  const { uid, hasSeenPrivacyNotice, setUid, setAnonymousId } = useUserStore();
 
-  // 應用啟動時，執行無感登入（僅在 Firebase 啟用時，且已看過隱私協議）
+  // 監聽 hasSeenPrivacyNotice 變化，當它變為 true 且未登入時，自動執行匿名登入
   useEffect(() => {
-    const initializeAuth = async () => {
+    const performAutoSignIn = async () => {
       // 如果 Firebase 未啟用，跳過
       if (!isFirebaseEnabled() || !auth) {
         console.log('Firebase not enabled, skipping anonymous sign-in');
         return;
       }
 
-      const { hasSeenPrivacyNotice } = useUserStore.getState();
-      
-      // 如果還沒看過隱私協議，不執行自動登入（等待用戶在排行榜頁面同意）
+      // 如果還沒看過隱私協議，不執行自動登入（等待用戶同意）
       if (!hasSeenPrivacyNotice) {
-        console.log('Privacy notice not seen yet, skipping auto sign-in');
         return;
       }
 
@@ -34,15 +31,16 @@ function App() {
         const userCredential = await signInAnonymously(auth);
         const userUid = userCredential.user.uid;
         setUid(userUid);
-        console.log('Anonymous sign-in successful:', userUid);
+        setAnonymousId(userUid);
+        console.log('Auto anonymous sign-in successful:', userUid);
       } catch (error) {
-        console.error('Anonymous sign-in failed:', error);
+        console.error('Auto anonymous sign-in failed:', error);
         // 不阻止應用運行，只是無法使用 Firebase 功能
       }
     };
 
-    initializeAuth();
-  }, [uid, setUid]);
+    performAutoSignIn();
+  }, [hasSeenPrivacyNotice, uid, setUid, setAnonymousId]);
 
   // 應用啟動時，檢查是否有未完成的計時
   useEffect(() => {

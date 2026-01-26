@@ -26,17 +26,20 @@ const PrivacyNoticeModal = ({ onAgree }: PrivacyNoticeModalProps) => {
         setAnonymousId(userUid);
         setHasSeenPrivacyNotice(true);
         console.log('Privacy notice agreed, anonymous sign-in successful:', userUid);
+        
+        // 登入成功後，通知父組件（觸發排行榜重新抓取）
+        onAgree();
       } catch (error) {
         console.error('Anonymous sign-in failed:', error);
         // 即使登入失敗，也標記為已看過（允許用戶繼續使用）
         setHasSeenPrivacyNotice(true);
+        onAgree();
       }
     } else {
       // Firebase 未啟用時，僅標記為已看過
       setHasSeenPrivacyNotice(true);
+      onAgree();
     }
-    
-    onAgree();
   };
 
   // 阻止背景滾動
