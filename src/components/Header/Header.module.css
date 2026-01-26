@@ -25,15 +25,24 @@
   letter-spacing: 0.1em;
   margin-top: var(--spacing-md);
   white-space: nowrap;
-  padding: 0 var(--spacing-lg);
+  padding: 0 calc(var(--spacing-lg) + 100px);
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.3rem;
+    padding: 0 calc(var(--spacing-lg) + 90px);
+  }
 }
 
 @media (max-width: 360px) {
   .title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    padding: 0 calc(var(--spacing-lg) + 70px);
   }
 }
 
@@ -193,7 +202,7 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: bold;
   transition: all 0.2s;
   display: flex;
@@ -201,12 +210,24 @@
   gap: var(--spacing-xs);
   z-index: 10;
   white-space: nowrap;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 480px) {
+  .leaderboardButton {
+    font-size: 0.65rem;
+    padding: var(--spacing-xs);
+    max-width: 80px;
+  }
 }
 
 @media (max-width: 360px) {
   .leaderboardButton {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     padding: var(--spacing-xs);
+    max-width: 60px;
   }
   
   .leaderboardButton span {
