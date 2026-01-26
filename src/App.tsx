@@ -1,13 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { signInAnonymously } from 'firebase/auth';
 import { Capacitor } from '@capacitor/core';
 import Router from './components/Router/Router';
 import PrivacyNoticeModal from './components/PrivacyNoticeModal/PrivacyNoticeModal';
+import LandingPage from './components/LandingPage/LandingPage';
 import { STORAGE_KEYS } from './utils/constants';
 import { auth, isFirebaseEnabled } from './config/firebase';
 import { useUserStore } from './stores/userStore';
 
 function App() {
+  // 控制是否顯示啟動頁面的狀態
+  const [isLoading, setIsLoading] = useState(true);
   const { uid, hasSeenPrivacyNotice, isPrivacyModalOpen, setUid, setAnonymousId } = useUserStore();
 
   // 監聽 hasSeenPrivacyNotice 的變化，一旦該值轉為 true，立即啟動匿名登入流程
@@ -104,6 +107,12 @@ function App() {
     };
   }, []);
 
+  // 如果正在載入，顯示 LandingPage
+  if (isLoading) {
+    return <LandingPage onFinish={() => setIsLoading(false)} />;
+  }
+
+  // 載入完成，顯示主應用
   return (
     <>
       <Router />

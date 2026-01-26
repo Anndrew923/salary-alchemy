@@ -83,10 +83,14 @@
       "Ergonomic Chair (with headrest) | If you're going to prison, at least sit comfortably.",
       "Therapy Session (1 hour) | You need more than money, you need a doctor."
     ],
-    "wealth_legendary": [
-      "Philosopher's Stone (Kidney Stone) | Are you sure you're okay in there? Should I call an ambulance?",
-      "Company Ownership (0.01%) | Congrats, you're a shareholder now.",
-      "Breath of Freedom | What you earned isn't money, it's dignity."
-    ]
-  }
+  "wealth_legendary": [
+    "Philosopher's Stone (Kidney Stone) | Are you sure you're okay in there? Should I call an ambulance?",
+    "Company Ownership (0.01%) | Congrats, you're a shareholder now.",
+    "Breath of Freedom | What you earned isn't money, it's dignity."
+  ]
+},
+"landing": {
+  "title": "Welcome back, Alchemist.",
+  "subtitle": "Don't let HR see the magic."
+}
 }

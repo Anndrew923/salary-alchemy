@@ -1,0 +1,127 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0a0a0a; /* 深黑背景 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* 退場時的狀態 */
+.exit {
+  opacity: 0;
+  transform: scale(1.1); /* 輕微放大淡出，增加動態感 */
+}
+
+.content {
+  text-align: center;
+  color: var(--text-gold); /* 預設金色 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 鍊成陣 SVG 容器 */
+.alchemyCircle {
+  width: 180px;
+  height: 180px;
+  margin-bottom: var(--spacing-lg);
+  /* 核心動畫：旋轉與顏色變換 */
+  animation: rotateAndTransmute 1.5s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+.circleGroup {
+  /* 讓 SVG 線條繼承當前的文字顏色 */
+  stroke: currentColor;
+}
+
+.ringOuter {
+  stroke: currentColor;
+  opacity: 0.8;
+}
+
+.ringInner {
+  stroke: currentColor;
+  opacity: 0.6;
+}
+
+.triangle {
+  stroke: currentColor;
+  opacity: 0.9;
+}
+
+.triangleDown {
+  stroke: currentColor;
+  opacity: 0.9;
+}
+
+.core {
+  stroke: currentColor;
+  opacity: 1;
+}
+
+.coreDot {
+  fill: currentColor;
+  opacity: 1;
+}
+
+.arc1,
+.arc2 {
+  stroke: currentColor;
+  opacity: 0.5;
+}
+
+.title {
+  font-family: 'Impact', sans-serif;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--spacing-sm);
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 0.3s forwards;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  font-family: var(--font-mono);
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 0.6s forwards;
+}
+
+/* --- 動畫關鍵影格 --- */
+
+/* 核心：旋轉並從金色轉化為鑽石藍 */
+@keyframes rotateAndTransmute {
+  0% {
+    transform: rotate(0deg) scale(0.8);
+    color: var(--text-gold); /* 起始：金色 */
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+  }
+  80% {
+    transform: rotate(180deg) scale(1);
+    color: var(--text-gold); /* 累積能量 */
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+  }
+  100% {
+    transform: rotate(180deg) scale(1.2); /* 停止旋轉，爆發 */
+    color: var(--text-diamond); /* 終點：鑽石藍 */
+    filter: drop-shadow(0 0 30px rgba(0, 191, 255, 1)); /* 強烈藍光 */
+  }
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
