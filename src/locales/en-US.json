@@ -1,0 +1,59 @@
+{
+  "exchange": {
+    "health_critical": [
+      "Emergency Room Co-pay | You earned just enough to pay for the ER. Get up, your anus is screaming.",
+      "Hemorrhoid Surgery Fund | Keep squatting, the doctor misses you.",
+      "Leg Amputation Risk | Can't feel your legs? That's because they're dead."
+    ],
+    "health_warning": [
+      "Donut Cushion | You'll need this to sit at your desk tomorrow.",
+      "Toilet Seat Imprint (Permanent) | Your butt has fused with the toilet seat.",
+      "Boss's Suspicion | Gone so long, your boss thinks you're mining crypto in the bathroom."
+    ],
+    "wealth_micro": [
+      "Boss's CO2 | You stole a breath of air from the company. This is the beginning of revenge.",
+      "Static Electricity | You took nothing but friction.",
+      "Void | Form is emptiness, emptiness is salary."
+    ],
+    "wealth_tiny": [
+      "Toilet Paper (2 sheets) | Company thanks you for helping deplete inventory.",
+      "Copy Paper (1 sheet) | Fold it into a paper airplane, you earned it.",
+      "Paperclip | Good for poking the reset button, otherwise useless.",
+      "Pen Ink (0.5cc) | Every grain counts. Squat a thousand more times to buy a whole pen."
+    ],
+    "wealth_low": [
+      "Convenience Store Tea Egg | Protein is the foundation of revolution. Watch your cholesterol.",
+      "Yakult | Drink it, promote digestion, start the next alchemy cycle.",
+      "Instant Noodles | Crush it like you're crushing your boss's dreams.",
+      "Plastic Bag ($0.07) | What are you putting in it? Your salary."
+    ],
+    "wealth_mid_low": [
+      "Iced Milk Tea (with pearls) | The price of the breakfast shop auntie calling you handsome.",
+      "Fried Chicken (uncut) | It's expensive now, but you traded poop for it.",
+      "Netflix Basic Plan | Watch shows at work, double alchemy, double happiness.",
+      "Bubble Tea (less sugar, less ice) | This is the blood pack for corporate slaves."
+    ],
+    "wealth_mid": [
+      "Chicken Leg Bento (with egg) | You earned today's lunch money in the bathroom.",
+      "Taxi Base Fare | Escape this company now, just go.",
+      "Movie Ticket (matinee) | Pretend to meet a client, actually meeting Tom Cruise.",
+      "Cheap Bluetooth Earbuds | Can't hear the boss's nonsense = good earbuds."
+    ],
+    "wealth_high": [
+      "High-Speed Rail Ticket (non-reserved) | Enough to escape to another city and start over.",
+      "Massage Voucher (30 min) | Your shoulders are stiff, but your life is stiffer.",
+      "Gacha Pull (one 10-pull) | Thanks boss for sponsoring your gacha money.",
+      "Premium Steak (business lunch) | Eating better than the boss, that's winning."
+    ],
+    "wealth_ultra": [
+      "Boss's Blood Pressure Meds | You made the company stock drop 0.00001%.",
+      "Ergonomic Chair (with headrest) | If you're going to prison, at least sit comfortably.",
+      "Therapy Session (1 hour) | You need more than money, you need a doctor."
+    ],
+    "wealth_legendary": [
+      "Philosopher's Stone (Kidney Stone) | Are you sure you're okay in there? Should I call an ambulance?",
+      "Company Ownership (0.01%) | Congrats, you're a shareholder now.",
+      "Breath of Freedom | What you earned isn't money, it's dignity."
+    ]
+  }
+}

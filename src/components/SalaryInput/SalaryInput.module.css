@@ -195,3 +195,146 @@
   background-color: var(--text-secondary);
   color: var(--bg-primary);
 }
+
+/* 撤銷實驗室區域 */
+.resetLabSection {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--bg-tertiary);
+}
+
+.resetLabButton {
+  width: 100%;
+  padding: var(--spacing-md);
+  background-color: var(--bg-primary);
+  border: 2px solid #8b0000;
+  border-radius: var(--radius-md);
+  color: #ff4444;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.resetLabButton:hover:not(:disabled) {
+  background-color: #8b0000;
+  color: var(--text-primary);
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
+}
+
+.resetLabButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: var(--text-secondary);
+  color: var(--text-secondary);
+}
+
+.resetLabButtonText {
+  position: relative;
+  z-index: 2;
+}
+
+.longPressProgress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: rgba(139, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.longPressProgressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #8b0000, #ff4444);
+  transition: width 0.05s linear;
+  box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+}
+
+/* 確認對話框 */
+.confirmDialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-md);
+}
+
+.confirmDialog {
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  border: 2px solid #8b0000;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
+}
+
+.confirmDialogTitle {
+  color: #ff4444;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.confirmDialogMessage {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.confirmDialogButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.confirmDialogButton {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.confirmDialogCancel {
+  background-color: var(--bg-primary);
+  border-color: var(--text-secondary);
+  color: var(--text-secondary);
+}
+
+.confirmDialogCancel:hover {
+  background-color: var(--text-secondary);
+  color: var(--bg-primary);
+}
+
+.confirmDialogConfirm {
+  background-color: var(--bg-primary);
+  border-color: #8b0000;
+  color: #ff4444;
+}
+
+.confirmDialogConfirm:hover {
+  background-color: #8b0000;
+  color: var(--text-primary);
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
+}

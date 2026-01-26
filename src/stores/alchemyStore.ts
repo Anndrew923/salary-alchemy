@@ -11,6 +11,7 @@ interface AlchemyState {
   reset: () => void;
   calculateEarned: (ratePerSecond: number) => number;
   addToTotal: (amount: number) => void;
+  resetTotalEarned: () => void;
 }
 
 export const useAlchemyStore = create<AlchemyState>()(
@@ -61,6 +62,11 @@ export const useAlchemyStore = create<AlchemyState>()(
           localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, newTotal.toString());
           return { totalEarned: newTotal };
         });
+      },
+      
+      resetTotalEarned: () => {
+        set({ totalEarned: 0 });
+        localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, '0');
       },
     }),
     {
