@@ -1,0 +1,263 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-in;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+}
+
+/* 旋轉煉金陣 */
+.alchemyCircle {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-bottom: var(--spacing-md);
+}
+
+.circleInner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  border: 3px solid var(--text-gold);
+  border-radius: 50%;
+  animation: rotate 3s linear infinite;
+}
+
+.circleOuter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border: 2px solid var(--text-gold);
+  border-radius: 50%;
+  animation: rotate 5s linear infinite reverse;
+}
+
+.circleInner::before,
+.circleInner::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border: 2px solid var(--text-gold);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.circleOuter::before,
+.circleOuter::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 160px;
+  height: 160px;
+  border: 1px solid var(--text-gold);
+  border-radius: 50%;
+  opacity: 0.4;
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  z-index: 1;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--text-gold);
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.levelTitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin: var(--spacing-md) 0;
+}
+
+.tierLabel {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.promotionText {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+/* Tier 1 - 菜鳥：灰色細線，微微抖動 */
+.overlay.tier1 .circleInner,
+.overlay.tier1 .circleOuter {
+  border-color: #888;
+  animation: rotate 3s linear infinite, shake 0.5s ease-in-out infinite;
+}
+
+.overlay.tier1 .title {
+  color: #888;
+  text-shadow: 0 0 10px rgba(136, 136, 136, 0.5);
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(0);
+  }
+  25% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(-2px);
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(2px);
+  }
+}
+
+/* Tier 2 - 古銅：穩定的金屬光澤 */
+.overlay.tier2 .circleInner,
+.overlay.tier2 .circleOuter {
+  border-color: var(--rpg-bronze);
+  box-shadow: 0 0 15px rgba(205, 127, 50, 0.6);
+}
+
+.overlay.tier2 .title {
+  color: var(--rpg-bronze);
+  text-shadow: 0 0 15px rgba(205, 127, 50, 0.8);
+}
+
+/* Tier 3 - 白銀：水銀流光特效 */
+.overlay.tier3 .circleInner,
+.overlay.tier3 .circleOuter {
+  border-color: var(--rpg-silver);
+  box-shadow: 0 0 20px rgba(192, 192, 192, 0.8);
+  animation: rotate 3s linear infinite, shimmer 2s ease-in-out infinite;
+}
+
+.overlay.tier3 .title {
+  color: var(--rpg-silver);
+  text-shadow: 0 0 20px rgba(192, 192, 192, 0.9);
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.3);
+  }
+}
+
+/* Tier 4 - 黃金：金色燃燒氣焰 */
+.overlay.tier4 .circleInner,
+.overlay.tier4 .circleOuter {
+  border-color: var(--rpg-gold);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.6);
+  animation: rotate 3s linear infinite, burn 1.5s ease-in-out infinite;
+}
+
+.overlay.tier4 .title {
+  color: var(--rpg-gold);
+  text-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.8);
+}
+
+@keyframes burn {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+  }
+  50% {
+    filter: brightness(1.3) drop-shadow(0 0 20px rgba(255, 215, 0, 1));
+  }
+}
+
+/* Tier 5 - 鑽石藍：藍色電漿閃電 */
+.overlay.tier5 {
+  background: rgba(0, 0, 0, 0.98);
+}
+
+.overlay.tier5 .circleInner,
+.overlay.tier5 .circleOuter {
+  border-color: var(--rpg-diamond);
+  box-shadow: 0 0 40px rgba(0, 191, 255, 1), 0 0 80px rgba(0, 191, 255, 0.8);
+  animation: rotate 2s linear infinite, lightning 0.3s ease-in-out infinite;
+}
+
+.overlay.tier5 .title {
+  color: var(--rpg-diamond);
+  text-shadow: 0 0 40px rgba(0, 191, 255, 1), 0 0 80px rgba(0, 191, 255, 0.9);
+}
+
+@keyframes lightning {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 20px rgba(0, 191, 255, 0.8));
+  }
+  25% {
+    filter: brightness(1.5) drop-shadow(0 0 30px rgba(0, 191, 255, 1));
+  }
+  50% {
+    filter: brightness(1.2) drop-shadow(0 0 25px rgba(0, 191, 255, 0.9));
+  }
+  75% {
+    filter: brightness(1.6) drop-shadow(0 0 35px rgba(0, 191, 255, 1));
+  }
+}
