@@ -6,6 +6,9 @@
   "error": "載入排行榜失敗，請檢查 Firebase 設定。",
   "empty": "排行榜目前為空",
   "privacyNoticeRequired": "請先接受隱私協議以查看排行榜...",
+  "globalCount": "全球已加入：{count} 位煉金術士",
+  "editNickname": "編輯暱稱",
+  "save": "儲存",
   "privacy": {
     "title": "煉金術士保密協議",
     "subtitle": "ALCHEMIST CONFIDENTIALITY AGREEMENT",

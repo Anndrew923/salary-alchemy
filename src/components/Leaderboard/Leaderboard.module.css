@@ -225,3 +225,57 @@
   border-radius: var(--radius-sm);
   border: 1px solid currentColor;
 }
+
+.globalCount {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+  font-family: var(--font-mono);
+}
+
+.nicknameContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.nicknameInput {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--text-gold);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 2px 4px;
+  outline: none;
+  min-width: 100px;
+  max-width: 150px;
+}
+
+.nicknameInput:focus {
+  border-bottom-color: var(--text-gold);
+  box-shadow: 0 1px 0 rgba(255, 215, 0, 0.5);
+}
+
+.editButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 2px 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editButton:hover {
+  opacity: 1;
+}
+
+.editButton:active {
+  transform: scale(0.95);
+}

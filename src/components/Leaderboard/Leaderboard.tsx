@@ -1,5 +1,5 @@
-import { useEffect, useState, useMemo } from 'react';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { useEffect, useState, useMemo, useRef } from 'react';
+import { collection, query, orderBy, limit, getDocs, getCountFromServer } from 'firebase/firestore';
 import { signInAnonymously } from 'firebase/auth';
 import { db, auth, isFirebaseEnabled } from '../../config/firebase';
 import { useUserStore } from '../../stores/userStore';
@@ -23,12 +23,16 @@ interface LeaderboardEntry {
 }
 
 const Leaderboard = () => {
-  const { locale, uid: currentUid, hasSeenPrivacyNotice, setUid, setAnonymousId, setPrivacyModalOpen, setShouldNavigateToLeaderboard } = useUserStore();
-  const { totalEarned: currentTotalEarned } = useAlchemyStore();
+  const { locale, uid: currentUid, hasSeenPrivacyNotice, setUid, setAnonymousId, setPrivacyModalOpen, setShouldNavigateToLeaderboard, nickname, setNickname } = useUserStore();
+  const { totalEarned: currentTotalEarned, syncToCloud } = useAlchemyStore();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showShieldTooltip, setShowShieldTooltip] = useState(false);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
+  const [editingNickname, setEditingNickname] = useState('');
+  const nicknameInputRef = useRef<HTMLInputElement>(null);
 
   const translations = locale === 'TW' ? zhTW : enUS;
   const privacy = translations.privacy;
@@ -139,6 +143,15 @@ const Leaderboard = () => {
         setLoading(true);
         setError(null);
 
+        // 獲取總參與人數
+        try {
+          const countSnapshot = await getCountFromServer(collection(db, 'leaderboard'));
+          setTotalCount(countSnapshot.data().count);
+        } catch (countError) {
+          console.warn('Failed to get total count:', countError);
+          // 不阻止主要數據載入
+        }
+
         const q = query(
           collection(db, 'leaderboard'),
           orderBy('normalizedScore', 'desc'),
@@ -207,8 +220,45 @@ const Leaderboard = () => {
 
   // 計算當前用戶的排名
   const currentUserRank = entries.findIndex(entry => entry.uid === currentUid) + 1;
-  const currentUserEntry = entries.find(entry => entry.uid === currentUid);
   const { tier: currentTier, index: currentLevelIndex } = calculateLevel(currentTotalEarned);
+
+  // 處理暱稱編輯
+  const handleStartEdit = () => {
+    setEditingNickname(nickname);
+    setIsEditingNickname(true);
+    setTimeout(() => {
+      nicknameInputRef.current?.focus();
+    }, 0);
+  };
+
+  const handleSaveNickname = async () => {
+    const trimmedNickname = editingNickname.trim() || 'Anonymous Alchemist';
+    setNickname(trimmedNickname);
+    setIsEditingNickname(false);
+    
+    // 立即同步到雲端
+    if (currentUid && isFirebaseEnabled() && db) {
+      try {
+        await syncToCloud();
+        console.log('Nickname updated and synced to cloud');
+      } catch (error) {
+        console.error('Failed to sync nickname:', error);
+      }
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditingNickname(false);
+    setEditingNickname('');
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSaveNickname();
+    } else if (e.key === 'Escape') {
+      handleCancelEdit();
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -247,6 +297,13 @@ const Leaderboard = () => {
           )}
         </div>
       </div>
+
+      {/* 全球參與人數 */}
+      {totalCount > 0 && (
+        <div className={styles.globalCount}>
+          {translations.globalCount.replace('{count}', totalCount.toString())}
+        </div>
+      )}
       
       {/* 當前用戶資訊 */}
       {currentUid && (
@@ -254,7 +311,31 @@ const Leaderboard = () => {
           <div className={styles.currentUserLabel}>{translations.yourRank}</div>
           <div className={styles.currentUserInfo}>
             <span className={styles.rank}>#{currentUserRank || '?'}</span>
-            <span className={styles.nickname}>{currentUserEntry?.nickname || (locale === 'TW' ? '你' : 'You')}</span>
+            <div className={styles.nicknameContainer}>
+              {isEditingNickname ? (
+                <input
+                  ref={nicknameInputRef}
+                  type="text"
+                  className={styles.nicknameInput}
+                  value={editingNickname}
+                  onChange={(e) => setEditingNickname(e.target.value)}
+                  onBlur={handleSaveNickname}
+                  onKeyDown={handleKeyDown}
+                  maxLength={20}
+                />
+              ) : (
+                <>
+                  <span className={styles.nickname}>{nickname || (locale === 'TW' ? '你' : 'You')}</span>
+                  <button
+                    className={styles.editButton}
+                    onClick={handleStartEdit}
+                    aria-label={translations.editNickname}
+                  >
+                    ✏️
+                  </button>
+                </>
+              )}
+            </div>
             <span className={styles.amount}>{formatCurrency(currentTotalEarned, locale)}</span>
             <span 
               className={styles.tierBadge}
