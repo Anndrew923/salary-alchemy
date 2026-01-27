@@ -370,8 +370,8 @@ const Leaderboard = () => {
             <div className={styles.info}>
               <div className={styles.nickname}>{entry.nickname}</div>
               <div className={styles.levelTitle}>{entry.levelTitle}</div>
+              <div className={styles.amount}>{formatCurrency(entry.totalEarned, (entry.locale === 'TW' || entry.locale === 'EN') ? entry.locale : locale)}</div>
             </div>
-            <div className={styles.amount}>{formatCurrency(entry.totalEarned, (entry.locale === 'TW' || entry.locale === 'EN') ? entry.locale : locale)}</div>
           </div>
         ))}
       </div>

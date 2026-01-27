@@ -151,8 +151,8 @@
 
 .entry {
   display: grid;
-  grid-template-columns: 25px 30px 1fr minmax(80px, auto);
-  grid-template-areas: "rank tier info amount";
+  grid-template-columns: 25px 30px 1fr;
+  grid-template-areas: "rank tier info";
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -203,35 +203,40 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--spacing-xs);
+  gap: 3px;
   min-width: 0;
   overflow: hidden;
+  margin-left: 6px;
 }
 
 .nickname {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.875rem; /* 14px */
+  font-weight: bold;
   color: var(--text-primary);
-  word-break: break-word;
-  overflow-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  line-height: 1.2;
 }
 
 .levelTitle {
-  font-size: 0.75rem;
+  font-size: 0.6875rem; /* 11px */
+  font-weight: normal;
   color: var(--text-secondary);
-  word-break: break-word;
-  overflow-wrap: break-word;
+  line-height: 1.2;
+  opacity: 0.8;
 }
 
 .amount {
-  grid-area: amount;
-  font-size: 0.9rem;
+  font-size: 0.8125rem; /* 13px */
   font-weight: bold;
   color: var(--text-gold);
   font-family: var(--font-mono);
-  text-align: right;
-  min-width: 90px;
+  text-align: left;
   white-space: nowrap;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
 }
 
 .tierBadge {
@@ -300,10 +305,18 @@
 /* 移動端適配：360px 以下螢幕 */
 @media (max-width: 360px) {
   .entry {
-    grid-template-columns: 25px 28px 1fr minmax(70px, auto);
+    grid-template-columns: 25px 28px 1fr;
   }
 
   .nickname {
     font-size: 0.8rem;
+  }
+  
+  .levelTitle {
+    font-size: 0.625rem; /* 10px */
+  }
+  
+  .amount {
+    font-size: 0.75rem; /* 12px */
   }
 }
