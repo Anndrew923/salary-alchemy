@@ -151,7 +151,7 @@
 
 .entry {
   display: grid;
-  grid-template-columns: minmax(30px, auto) 30px 1fr minmax(80px, auto);
+  grid-template-columns: 25px 30px 1fr minmax(80px, auto);
   grid-template-areas: "rank tier info amount";
   align-items: center;
   gap: var(--spacing-sm);
@@ -182,7 +182,7 @@
 
 .rank {
   grid-area: rank;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
   color: var(--text-gold);
   text-align: center;
@@ -191,7 +191,7 @@
 
 .tierIcon {
   grid-area: tier;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   text-align: center;
   display: flex;
   align-items: center;
@@ -202,27 +202,25 @@
   grid-area: info;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--spacing-xs);
   min-width: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .nickname {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .levelTitle {
   font-size: 0.75rem;
   color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .amount {
@@ -232,10 +230,8 @@
   color: var(--text-gold);
   font-family: var(--font-mono);
   text-align: right;
+  min-width: 90px;
   white-space: nowrap;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .tierBadge {
@@ -299,4 +295,15 @@
 
 .editButton:active {
   transform: scale(0.95);
+}
+
+/* 移動端適配：360px 以下螢幕 */
+@media (max-width: 360px) {
+  .entry {
+    grid-template-columns: 25px 28px 1fr minmax(70px, auto);
+  }
+
+  .nickname {
+    font-size: 0.8rem;
+  }
 }
