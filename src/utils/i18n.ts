@@ -11,6 +11,7 @@ export interface I18nStrings {
   settle: string;
   finish: string;
   discard: string;
+  giveUp: string;
   
   // 薪資輸入
   monthlySalary: string;
@@ -60,8 +61,9 @@ const translations: Record<Locale, I18nStrings> = {
     reset: '重置',
     settings: '設定',
     settle: '煉成',
-    finish: '結束',
+    finish: '煉成',
     discard: '放棄',
+    giveUp: '放棄',
     monthlySalary: '月薪',
     dailyHours: '每日工時',
     workingDays: '工作天數',
@@ -99,6 +101,7 @@ const translations: Record<Locale, I18nStrings> = {
     settle: 'Settle',
     finish: 'Finish',
     discard: 'Discard',
+    giveUp: 'Give Up',
     monthlySalary: 'Monthly Salary',
     dailyHours: 'Daily Hours',
     workingDays: 'Working Days',

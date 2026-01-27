@@ -176,31 +176,46 @@
   border-color: var(--text-gold);
 }
 
-.pauseButton {
+/* 煉成按鈕（Primary - 紅色強調） */
+.settleButton {
   border-color: #ff6b6b;
   color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  font-weight: bold;
 }
 
-.pauseButton:hover:not(:disabled) {
+.settleButton:hover:not(:disabled) {
   background-color: #ff6b6b;
   color: var(--bg-primary);
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  transform: translateY(-2px);
 }
 
-.resetButton {
+/* 放棄按鈕（Secondary - 灰色 Ghost） */
+.discardButton {
   border-color: var(--text-secondary);
   color: var(--text-secondary);
+  background-color: transparent;
+  opacity: 0.7;
 }
 
-.resetButton:hover:not(:disabled) {
-  background-color: var(--text-secondary);
-  color: var(--bg-primary);
+.discardButton:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-secondary);
+  color: var(--text-secondary);
+  opacity: 1;
 }
 
-/* 撤銷實驗室區域 */
+/* 撤銷實驗室區域（移到最下方，紅色警告樣式） */
 .resetLabSection {
-  margin-top: var(--spacing-lg);
-  padding-top: var(--spacing-md);
-  border-top: 1px solid var(--bg-tertiary);
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 2px solid #8b0000;
+  border-bottom: 2px solid #8b0000;
+  background-color: rgba(139, 0, 0, 0.1);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
 }
 
 .resetLabButton {

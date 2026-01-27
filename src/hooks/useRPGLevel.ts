@@ -59,7 +59,7 @@ export const useRPGLevel = () => {
 
   const isDiamondMode = useMemo(() => {
     return totalEarned >= DIAMOND_THRESHOLD;
-  }, [totalEarned]);
+  }, [totalEarned, DIAMOND_THRESHOLD]);
 
   const nextLevelThreshold = useMemo(() => {
     if (currentLevelIndex >= RPG_LEVELS.length - 1) {

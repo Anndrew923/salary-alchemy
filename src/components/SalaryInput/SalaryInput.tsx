@@ -9,7 +9,7 @@ import styles from './SalaryInput.module.css';
 
 const SalaryInput = () => {
   const { monthlySalary, dailyHours, workingDays, locale, setMonthlySalary, setDailyHours, setWorkingDays } = useUserStore();
-  const { isRunning, start, pause, reset, resetTotalEarned, totalEarned } = useAlchemyStore();
+  const { isRunning, start, reset, finishSession, resetTotalEarned, totalEarned } = useAlchemyStore();
   const { ratePerSecond, ratePerHour, monthlyHours } = useSalaryCalculator();
   const elapsedSeconds = useAlchemyTimer();
   const i18n = getI18n(locale);
@@ -59,38 +59,28 @@ const SalaryInput = () => {
     }
   };
 
-  const handlePause = () => {
+  // 煉成（結算並顯示收據）
+  const handleSettle = () => {
     const alchemyStore = useAlchemyStore.getState();
     if (alchemyStore.startTimestamp && ratePerSecond > 0) {
       const earned = alchemyStore.calculateEarned(ratePerSecond);
       if (earned > 0) {
-        alchemyStore.addToTotal(earned);
         // 顯示收據卡片
         const minutes = elapsedSeconds / 60;
         setReceiptEarned(earned);
         setReceiptMinutes(minutes);
         setShowReceipt(true);
+        // 結算金額入帳並重置計時
+        finishSession(earned);
+      } else {
+        // 即使沒有收益，也要重置計時
+        reset();
       }
     }
-    pause();
   };
 
-  const handleReset = () => {
-    // 重置前，先將當前收益加入總額（如果正在運行）
-    if (isRunning) {
-      const alchemyStore = useAlchemyStore.getState();
-      if (alchemyStore.startTimestamp && ratePerSecond > 0) {
-        const earned = alchemyStore.calculateEarned(ratePerSecond);
-        if (earned > 0) {
-          alchemyStore.addToTotal(earned);
-          // 顯示收據卡片
-          const minutes = elapsedSeconds / 60;
-          setReceiptEarned(earned);
-          setReceiptMinutes(minutes);
-          setShowReceipt(true);
-        }
-      }
-    }
+  // 放棄（直接重置，不結算）
+  const handleDiscard = () => {
     reset();
   };
 
@@ -296,16 +286,16 @@ const SalaryInput = () => {
         ) : (
           <>
             <button
-              className={`${styles.button} ${styles.pauseButton}`}
-              onClick={handlePause}
+              className={`${styles.button} ${styles.settleButton}`}
+              onClick={handleSettle}
             >
-              {i18n.pause}
+              {i18n.finish}
             </button>
             <button
-              className={`${styles.button} ${styles.resetButton}`}
-              onClick={handleReset}
+              className={`${styles.button} ${styles.discardButton}`}
+              onClick={handleDiscard}
             >
-              {i18n.reset}
+              {i18n.giveUp}
             </button>
           </>
         )}

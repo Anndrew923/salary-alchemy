@@ -64,7 +64,7 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
 
         <div className={styles.receiptFooter}>
           <button className={styles.closeButton} onClick={onClose}>
-            {i18nStrings.receiptConfirm}
+            {i18nStrings.receiptConfirmButton}
           </button>
         </div>
       </div>

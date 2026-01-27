@@ -1,28 +1,40 @@
-# 帶薪煉金術 (Salary Alchemy) 開發守則
+帶薪煉金術 (Salary Alchemy) 開發守則 v1.1
 
 ## 1. 核心技術棧 (Strictly match up-rebirth)
-- **Framework**: Vite + React (TypeScript) ^18.3.1.
-- **State Management**: Zustand ^5.0.2.
-- **Styling**: 嚴格使用 **CSS Modules** (*.module.css)，禁止使用 Tailwind 或 NativeWind.
-- **Routing**: 自定義 Hash-based Routing (#path)，不使用 react-router.
-- **Platform**: Capacitor ^6.0.0 (Native Mobile Wrapper).
 
-## 2. 禁止清單 (防止 SHA-1 錯誤與環境衝突)
-- **絕對禁止**安裝或引入: Expo, Metro, NativeWind, react-native-css-interop.
-- 構建指令必須為 `npm run build` (vite build)，確保輸出為純靜態檔案以適配 Netlify.
+* **Framework**: Vite + React (TypeScript) ^18.3.1.
+* **State Management**: Zustand ^5.0.2.
+* **Styling**: 嚴格使用 **CSS Modules** (*.module.css)，禁止使用 Tailwind 或 NativeWind.
+* **Routing**: 自定義 **Hash-based Routing** (#path)，不使用 react-router.
+* **Platform**: Capacitor ^6.0.0 (Native Mobile Wrapper).
+
+## 2. 禁止清單 (防止環境衝突)
+
+* **絕對禁止**安裝或引入: Expo, Metro, NativeWind, react-native-css-interop.
+* **構建指令**: 必須為 `npm run build` (vite build)，確保輸出為純靜態檔案以適配 Netlify.
 
 ## 3. UI/UX 規範 (Dark Magic Finance)
-- **Mobile-First**: Web 端必須包裹在 `maxWidth: 480px` 的居中容器內，背景為 `#000`，模擬手機畫面.
-- **Design Tokens**: 全域顏色定義在 `index.css` 的 `:root` 中，使用暗黑、黃金、RPG 風格.
-- **Typography**: 數字顯示必須使用 **Monospace (等寬字體)**，模擬金融終端感.
+
+* **Mobile-First**: Web 端必須包裹在 `maxWidth: 480px` 的居中容器內，背景為 `#000`.
+* **Design Tokens**: 全域顏色定義在 `index.css` 的 `:root` 中，使用暗黑、黃金、RPG 風格.
+* **Typography**: 數字顯示必須使用 **Monospace (等寬字體)**，模擬金融終端感.
 
 ## 4. 業務邏輯與持久化
-- **計時邏輯**: 禁止依賴 setInterval 進行長時間後台追蹤。
-- **持久化**: 使用 `localStorage` 存儲 `startTimestamp`，App 回到前台後計算時間差 (Delta Time).
-- **廣告整合**: 預留底部 Sticky Footer 空間 (AdBanner 佔位).
+
+* **計時邏輯**: 禁止依賴 `setInterval` 進行長時間後台追蹤，應利用 `startTimestamp` 計算 Delta Time.
+* **持久化**: 使用 `localStorage` 存儲關鍵數據 (如 `totalEarned`, `locale`).
+* **廣告整合**: 預留底部 Sticky Footer 空間 (AdBanner 佔位).
 
 ## 5. 代碼組織結構
-- `src/stores/`: Zustand stores (如 alchemyStore.ts, userStore.ts).
-- `src/components/`: 每個組件擁有獨立目錄及專屬 `.module.css`.
-- `src/hooks/`: 封裝所有與計算、計時相關的邏輯.
-- `src/utils/`: 存放 i18n 翻譯與 sarcastm (毒舌) 演算法.
+
+* `src/stores/`: Zustand stores 管理全局狀態.
+* `src/components/`: 每個組件擁有獨立目錄及專屬 `.module.css`.
+* `src/hooks/`: 封裝所有與計算、計時相關的邏輯.
+* `src/utils/`: 存放 i18n 翻譯與毒舌演算法 (Sarcasm).
+
+## 6. 輸出效能優化 (Token Saving Mode)
+
+* **精簡解說**: 回答時直接進入重點，跳過冗長的背景說明與客套話。
+* **增量代碼**: 除非是新檔案，否則優先提供**修改部分的代碼塊 (Code Snippets)**，避免重複輸出整份檔案。
+* **結構化表達**: 優先使用條列式 (Bullet points) 與表格，取代長篇段落，提升資訊密度。
+* **代碼優先**: 當邏輯複雜時，以代碼注釋代替額外的文字說明。
