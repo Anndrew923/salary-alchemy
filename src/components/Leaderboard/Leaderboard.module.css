@@ -53,22 +53,21 @@
 }
 
 .shieldTooltip {
-  position: absolute;
-  top: 100%;
+  position: fixed;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  margin-top: var(--spacing-xs);
   padding: 8px 16px;
   background-color: var(--bg-primary);
   border: 1px solid var(--text-diamond);
   border-radius: var(--radius-sm);
   color: var(--text-diamond);
   font-size: 0.75rem;
-  white-space: normal;
-  width: 200px;
-  max-width: 70vw;
+  white-space: pre-wrap;
+  width: 280px;
+  max-width: 90vw;
   line-height: 1.4;
-  z-index: 10000;
+  z-index: 20000;
   box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
   font-family: var(--font-mono);
   text-align: center;

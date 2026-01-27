@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { collection, query, orderBy, limit, getDocs, getCountFromServer } from 'firebase/firestore';
 import { signInAnonymously } from 'firebase/auth';
 import { db, auth, isFirebaseEnabled } from '../../config/firebase';
@@ -290,10 +291,11 @@ const Leaderboard = () => {
           onTouchEnd={() => setTimeout(() => setShowShieldTooltip(false), 2000)}
         >
           <div className={styles.shieldIcon}>🛡️</div>
-          {showShieldTooltip && (
+          {showShieldTooltip && createPortal(
             <div className={styles.shieldTooltip}>
               {privacy.shieldTooltip}
-            </div>
+            </div>,
+            document.body
           )}
         </div>
       </div>
