@@ -65,8 +65,8 @@
   color: var(--text-diamond);
   font-size: 0.75rem;
   white-space: normal;
-  max-width: 280px;
-  width: max-content;
+  width: 200px;
+  max-width: 70vw;
   line-height: 1.4;
   z-index: 10000;
   box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
@@ -74,6 +74,8 @@
   text-align: center;
   animation: fadeInTooltip 0.2s ease-in;
   pointer-events: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 @keyframes fadeInTooltip {

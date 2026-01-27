@@ -80,11 +80,11 @@ function App() {
       
       backButtonListener = CapacitorApp.addListener('backButton', () => {
         const currentHash = window.location.hash;
-        // 如果在排行榜頁面，按返回鍵回到主頁
-        if (currentHash.includes('leaderboard')) {
+        // 如果在排行榜，返回主頁
+        if (currentHash === '#leaderboard' || currentHash.includes('leaderboard')) {
           window.location.hash = '#/';
         } else {
-          // 如果已在主頁，按返回鍵退出 App
+          // 如果已在主頁，執行退出 App
           CapacitorApp.exitApp();
         }
       });
@@ -94,7 +94,7 @@ function App() {
 
     return () => {
       if (backButtonListener) {
-        backButtonListener.then((h: any) => h.remove());
+        backButtonListener.then((l: any) => l.remove());
       }
     };
   }, []);
