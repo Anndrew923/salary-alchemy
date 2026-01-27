@@ -24,7 +24,7 @@
 
 .title {
   font-family: 'Impact', 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
-  font-size: clamp(1.5rem, 8vw, 2.2rem);
+  font-size: clamp(1.2rem, 7vw, 1.8rem);
   font-weight: bold;
   text-align: center;
   letter-spacing: 0.15em;
@@ -37,7 +37,8 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.1;
   overflow: visible;
 }
 

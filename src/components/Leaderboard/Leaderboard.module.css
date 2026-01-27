@@ -21,6 +21,19 @@
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
+/* 手機版標題縮小 */
+@media (max-width: 480px) {
+  .header .title {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .header .title {
+    font-size: 1rem;
+  }
+}
+
 .shieldContainer {
   position: relative;
   cursor: pointer;
@@ -80,11 +93,11 @@
 @keyframes fadeInTooltip {
   from {
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translate(-50%, calc(-50% - 5px));
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -138,7 +151,7 @@
 
 .entry {
   display: grid;
-  grid-template-columns: 40px 35px 1fr 120px;
+  grid-template-columns: minmax(30px, auto) 30px 1fr minmax(80px, auto);
   grid-template-areas: "rank tier info amount";
   align-items: center;
   gap: var(--spacing-sm);
@@ -192,6 +205,7 @@
   gap: var(--spacing-xs);
   min-width: 0;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nickname {
@@ -219,6 +233,9 @@
   font-family: var(--font-mono);
   text-align: right;
   white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tierBadge {

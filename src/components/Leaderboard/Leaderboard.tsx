@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { collection, query, orderBy, limit, getDocs, getCountFromServer } from 'firebase/firestore';
 import { signInAnonymously } from 'firebase/auth';
 import { db, auth, isFirebaseEnabled } from '../../config/firebase';
@@ -26,6 +27,7 @@ interface LeaderboardEntry {
 const Leaderboard = () => {
   const { locale, uid: currentUid, hasSeenPrivacyNotice, setUid, setAnonymousId, setPrivacyModalOpen, setShouldNavigateToLeaderboard, nickname, setNickname } = useUserStore();
   const { totalEarned: currentTotalEarned, syncToCloud } = useAlchemyStore();
+  const { t, i18n } = useTranslation();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +39,11 @@ const Leaderboard = () => {
 
   const translations = locale === 'TW' ? zhTW : enUS;
   const privacy = translations.privacy;
+
+  // 同步語言設定
+  useEffect(() => {
+    i18n.changeLanguage(locale === 'TW' ? 'zh-TW' : 'en-US');
+  }, [locale, i18n]);
 
   // 組件掛載時，強制攔截：檢查隱私協議狀態
   // 如果用戶直接通過 URL 進入排行榜但未簽署，必須強制開啟 PrivacyNoticeModal
@@ -280,7 +287,7 @@ const Leaderboard = () => {
         <>
       
       <div className={styles.header}>
-        <h1 className={styles.title}>{translations.leaderboardTitle}</h1>
+        <h1 className={styles.title}>{t('leaderboardTitle')}</h1>
         
         {/* 匿名保護盾 */}
         <div 
