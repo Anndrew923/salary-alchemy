@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { useSalaryCalculator } from '../../hooks/useSalaryCalculator';
@@ -52,19 +53,31 @@ const SalaryInput = () => {
     setWorkingDays(num);
   };
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (monthlySalary > 0 && monthlyHours > 0) {
+      // 觸覺回饋：開始煉金
+      try {
+        await Haptics.impact({ style: ImpactStyle.Light });
+      } catch (error) {
+        console.log('Haptics not available:', error);
+      }
       start();
       setIsExpanded(false); // 開始後自動摺疊
     }
   };
 
   // 煉成（結算並顯示收據）
-  const handleSettle = () => {
+  const handleSettle = async () => {
     const alchemyStore = useAlchemyStore.getState();
     if (alchemyStore.startTimestamp && ratePerSecond > 0) {
       const earned = alchemyStore.calculateEarned(ratePerSecond);
       if (earned > 0) {
+        // 觸覺回饋：煉成結算
+        try {
+          await Haptics.impact({ style: ImpactStyle.Medium });
+        } catch (error) {
+          console.log('Haptics not available:', error);
+        }
         // 顯示收據卡片
         const minutes = elapsedSeconds / 60;
         setReceiptEarned(earned);
@@ -80,7 +93,15 @@ const SalaryInput = () => {
   };
 
   // 放棄（直接重置，不結算）
-  const handleDiscard = () => {
+  const handleDiscard = async () => {
+    // 觸覺回饋：放棄煉金（負面動作）
+    try {
+      await Haptics.vibrate();
+      await new Promise(resolve => setTimeout(resolve, 100));
+      await Haptics.vibrate();
+    } catch (error) {
+      console.log('Haptics not available:', error);
+    }
     reset();
   };
 
@@ -113,7 +134,13 @@ const SalaryInput = () => {
     setLongPressProgress(0);
   };
 
-  const handleLongPressComplete = () => {
+  const handleLongPressComplete = async () => {
+    // 觸覺回饋：重置實驗室（重大動作）
+    try {
+      await Haptics.impact({ style: ImpactStyle.Heavy });
+    } catch (error) {
+      console.log('Haptics not available:', error);
+    }
     handleLongPressEnd();
     setShowConfirmDialog(true);
   };

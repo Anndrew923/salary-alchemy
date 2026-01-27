@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { collection, query, orderBy, limit, getDocs, getCountFromServer } from 'firebase/firestore';
 import { signInAnonymously } from 'firebase/auth';
 import { db, auth, isFirebaseEnabled } from '../../config/firebase';
@@ -8,6 +9,7 @@ import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { RPG_LEVELS_TW, RPG_LEVELS_EN, LEVEL_TITLES } from '../../utils/constants';
 import { formatCurrency } from '../../utils/i18n';
+import { truncateByWeight, truncateByWeightWithoutEllipsis, formatWeightDisplay, MAX_WEIGHT } from '../../utils/characterLimit';
 import zhTW from '../../locales/zh-TW.json';
 import enUS from '../../locales/en-US.json';
 import styles from './Leaderboard.module.css';
@@ -239,9 +241,26 @@ const Leaderboard = () => {
     }, 0);
   };
 
+  // 處理輸入變化，限制權重
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    // 使用工具函數截斷，輸入時不顯示省略號
+    const truncated = truncateByWeightWithoutEllipsis(newValue, MAX_WEIGHT);
+    setEditingNickname(truncated);
+  };
+
   const handleSaveNickname = async () => {
+    // 觸覺回饋：保存暱稱
+    try {
+      await Haptics.impact({ style: ImpactStyle.Light });
+    } catch (error) {
+      console.log('Haptics not available:', error);
+    }
+    
+    // 確保保存時也進行截斷處理
     const trimmedNickname = editingNickname.trim() || 'Anonymous Alchemist';
-    setNickname(trimmedNickname);
+    const finalNickname = truncateByWeight(trimmedNickname, MAX_WEIGHT);
+    setNickname(finalNickname);
     setIsEditingNickname(false);
     
     // 立即同步到雲端
@@ -267,6 +286,11 @@ const Leaderboard = () => {
       handleCancelEdit();
     }
   };
+
+  // 計算當前編輯名稱的權重顯示
+  const weightDisplay = useMemo(() => {
+    return formatWeightDisplay(editingNickname, MAX_WEIGHT);
+  }, [editingNickname]);
 
   return (
     <div className={styles.container}>
@@ -322,19 +346,21 @@ const Leaderboard = () => {
             <span className={styles.rank}>#{currentUserRank || '?'}</span>
             <div className={styles.nicknameContainer}>
               {isEditingNickname ? (
-                <input
-                  ref={nicknameInputRef}
-                  type="text"
-                  className={styles.nicknameInput}
-                  value={editingNickname}
-                  onChange={(e) => setEditingNickname(e.target.value)}
-                  onBlur={handleSaveNickname}
-                  onKeyDown={handleKeyDown}
-                  maxLength={20}
-                />
+                <div className={styles.nicknameInputWrapper}>
+                  <input
+                    ref={nicknameInputRef}
+                    type="text"
+                    className={styles.nicknameInput}
+                    value={editingNickname}
+                    onChange={handleNicknameChange}
+                    onBlur={handleSaveNickname}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <span className={styles.weightCounter}>{weightDisplay}</span>
+                </div>
               ) : (
                 <>
-                  <span className={styles.nickname}>{nickname || (locale === 'TW' ? '你' : 'You')}</span>
+                  <span className={styles.nickname}>{truncateByWeight(nickname || (locale === 'TW' ? '你' : 'You'), MAX_WEIGHT)}</span>
                   <button
                     className={styles.editButton}
                     onClick={handleStartEdit}
@@ -358,22 +384,34 @@ const Leaderboard = () => {
 
       {/* 排行榜列表 */}
       <div className={styles.leaderboard}>
-        {entries.map((entry) => (
-          <div
-            key={entry.uid}
-            className={`${styles.entry} ${entry.uid === currentUid ? styles.currentUserEntry : ''} ${entry.tier === 5 ? styles.diamondEntry : ''}`}
-          >
-            <div className={styles.rank}>{entry.rank}</div>
-            <div className={styles.tierIcon} style={{ color: getTierColor(entry.tier) }}>
-              {getTierIcon(entry.tier)}
+        {entries.map((entry) => {
+          const handleEntryClick = async () => {
+            // 觸覺回饋：點擊排行榜項目
+            try {
+              await Haptics.impact({ style: ImpactStyle.Light });
+            } catch (error) {
+              console.log('Haptics not available:', error);
+            }
+          };
+          
+          return (
+            <div
+              key={entry.uid}
+              className={`${styles.entry} ${entry.uid === currentUid ? styles.currentUserEntry : ''} ${entry.tier === 5 ? styles.diamondEntry : ''}`}
+              onClick={handleEntryClick}
+            >
+              <div className={styles.rank}>{entry.rank}</div>
+              <div className={styles.tierIcon} style={{ color: getTierColor(entry.tier) }}>
+                {getTierIcon(entry.tier)}
+              </div>
+              <div className={styles.info}>
+                <div className={styles.nickname}>{truncateByWeight(entry.nickname, MAX_WEIGHT)}</div>
+                <div className={styles.levelTitle}>{entry.levelTitle}</div>
+                <div className={styles.amount}>{formatCurrency(entry.totalEarned, (entry.locale === 'TW' || entry.locale === 'EN') ? entry.locale : locale)}</div>
+              </div>
             </div>
-            <div className={styles.info}>
-              <div className={styles.nickname}>{entry.nickname}</div>
-              <div className={styles.levelTitle}>{entry.levelTitle}</div>
-              <div className={styles.amount}>{formatCurrency(entry.totalEarned, (entry.locale === 'TW' || entry.locale === 'EN') ? entry.locale : locale)}</div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       </>
       )}
