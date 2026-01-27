@@ -54,12 +54,12 @@
 
 .shieldTooltip {
   position: fixed;
-  bottom: 20px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  padding: 8px 16px;
-  background-color: var(--bg-primary);
-  border: 1px solid var(--text-diamond);
+  transform: translate(-50%, -50%);
+  padding: 20px 24px;
+  background-color: rgba(10, 10, 10, 0.9);
+  border: 2px solid var(--text-diamond);
   border-radius: var(--radius-sm);
   color: var(--text-diamond);
   font-size: 0.75rem;
