@@ -19,28 +19,15 @@ export class AdService {
   private static getRewardedAdId(): string {
     const platform = Capacitor.getPlatform();
 
-    // 專注優化 Android 平台：優先讀取 ANDROID 專用環境變數
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const env = (import.meta as any).env || {};
+    // 開發 / 測試期間：一律使用 Google 官方 Rewarded 測試 ID
+    // 參考：https://developers.google.com/admob/android/test-ads
+    const googleOfficialTestId = "ca-app-pub-3940256099942544/5224354917";
 
-    if (platform === "android") {
-      const androidId = env.VITE_ADMOB_REWARDED_AD_ID_ANDROID as
-        | string
-        | undefined;
-      if (!androidId) {
-        console.warn(
-          "[AdService] VITE_ADMOB_REWARDED_AD_ID_ANDROID 未設定，使用 Android 測試 ID。",
-        );
-        return "TEST_ANDROID_REWARDED_ID";
-      }
-      return androidId;
-    }
-
-    // 其他平台（含 Web / iOS / desktop）統一使用測試 ID
     console.info(
-      `[AdService] 非 Android 平台 (${platform})，使用通用測試 ID。`,
+      `[AdService] 平台 (${platform}) 使用 Google 官方 Rewarded 測試 ID：${googleOfficialTestId}`,
     );
-    return "TEST_WEB_OR_OTHER_ID";
+
+    return googleOfficialTestId;
   }
 
   // 初始化 AdMob
@@ -57,11 +44,13 @@ export class AdService {
     await AdMob.initialize({
       // 開發階段可加上測試裝置 ID
       // testingDevices: ['YOUR_DEVICE_ID'],
-      initializeForTesting: true, // 開發測試期間強制啟用 Testing 模式
+      initializeForTesting: true, // Boss 測試階段：強制啟用 Testing 模式
     });
 
     this.isInitialized = true;
-    console.log("[AdService] AdMob Initialized");
+    console.info(
+      "[AdService] AdMob Initialized (initializeForTesting: true, FORCE TEST IDS ENABLED)",
+    );
   }
 
   // 顯示底部橫幅廣告 (Android 優先)
@@ -79,8 +68,11 @@ export class AdService {
         adId,
         adSize: BannerAdSize.ADAPTIVE_BANNER, // 使用自適應橫幅以獲得最佳收益與適配
         position: BannerAdPosition.BOTTOM_CENTER,
-        margin: 0,
-        // isTesting 建議也走環境變數控制，開發測試期間強制開啟 Testing 模式
+        // Android 15 底部導覽列 (手勢列) 會吃掉一部分 Banner，
+        // 利用 margin 將橫幅往上「頂」出安全區域。
+        // 實測範圍約 24dp ~ 48dp，這裡取中間值 30px，之後可依實機再微調。
+        margin: 30,
+        // isTesting 建議也走環境變數控制，Boss 測試階段一律使用測試流量
         isTesting: true,
       });
     } catch (error) {

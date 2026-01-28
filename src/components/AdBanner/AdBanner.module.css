@@ -1,9 +1,10 @@
 .bannerContainer {
   width: 100%;
-  min-height: 50px; /* 標準橫幅高度 */
+  /* 標準橫幅高度 (50px) + Safe Area 邊距，避免被 Android 15 導覽列吃掉 */
+  min-height: calc(50px + var(--safe-area-bottom, 20px));
   background: transparent;
   /* 確保在 Web 預覽時留出位置，且考慮安全區域 (Android 15 底部手勢欄) */
-  padding-bottom: var(--safe-area-bottom, 0px);
+  padding-bottom: var(--safe-area-bottom, 20px);
 }
 
 .webPlaceholder {
@@ -16,4 +17,3 @@
   font-size: 0.8rem;
   border-top: 1px solid rgba(255, 215, 0, 0.1);
 }
-

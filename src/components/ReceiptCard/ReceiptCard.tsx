@@ -79,6 +79,13 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
   const fontSizeClass = getFontSizeClass(earnedFormatted);
 
   const handleWatchAd = async () => {
+    if (isAdLoading || isAdRewardPending) {
+      console.warn(
+        "[ReceiptCard] Ignoring duplicate watch-ad click (loading or already pending reward).",
+      );
+      return;
+    }
+
     setIsAdLoading(true);
     try {
       const success = await AdService.showRewardedAd();

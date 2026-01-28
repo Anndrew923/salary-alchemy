@@ -29,4 +29,3 @@ const AdBanner = () => {
 };
 
 export default AdBanner;
-
