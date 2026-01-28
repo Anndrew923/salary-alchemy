@@ -68,6 +68,8 @@
   "receiptTypeWealth": "Wealth Accumulation",
   "receiptConfirm": "Confirm",
   "receiptConfirmButton": "Confirm",
+  "adRewardButton": "Summon Legendary",
+  "adLoading": "Casting Spell...",
   "privacy": {
     "title": "Alchemist Confidentiality Agreement",
     "subtitle": "ALCHEMIST CONFIDENTIALITY AGREEMENT",
@@ -130,6 +132,29 @@
     "50": "You've earned enough to buy the Solar System. The board of directors is now just your private dance troupe."
   },
   "exchange": {
+    "summonFailed": "Insufficient mana. Please try again later...",
+    "ad_legendary": [
+      "Boss's Private Parking Spot (5m) | Park and flee! Experience 300 seconds of peak corporate power.",
+      "Fake Smile Detector | 99.9% accuracy. Predicts if 'Great job' actually means 'More work coming'.",
+      "Private Jet Mock Boarding Pass | It’s not yours, but holding it makes slacking feel like a business trip.",
+      "Chairman’s Office Air (Canned) | One whiff to enjoy the sweet, sweet scent of zero weekly reports.",
+      "Code: 'Boss is Out' | A secret signal indicating the company's slacking index has peaked.",
+      "Virtual Key to the Quietest Stall | A signal-free sanctuary with a premium ergonomic seat.",
+      "Keyboard Clatter Camouflage (Elite) | Makes your slacking sound like a billion-dollar algorithm.",
+      "Monday Morning 'Mass Amnesia' Spell | Makes everyone forget you didn't submit that report on Friday.",
+      "Lunch Break Time-Warp (Hallucination) | Feels like an hour, lasted 30s, but your soul is fully charged.",
+      "'On a Call' Digital Forcefield | Coworkers attempting to assign tasks will auto-turn away within 3 meters.",
+      "Digital Gold Leaf Toilet Paper | The ultimate romance for alchemists. Every wipe is a golden touch.",
+      "Water Cooler Buyout Contract | Every drop the staff drinks now contains your 'liquid investment'.",
+      "Isekai Starter Kit: Hero Gear | Grants the 'Courage to be Fired' and 'Instant Sleep' passive skills.",
+      "30-Second Wealth Freedom Trial | For this brief moment, the entire world thinks you're a billionaire.",
+      "Mars Office Migration Intent | Leave Earthly stress behind; your factory is heading to the stars.",
+      "PTO Auto-Multiplier Spores | Not in the labor law, but in your mind, the vacation never ends.",
+      "Weekly Report Generator (Gibberish) | Filled with terms you don't understand, but the Boss is impressed.",
+      "Conference Room Invisibility | As long as you don't make eye contact, you won't have to present.",
+      "Afternoon Tea Prophecy | Predicts a generous coworker (or the Boss) will buy treats at 3 PM.",
+      "Slacker Lifetime Achievement Award | Thanks for the rigorous, long-term stress testing of our toilets."
+    ],
     "health_critical": [
       "Emergency Room Co-pay | You earned just enough to pay for the ER. Get up, your anus is screaming.",
       "Hemorrhoid Surgery Fund | Keep squatting, the doctor misses you.",

@@ -11,6 +11,9 @@ interface AlchemyState {
   startTimestamp: number | null;
   isRunning: boolean;
   totalEarned: number;
+  // 廣告相關：記錄是否有待領取的廣告傳說獎勵
+  isAdRewardPending: boolean;
+  setAdRewardPending: (pending: boolean) => void;
   start: () => void;
   pause: () => void;
   reset: () => void;
@@ -31,6 +34,11 @@ export const useAlchemyStore = create<AlchemyState>()(
       startTimestamp: null,
       isRunning: false,
       totalEarned: 0,
+      isAdRewardPending: false,
+
+      setAdRewardPending: (pending: boolean) => {
+        set({ isAdRewardPending: pending });
+      },
 
       start: () => {
         const now = Date.now();
@@ -248,6 +256,8 @@ export const useAlchemyStore = create<AlchemyState>()(
       name: "salary-alchemy-alchemy",
       partialize: (state) => ({
         totalEarned: state.totalEarned,
+        // 廣告傳說池屬於體驗狀態，也需要被持久化，避免中途關閉 App 後獎勵消失
+        isAdRewardPending: state.isAdRewardPending,
       }),
     },
   ),

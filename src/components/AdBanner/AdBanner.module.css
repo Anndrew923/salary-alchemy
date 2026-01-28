@@ -1,40 +1,19 @@
-.container {
-  position: fixed;
-  /* 讓廣告浮在導覽列上方，並考慮 Safe Area */
-  bottom: var(--safe-area-bottom);
-  left: 50%;
-  transform: translateX(-50%);
+.bannerContainer {
   width: 100%;
-  max-width: 480px;
-  /* 基礎高度 + Safe Area，避免被底部導覽列吃掉 */
-  height: calc(80px + var(--safe-area-bottom));
-  background-color: var(--bg-tertiary);
-  border-top: 1px solid var(--border-gold);
+  min-height: 50px; /* 標準橫幅高度 */
+  background: transparent;
+  /* 確保在 Web 預覽時留出位置，且考慮安全區域 (Android 15 底部手勢欄) */
+  padding-bottom: var(--safe-area-bottom, 0px);
+}
+
+.webPlaceholder {
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  background: rgba(0, 0, 0, 0.2);
+  color: #666;
+  font-size: 0.8rem;
+  border-top: 1px solid rgba(255, 215, 0, 0.1);
 }
 
-.placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: repeating-linear-gradient(
-    45deg,
-    var(--bg-secondary),
-    var(--bg-secondary) 10px,
-    var(--bg-tertiary) 10px,
-    var(--bg-tertiary) 20px
-  );
-}
-
-.text {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  opacity: 0.5;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}

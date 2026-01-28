@@ -1,5 +1,7 @@
+import { Capacitor } from "@capacitor/core";
+
 /**
- * UI 工具函數
+ * UI / 平台相關工具函數
  */
 
 /**
@@ -15,5 +17,17 @@ export const getFontSizeClass = (amountString: string): string => {
     return "amountMedium";
   } else {
     return "amountSmall";
+  }
+};
+
+/**
+ * 檢查目前是否在原生 (Capacitor) 平台執行
+ */
+export const isNative = (): boolean => {
+  try {
+    return Capacitor.isNativePlatform();
+  } catch {
+    // 理論上不會進來，單純防禦，確保 Web 端不會炸
+    return false;
   }
 };

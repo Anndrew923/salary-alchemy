@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   getExchangeItem,
@@ -7,7 +7,9 @@ import {
 import { formatCurrency } from "../../utils/i18n";
 import { getFontSizeClass } from "../../utils/ui";
 import { useUserStore } from "../../stores/userStore";
+import { useAlchemyStore } from "../../stores/alchemyStore";
 import { useHaptics } from "../../hooks/useHaptics";
+import { AdService } from "../../services/adService";
 import styles from "./ReceiptCard.module.css";
 
 interface ReceiptCardProps {
@@ -20,6 +22,8 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
   const { locale } = useUserStore();
   const { t, i18n } = useTranslation();
   const haptics = useHaptics();
+  const { isAdRewardPending, setAdRewardPending } = useAlchemyStore();
+  const [isAdLoading, setIsAdLoading] = useState(false);
 
   // 同步語言設定
   useEffect(() => {
@@ -29,8 +33,8 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
   const currency = locale === "TW" ? "TWD" : "USD";
   const exchangeResult = getExchangeItem(earned, minutes, currency);
   const { item, desc } = useMemo(
-    () => getRandomExchangeMsg(exchangeResult.key),
-    [exchangeResult.key],
+    () => getRandomExchangeMsg(exchangeResult.key, isAdRewardPending),
+    [exchangeResult.key, isAdRewardPending],
   );
 
   // 根據 exchangeResult 的級距決定觸覺回饋強度
@@ -74,8 +78,35 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
   const earnedFormatted = formatCurrency(earned, locale);
   const fontSizeClass = getFontSizeClass(earnedFormatted);
 
+  const handleWatchAd = async () => {
+    setIsAdLoading(true);
+    try {
+      const success = await AdService.showRewardedAd();
+      if (success) {
+        setAdRewardPending(true);
+        await haptics.heavy(); // 成功召喚傳說，給予最強震動
+      } else {
+        // 廣告加載或播放失敗，給予召喚失敗提示
+        alert(t("exchange.summonFailed"));
+      }
+    } catch (err) {
+      console.error("Failed to summon legendary:", err);
+      alert(t("exchange.summonFailed"));
+    } finally {
+      setIsAdLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    if (isAdRewardPending) {
+      // 關閉收據時消耗掉這次的廣告傳說獎勵
+      setAdRewardPending(false);
+    }
+    onClose();
+  };
+
   return (
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={styles.overlay} onClick={handleClose}>
       <div className={styles.receiptCard} onClick={(e) => e.stopPropagation()}>
         <div className={styles.receiptHeader}>
           <div className={styles.receiptTitle}>{t("receiptTitle")}</div>
@@ -84,8 +115,27 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
 
         <div className={styles.receiptBody}>
           <div className={styles.exchangeIcon}>{exchangeResult.icon}</div>
-          <div className={styles.itemName}>{item}</div>
+          <div className={styles.itemName}>
+            {isAdRewardPending && (
+              <span className={styles.legendaryBadge}>LEGENDARY</span>
+            )}
+            {item}
+          </div>
           <div className={styles.itemDesc}>{desc}</div>
+
+          {!isAdRewardPending && (
+            <button
+              className={styles.adRewardButton}
+              onClick={handleWatchAd}
+              disabled={isAdLoading}
+            >
+              {isAdLoading
+                ? locale === "TW"
+                  ? "召喚中..."
+                  : t("adLoading")
+                : t("adRewardButton")}
+            </button>
+          )}
 
           <div className={styles.receiptDivider} />
 
@@ -116,7 +166,7 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
         </div>
 
         <div className={styles.receiptFooter}>
-          <button className={styles.closeButton} onClick={onClose}>
+          <button className={styles.closeButton} onClick={handleClose}>
             {t("receiptConfirmButton")}
           </button>
         </div>
