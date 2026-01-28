@@ -33,10 +33,11 @@ const Leaderboard = () => {
   const { totalEarned: currentTotalEarned, syncToCloud } = useAlchemyStore();
   const { t, i18n } = useTranslation();
   const haptics = useHaptics();
-  const { entries, loading, error, totalCount } = useLeaderboard({
-    hasSeenPrivacyNotice,
-    locale,
-  });
+  const { entries, loading, error, totalCount, fetchMore, hasMore } =
+    useLeaderboard({
+      hasSeenPrivacyNotice,
+      locale,
+    });
   const [showShieldTooltip, setShowShieldTooltip] = useState(false);
   const [isEditingNickname, setIsEditingNickname] = useState(false);
   const [editingNickname, setEditingNickname] = useState("");
@@ -286,6 +287,18 @@ const Leaderboard = () => {
               );
             })}
           </div>
+
+          {hasMore && !loading && (
+            <div className={styles.loadMoreContainer}>
+              <button
+                className={styles.loadMoreButton}
+                onClick={fetchMore}
+                aria-label={t("loadMore")}
+              >
+                {t("loadMore")}
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>

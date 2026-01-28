@@ -55,12 +55,14 @@
 }
 
 @keyframes shieldPulse {
-  0%, 100% {
+  0%,
+  100% {
     filter: drop-shadow(0 0 8px rgba(0, 191, 255, 0.6));
     opacity: 1;
   }
   50% {
-    filter: drop-shadow(0 0 15px rgba(0, 191, 255, 1)) drop-shadow(0 0 25px rgba(0, 191, 255, 0.8));
+    filter: drop-shadow(0 0 15px rgba(0, 191, 255, 1))
+      drop-shadow(0 0 25px rgba(0, 191, 255, 0.8));
     opacity: 0.9;
   }
 }
@@ -113,19 +115,31 @@
 }
 
 .currentUser {
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(20, 20, 20, 0.95) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-tertiary) 0%,
+    rgba(20, 20, 20, 0.95) 100%
+  );
   border: 3px solid var(--text-gold);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
-  box-shadow: var(--shadow-glow), 0 0 20px rgba(255, 215, 0, 0.4);
+  box-shadow:
+    var(--shadow-glow),
+    0 0 20px rgba(255, 215, 0, 0.4);
   position: relative;
 }
 
 .currentUser.diamondMode {
   border-color: var(--text-diamond);
-  box-shadow: var(--shadow-diamond), 0 0 20px rgba(0, 191, 255, 0.4);
-  background: linear-gradient(135deg, rgba(0, 30, 50, 0.8) 0%, rgba(20, 20, 20, 0.95) 100%);
+  box-shadow:
+    var(--shadow-diamond),
+    0 0 20px rgba(0, 191, 255, 0.4);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 30, 50, 0.8) 0%,
+    rgba(20, 20, 20, 0.95) 100%
+  );
 }
 
 .currentUserLabel {
@@ -171,13 +185,21 @@
   border-color: var(--text-gold);
   border-width: 2px;
   box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(255, 215, 0, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-tertiary) 0%,
+    rgba(255, 215, 0, 0.15) 100%
+  );
 }
 
 .entry.diamondEntry.currentUserEntry {
   border-color: var(--text-diamond);
   box-shadow: 0 0 12px rgba(0, 191, 255, 0.5);
-  background: linear-gradient(135deg, rgba(0, 30, 50, 0.6) 0%, rgba(255, 215, 0, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 30, 50, 0.6) 0%,
+    rgba(255, 215, 0, 0.1) 100%
+  );
 }
 
 .rank {
@@ -257,10 +279,15 @@
 
 .globalCount {
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.9rem; /* 稍微放大一點，更有存在感 */
   color: var(--text-secondary);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
   font-family: var(--font-mono);
+  /* 新增以下保險措施 */
+  white-space: normal; /* 允許換行 */
+  word-break: break-word; /* 避免長數字爆格 */
+  overflow: visible; /* 絕對不顯示省略號 */
+  width: 100%; /* 佔滿寬度 */
 }
 
 .nicknameContainer {
@@ -336,11 +363,11 @@
   .nickname {
     font-size: 0.8rem;
   }
-  
+
   .levelTitle {
     font-size: 0.625rem; /* 10px */
   }
-  
+
   .amount {
     font-size: 0.75rem; /* 12px */
   }

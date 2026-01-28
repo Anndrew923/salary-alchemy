@@ -6,9 +6,10 @@
   "error": "Failed to load leaderboard. Please check Firebase configuration.",
   "empty": "Leaderboard is currently empty",
   "privacyNoticeRequired": "Please accept the privacy notice to view the leaderboard...",
-  "globalCount": "Global Participants: {count} Alchemists",
+  "globalCount": "Global Participants: {{count}} Alchemists",
   "editNickname": "Edit Nickname",
   "save": "Save",
+  "loadMore": "Load More",
   "privacy": {
     "title": "Alchemist Confidentiality Agreement",
     "subtitle": "ALCHEMIST CONFIDENTIALITY AGREEMENT",
