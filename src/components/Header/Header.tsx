@@ -63,8 +63,6 @@ const Header = () => {
       <div className={styles.level}>
         <span
           className={`${styles.levelLabel} ${styles[`tier${currentTier}`]}`}
-          onMouseEnter={() => setShowTooltip(true)}
-          onMouseLeave={() => setShowTooltip(false)}
           onClick={() => setShowTooltip(!showTooltip)}
           style={{ cursor: "pointer" }}
         >

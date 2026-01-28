@@ -1,5 +1,9 @@
 .header {
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-tertiary) 0%,
+    var(--bg-secondary) 100%
+  );
   border-bottom: 2px solid var(--border-gold);
   padding: var(--spacing-md);
   display: flex;
@@ -23,7 +27,7 @@
 }
 
 .title {
-  font-family: 'Impact', 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
+  font-family: "Impact", "Haettenschweiler", "Arial Narrow Bold", sans-serif;
   font-size: clamp(1.2rem, 7vw, 1.8rem);
   font-weight: bold;
   text-align: center;
@@ -88,12 +92,24 @@
   z-index: 1000;
   box-shadow: var(--shadow-glow);
   font-family: var(--font-mono);
+  animation: fadeIn 0.2s ease-out;
 }
 
 .diamondMode .tooltip {
   border-color: var(--text-diamond);
   color: var(--text-diamond);
   box-shadow: var(--shadow-diamond);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Tier 1 - 菜鳥：灰色細線，微微抖動 */
@@ -104,7 +120,8 @@
 }
 
 @keyframes subtleShake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
   25% {
@@ -120,7 +137,11 @@
   border-color: var(--rpg-bronze);
   color: var(--rpg-bronze);
   box-shadow: 0 0 8px rgba(205, 127, 50, 0.4);
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(205, 127, 50, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-tertiary) 0%,
+    rgba(205, 127, 50, 0.1) 100%
+  );
 }
 
 /* Tier 3 - 白銀：水銀流光特效 */
@@ -128,12 +149,17 @@
   border-color: var(--rpg-silver);
   color: var(--rpg-silver);
   box-shadow: 0 0 12px rgba(192, 192, 192, 0.6);
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(192, 192, 192, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-tertiary) 0%,
+    rgba(192, 192, 192, 0.15) 100%
+  );
   animation: silverShimmer 3s ease-in-out infinite;
 }
 
 @keyframes silverShimmer {
-  0%, 100% {
+  0%,
+  100% {
     filter: brightness(1);
     box-shadow: 0 0 12px rgba(192, 192, 192, 0.6);
   }
@@ -147,19 +173,30 @@
 .levelLabel.tier4 {
   border-color: var(--rpg-gold);
   color: var(--rpg-gold);
-  box-shadow: 0 0 16px rgba(255, 215, 0, 0.8), 0 0 32px rgba(255, 215, 0, 0.4);
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(255, 215, 0, 0.2) 100%);
+  box-shadow:
+    0 0 16px rgba(255, 215, 0, 0.8),
+    0 0 32px rgba(255, 215, 0, 0.4);
+  background: linear-gradient(
+    135deg,
+    var(--bg-tertiary) 0%,
+    rgba(255, 215, 0, 0.2) 100%
+  );
   animation: goldBurn 2s ease-in-out infinite;
 }
 
 @keyframes goldBurn {
-  0%, 100% {
+  0%,
+  100% {
     filter: brightness(1) drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
-    box-shadow: 0 0 16px rgba(255, 215, 0, 0.8), 0 0 32px rgba(255, 215, 0, 0.4);
+    box-shadow:
+      0 0 16px rgba(255, 215, 0, 0.8),
+      0 0 32px rgba(255, 215, 0, 0.4);
   }
   50% {
     filter: brightness(1.3) drop-shadow(0 0 12px rgba(255, 215, 0, 1));
-    box-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 40px rgba(255, 215, 0, 0.6);
+    box-shadow:
+      0 0 20px rgba(255, 215, 0, 1),
+      0 0 40px rgba(255, 215, 0, 0.6);
   }
 }
 
@@ -167,27 +204,42 @@
 .levelLabel.tier5 {
   border-color: var(--rpg-diamond);
   color: var(--rpg-diamond);
-  box-shadow: 0 0 20px rgba(0, 191, 255, 1), 0 0 40px rgba(0, 191, 255, 0.6);
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(0, 191, 255, 0.25) 100%);
+  box-shadow:
+    0 0 20px rgba(0, 191, 255, 1),
+    0 0 40px rgba(0, 191, 255, 0.6);
+  background: linear-gradient(
+    135deg,
+    var(--bg-tertiary) 0%,
+    rgba(0, 191, 255, 0.25) 100%
+  );
   animation: diamondLightning 1s ease-in-out infinite;
 }
 
 @keyframes diamondLightning {
-  0%, 100% {
+  0%,
+  100% {
     filter: brightness(1) drop-shadow(0 0 10px rgba(0, 191, 255, 0.8));
-    box-shadow: 0 0 20px rgba(0, 191, 255, 1), 0 0 40px rgba(0, 191, 255, 0.6);
+    box-shadow:
+      0 0 20px rgba(0, 191, 255, 1),
+      0 0 40px rgba(0, 191, 255, 0.6);
   }
   25% {
     filter: brightness(1.5) drop-shadow(0 0 15px rgba(0, 191, 255, 1));
-    box-shadow: 0 0 25px rgba(0, 191, 255, 1.2), 0 0 50px rgba(0, 191, 255, 0.8);
+    box-shadow:
+      0 0 25px rgba(0, 191, 255, 1.2),
+      0 0 50px rgba(0, 191, 255, 0.8);
   }
   50% {
     filter: brightness(1.2) drop-shadow(0 0 12px rgba(0, 191, 255, 0.9));
-    box-shadow: 0 0 22px rgba(0, 191, 255, 1.1), 0 0 45px rgba(0, 191, 255, 0.7);
+    box-shadow:
+      0 0 22px rgba(0, 191, 255, 1.1),
+      0 0 45px rgba(0, 191, 255, 0.7);
   }
   75% {
     filter: brightness(1.6) drop-shadow(0 0 18px rgba(0, 191, 255, 1));
-    box-shadow: 0 0 28px rgba(0, 191, 255, 1.3), 0 0 55px rgba(0, 191, 255, 0.9);
+    box-shadow:
+      0 0 28px rgba(0, 191, 255, 1.3),
+      0 0 55px rgba(0, 191, 255, 0.9);
   }
 }
 
