@@ -8,23 +8,8 @@ import {
   formatTime,
   getI18n,
 } from "../../utils/i18n";
+import { getFontSizeClass } from "../../utils/ui";
 import styles from "./AlchemyDisplay.module.css";
-
-/**
- * 根據金額字串長度返回對應的字體大小 Class
- * @param amountString 格式化後的金額字串
- * @returns CSS Class 名稱
- */
-const getFontSizeClass = (amountString: string): string => {
-  const length = amountString.length;
-  if (length <= 10) {
-    return styles.amountLarge;
-  } else if (length <= 13) {
-    return styles.amountMedium;
-  } else {
-    return styles.amountSmall;
-  }
-};
 
 const AlchemyDisplay = () => {
   const { ratePerSecond } = useSalaryCalculator();
@@ -45,7 +30,7 @@ const AlchemyDisplay = () => {
       <div className={styles.currentSection}>
         <div className={styles.label}>{i18n.currentEarned}</div>
         <div
-          className={`${styles.amount} ${getFontSizeClass(currentEarnedFormatted)} monospace`}
+          className={`${styles.amount} ${styles[getFontSizeClass(currentEarnedFormatted)]} monospace`}
         >
           {currentEarnedFormatted}
         </div>
@@ -59,7 +44,7 @@ const AlchemyDisplay = () => {
       <div className={styles.totalSection}>
         <div className={styles.label}>{i18n.totalEarned}</div>
         <div
-          className={`${styles.amount} ${styles.totalAmount} ${getFontSizeClass(totalEarnedFormatted)} monospace`}
+          className={`${styles.amount} ${styles.totalAmount} ${styles[getFontSizeClass(totalEarnedFormatted)]} monospace`}
         >
           {totalEarnedFormatted}
         </div>

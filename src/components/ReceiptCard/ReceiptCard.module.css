@@ -69,7 +69,8 @@
 }
 
 @keyframes iconPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -96,7 +97,12 @@
 
 .receiptDivider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-gold),
+    transparent
+  );
   margin: var(--spacing-lg) 0;
 }
 
@@ -125,6 +131,21 @@
   font-size: 0.95rem;
   color: var(--text-gold);
   font-weight: bold;
+  transition: font-size 0.3s ease;
+  white-space: nowrap;
+}
+
+/* 動態縮放 Class（用於金額顯示） */
+.detailValue.amountLarge {
+  font-size: 1.1rem;
+}
+
+.detailValue.amountMedium {
+  font-size: 0.95rem;
+}
+
+.detailValue.amountSmall {
+  font-size: 0.8rem;
 }
 
 .receiptFooter {

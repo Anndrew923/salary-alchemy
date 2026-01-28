@@ -167,7 +167,7 @@ const generateRPGLevels = () => {
 };
 
 // RPG 等級系統閾值 (50 階) - 台幣版本
-export const RPG_LEVELS_TW = generateRPGLevels() as readonly Array<{
+export const RPG_LEVELS_TW = generateRPGLevels() as ReadonlyArray<{
   threshold: number;
   tier: number;
 }>;
