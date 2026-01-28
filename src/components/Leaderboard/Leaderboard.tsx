@@ -6,7 +6,7 @@ import { auth, isFirebaseEnabled } from '../../config/firebase';
 import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { getTierIcon, getTierColor, LEVEL_TITLES } from '../../utils/constants';
-import { formatCurrency } from '../../utils/i18n';
+import { formatAlchemyMoney } from '../../utils/i18n';
 import { truncateByWeight, truncateByWeightWithoutEllipsis, formatWeightDisplay, MAX_WEIGHT } from '../../utils/characterLimit';
 import { calculateLevel } from '../../hooks/useRPGLevel';
 import { useLeaderboard } from '../../hooks/useLeaderboard';
@@ -163,11 +163,9 @@ const Leaderboard = () => {
         </div>
       </div>
 
-      {totalCount > 0 && (
-        <div className={styles.globalCount}>
-          {t('globalCount', { count: totalCount })}
-        </div>
-      )}
+      <div className={styles.globalCount}>
+        {loading ? t('loading') : t('globalCount', { count: totalCount || 0 })}
+      </div>
       
       {currentUid && (
         <div className={`${styles.currentUser} ${currentTier === 5 ? styles.diamondMode : ''}`}>
@@ -201,7 +199,7 @@ const Leaderboard = () => {
                 </>
               )}
             </div>
-            <span className={styles.amount}>{formatCurrency(currentTotalEarned, locale)}</span>
+            <span className={styles.amount}>{formatAlchemyMoney(currentTotalEarned, locale)}</span>
             <span 
               className={styles.tierBadge}
               style={{ color: getTierColor(currentTier) }}
@@ -231,7 +229,7 @@ const Leaderboard = () => {
               <div className={styles.info}>
                 <div className={styles.nickname}>{truncateByWeight(entry.nickname, MAX_WEIGHT)}</div>
                 <div className={styles.levelTitle}>{entry.levelTitle}</div>
-                <div className={styles.amount}>{formatCurrency(entry.totalEarned, (entry.locale === 'TW' || entry.locale === 'EN') ? entry.locale : locale)}</div>
+                <div className={styles.amount}>{formatAlchemyMoney(entry.totalEarned, (entry.locale === 'TW' || entry.locale === 'EN') ? entry.locale : locale)}</div>
               </div>
             </div>
           );

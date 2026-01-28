@@ -2,7 +2,7 @@ import { useAlchemyStore } from '../../stores/alchemyStore';
 import { useSalaryCalculator } from '../../hooks/useSalaryCalculator';
 import { useAlchemyTimer } from '../../hooks/useAlchemyTimer';
 import { useUserStore } from '../../stores/userStore';
-import { formatCurrency, formatTime, getI18n } from '../../utils/i18n';
+import { formatAlchemyMoney, formatCurrencyPerSecond, formatTime, getI18n } from '../../utils/i18n';
 import styles from './AlchemyDisplay.module.css';
 
 const AlchemyDisplay = () => {
@@ -20,10 +20,10 @@ const AlchemyDisplay = () => {
       <div className={styles.currentSection}>
         <div className={styles.label}>{i18n.currentEarned}</div>
         <div className={`${styles.amount} monospace`}>
-          {formatCurrency(currentEarned, locale)}
+          {formatAlchemyMoney(currentEarned, locale)}
         </div>
         <div className={styles.rate}>
-          {formatCurrency(ratePerSecond, locale)} {i18n.perSecond}
+          {formatCurrencyPerSecond(ratePerSecond, locale)} {i18n.perSecond}
         </div>
       </div>
 
@@ -32,7 +32,7 @@ const AlchemyDisplay = () => {
       <div className={styles.totalSection}>
         <div className={styles.label}>{i18n.totalEarned}</div>
         <div className={`${styles.amount} ${styles.totalAmount} monospace`}>
-          {formatCurrency(totalEarned, locale)}
+          {formatAlchemyMoney(totalEarned, locale)}
         </div>
       </div>
 

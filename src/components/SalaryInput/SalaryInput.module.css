@@ -353,3 +353,53 @@
   color: var(--text-primary);
   box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
 }
+
+/* 成功提示對話框 */
+.successDialog {
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  border: 2px solid #4caf50;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
+}
+
+.successDialogTitle {
+  color: #4caf50;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.successDialogMessage {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.successDialogButton {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid #4caf50;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-primary);
+  color: #4caf50;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.successDialogButton:hover {
+  background-color: #4caf50;
+  color: var(--text-primary);
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+}

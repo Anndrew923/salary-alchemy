@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getExchangeItem, getRandomExchangeMsg } from '../../utils/equivalentExchange';
-import { formatCurrency, getI18n } from '../../utils/i18n';
+import { formatAlchemyMoney, getI18n } from '../../utils/i18n';
 import { useUserStore } from '../../stores/userStore';
 import styles from './ReceiptCard.module.css';
 
@@ -44,7 +44,7 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>{i18nStrings.receiptAmount}</span>
               <span className={`${styles.detailValue} monospace`}>
-                {formatCurrency(earned, locale)}
+                {formatAlchemyMoney(earned, locale)}
               </span>
             </div>
             <div className={styles.detailRow}>

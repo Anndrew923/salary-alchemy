@@ -4,7 +4,7 @@ import { useAlchemyStore } from '../../stores/alchemyStore';
 import { useSalaryCalculator } from '../../hooks/useSalaryCalculator';
 import { useAlchemyTimer } from '../../hooks/useAlchemyTimer';
 import { useHaptics } from '../../hooks/useHaptics';
-import { getI18n, formatCurrency } from '../../utils/i18n';
+import { getI18n, formatCurrency, formatAlchemyMoney, formatCurrencyPerSecond } from '../../utils/i18n';
 import ReceiptCard from '../ReceiptCard/ReceiptCard';
 import styles from './SalaryInput.module.css';
 
@@ -25,6 +25,8 @@ const SalaryInput = () => {
   const [receiptEarned, setReceiptEarned] = useState(0);
   const [receiptMinutes, setReceiptMinutes] = useState(0);
   const [longPressProgress, setLongPressProgress] = useState(0);
+  const [randomConfirmMessage, setRandomConfirmMessage] = useState<string>('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   
   const longPressTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const longPressStartTimeRef = useRef<number | null>(null);
@@ -118,13 +120,28 @@ const SalaryInput = () => {
   const handleLongPressComplete = async () => {
     await haptics.heavy();
     handleLongPressEnd();
+    
+    // 隨機選擇確認文案
+    const messages = i18n.resetLabConfirmMessages;
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    setRandomConfirmMessage(messages[randomIndex]);
+    
     setShowConfirmDialog(true);
   };
 
-  const handleConfirmReset = () => {
-    resetTotalEarned();
+  const handleConfirmReset = async () => {
+    // 執行重置（包含本地和云端同步）
+    await resetTotalEarned();
     setShowConfirmDialog(false);
     setIsExpanded(false); // 重置後自動摺疊
+    
+    // 顯示成功提示
+    setShowSuccessMessage(true);
+    
+    // 3 秒後自動關閉成功提示
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 3000);
   };
 
   const handleCancelReset = () => {
@@ -208,7 +225,7 @@ const SalaryInput = () => {
                 <div className={styles.rateItem}>
                   <span className={styles.rateLabel}>{i18n.perSecond}:</span>
                   <span className={`${styles.rateValue} monospace`}>
-                    {formatCurrency(ratePerSecond, locale)}
+                    {formatCurrencyPerSecond(ratePerSecond, locale)}
                   </span>
                 </div>
                 <div className={styles.rateItem}>
@@ -251,7 +268,9 @@ const SalaryInput = () => {
         <div className={styles.confirmDialogOverlay} onClick={handleCancelReset}>
           <div className={styles.confirmDialog} onClick={(e) => e.stopPropagation()}>
             <h3 className={styles.confirmDialogTitle}>{i18n.resetLabConfirm}</h3>
-            <p className={styles.confirmDialogMessage}>{i18n.resetLabConfirmMessage}</p>
+            <p className={styles.confirmDialogMessage}>
+              {randomConfirmMessage || i18n.resetLabConfirmMessage}
+            </p>
             <div className={styles.confirmDialogButtons}>
               <button
                 className={`${styles.confirmDialogButton} ${styles.confirmDialogCancel}`}
@@ -264,6 +283,28 @@ const SalaryInput = () => {
                 onClick={handleConfirmReset}
               >
                 {i18n.resetLabConfirmButton}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 重置成功提示 */}
+      {showSuccessMessage && (
+        <div className={styles.confirmDialogOverlay} onClick={() => setShowSuccessMessage(false)}>
+          <div className={styles.successDialog} onClick={(e) => e.stopPropagation()}>
+            <h3 className={styles.successDialogTitle}>
+              ✓ {locale === 'TW' ? '重置成功' : 'Reset Successful'}
+            </h3>
+            <p className={styles.successDialogMessage}>
+              {i18n.resetLabSuccess}
+            </p>
+            <div className={styles.confirmDialogButtons}>
+              <button
+                className={styles.successDialogButton}
+                onClick={() => setShowSuccessMessage(false)}
+              >
+                {i18n.receiptConfirm}
               </button>
             </div>
           </div>

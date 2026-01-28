@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { signInAnonymously } from 'firebase/auth';
 import { STORAGE_KEYS, EXCHANGE_RATE } from '../utils/constants';
 import { db, auth, isFirebaseEnabled } from '../config/firebase';
@@ -16,7 +16,7 @@ interface AlchemyState {
   finishSession: (earned: number) => Promise<void>;
   calculateEarned: (ratePerSecond: number) => number;
   addToTotal: (amount: number) => Promise<void>;
-  resetTotalEarned: () => void;
+  resetTotalEarned: () => Promise<void>;
   syncToCloud: () => Promise<void>;
 }
 
@@ -160,9 +160,56 @@ export const useAlchemyStore = create<AlchemyState>()(
         });
       },
       
-      resetTotalEarned: () => {
+      resetTotalEarned: async () => {
+        // 本地重置
         set({ totalEarned: 0 });
         localStorage.setItem(STORAGE_KEYS.TOTAL_EARNED, '0');
+        
+        // 云端同步重置
+        if (isFirebaseEnabled() && db) {
+          try {
+            const userState = useUserStore.getState();
+            let uid = userState.uid;
+            
+            // 如果未認證，先執行匿名登入
+            if (!uid || (auth && !auth.currentUser)) {
+              if (!userState.hasSeenPrivacyNotice) {
+                useUserStore.getState().setPrivacyModalOpen(true);
+                return;
+              }
+              
+              if (auth) {
+                try {
+                  const userCredential = await signInAnonymously(auth);
+                  uid = userCredential.user.uid;
+                  useUserStore.getState().setUid(uid);
+                  useUserStore.getState().setAnonymousId(uid);
+                } catch (error) {
+                  console.error('resetTotalEarned: Auto sign-in failed:', error);
+                  return;
+                }
+              } else {
+                console.warn('Cannot reset cloud: auth not available');
+                return;
+              }
+            }
+            
+            // 更新云端數據：將 totalEarned 和 normalizedScore 設為 0
+            // 稱號會自動根據 normalizedScore 重置為最低等級
+            await updateDoc(
+              doc(db, 'leaderboard', uid),
+              {
+                totalEarned: 0,
+                normalizedScore: 0,
+                updatedAt: new Date().toISOString(),
+              }
+            );
+            
+            console.log('Successfully reset cloud data:', { uid });
+          } catch (error) {
+            console.error('Failed to reset cloud data:', error);
+          }
+        }
       },
     }),
     {

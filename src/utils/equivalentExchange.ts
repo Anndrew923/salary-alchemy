@@ -22,7 +22,8 @@ export const getExchangeItem = (earned: number, minutes: number, currency: 'TWD'
   if (pp < 300) return { key: 'wealth_mid', icon: '🍱', type: 'WEALTH' };
   if (pp < 1000) return { key: 'wealth_high', icon: '🎫', type: 'WEALTH' };
   if (pp < 3000) return { key: 'wealth_ultra', icon: '💊', type: 'WEALTH' };
-  return { key: 'wealth_legendary', icon: '💎', type: 'WEALTH' };
+  if (pp < 10000) return { key: 'wealth_legendary', icon: '💎', type: 'WEALTH' };
+  return { key: 'wealth_overlord', icon: '👑', type: 'WEALTH' };
 };
 
 export const getRandomExchangeMsg = (categoryKey: string): { item: string; desc: string } => {
