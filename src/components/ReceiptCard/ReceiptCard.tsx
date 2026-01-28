@@ -4,7 +4,7 @@ import {
   getExchangeItem,
   getRandomExchangeMsg,
 } from "../../utils/equivalentExchange";
-import { formatAlchemyMoney, getI18n } from "../../utils/i18n";
+import { formatCurrency, getI18n } from "../../utils/i18n";
 import { getFontSizeClass } from "../../utils/ui";
 import { useUserStore } from "../../stores/userStore";
 import { useHaptics } from "../../hooks/useHaptics";
@@ -69,7 +69,7 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
   }, [exchangeResult.key, exchangeResult.type, haptics]);
 
   // 格式化金額字串，用於動態字體縮放
-  const earnedFormatted = formatAlchemyMoney(earned, locale);
+  const earnedFormatted = formatCurrency(earned, locale);
   const fontSizeClass = getFontSizeClass(earnedFormatted);
 
   return (

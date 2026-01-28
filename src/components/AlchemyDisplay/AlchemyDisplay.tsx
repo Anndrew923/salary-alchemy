@@ -3,7 +3,7 @@ import { useSalaryCalculator } from "../../hooks/useSalaryCalculator";
 import { useAlchemyTimer } from "../../hooks/useAlchemyTimer";
 import { useUserStore } from "../../stores/userStore";
 import {
-  formatAlchemyMoney,
+  formatCurrency,
   formatCurrencyPerSecond,
   formatTime,
   getI18n,
@@ -22,8 +22,8 @@ const AlchemyDisplay = () => {
   const currentEarned = isRunning ? calculateEarned(ratePerSecond) : 0;
 
   // 格式化金額字串，用於動態字體縮放
-  const currentEarnedFormatted = formatAlchemyMoney(currentEarned, locale);
-  const totalEarnedFormatted = formatAlchemyMoney(totalEarned, locale);
+  const currentEarnedFormatted = formatCurrency(currentEarned, locale);
+  const totalEarnedFormatted = formatCurrency(totalEarned, locale);
 
   return (
     <div className={styles.container}>
