@@ -30,7 +30,45 @@
     "9": "You are now the company's appendix. Useless, but cutting you out would hurt.",
     "10": "It's not theft anymore; it's a daylight robbery of the company's profit margin.",
     "11": "A miracle occurred. Your bathroom wealth is now impacting the quarterly report.",
-    "12": "Legend born! You've transmuted enough to own the stall. You are the King of Toilets."
+    "12": "Legend born! You've transmuted enough to own the stall. You are the King of Toilets.",
+    "13": "You've mastered the wormhole technology between the copier and the restroom.",
+    "14": "The reports you write while pooping are somehow more popular than your actual work.",
+    "15": "Your bowels automatically signal \"Alchemy\" the moment a meeting is detected.",
+    "16": "Using three slides to cover up the fact that you spent three hours in the stall.",
+    "17": "Between refilling coffee and eliminating waste, you've avoided all actual tasks.",
+    "18": "You've started mapping out your empire on the walls of the cubicle.",
+    "19": "You can now sleep sitting on the toilet while keeping the alchemy process running.",
+    "20": "You are a bug in the system that cannot be fixed. The company pays for your expansion.",
+    "21": "You're tracking every cent of the budget and pouring it straight down the toilet.",
+    "22": "You trade while you poop. The company's stock price fluctuates with your output.",
+    "23": "You've calculated that firing you is more expensive than keeping you in the stall.",
+    "24": "You've turned every second of your legal rights into shiny gold coins.",
+    "25": "You've earned enough to buy a year's supply of the office's bottled water.",
+    "26": "Your AC consumption and your gold production have reached perfect equilibrium.",
+    "27": "Any project that enters your stall turns into pure gold wastepaper.",
+    "28": "Your stall is an offshore financial center that the company's auditors can't find.",
+    "29": "The boss tries to talk to you, but you're busy with \"Million-dollar Alchemy.\"",
+    "30": "Your alchemy generates enough heat to keep every toilet seat in the building warm.",
+    "31": "You've converted all workplace stress into bowel movement and massive wealth.",
+    "32": "Your annual alchemy total is listed as the company's largest non-essential expense.",
+    "33": "Accounting had to invent new math models to hide your alchemy volume.",
+    "34": "You've earned enough to buy the very ground you're sitting on.",
+    "35": "You're planning five-star alchemy outposts in luxury hotels worldwide.",
+    "36": "Using time zones to perform simultaneous alchemy in branch offices across the world.",
+    "37": "One major session from you is enough to trigger a regional recession.",
+    "38": "You do nothing, yet the company would lose its gold production without you.",
+    "39": "You've earned enough to buy 30% of the company's common stock.",
+    "40": "Regulators are investigating why your per-second pay is higher than Apple's.",
+    "41": "You've found the truth: Money is void, only the poop is real.",
+    "42": "Any task assigned to you silently disappears into the porcelain abyss.",
+    "43": "You create value anywhere with a toilet—including the boss's private jet.",
+    "44": "You watch the company's net worth hit zero while you finish your business.",
+    "45": "The boss wakes up every morning praying that you're constipated today.",
+    "46": "Your assets allow you to buy a social platform just to post sh*tposts.",
+    "47": "You're considering building a solid gold interstellar restroom on Mars.",
+    "48": "Mining gold on Earth, investing on Mars, and evading taxes on Saturn.",
+    "49": "The first human to achieve \"Paid Pooping\" on the Red Planet.",
+    "50": "You've earned enough to buy the Solar System. The board of directors is now just your private dance troupe."
   },
   "exchange": {
     "health_critical": [
@@ -301,8 +339,8 @@
       "The True Philosopher's Stone | You've reached the pinnacle of alchemy: turning waste into pure gold."
     ]
   },
-"landing": {
-  "title": "Welcome back, Alchemist.",
-  "subtitle": "Don't let HR see the magic."
-}
+  "landing": {
+    "title": "Welcome back, Alchemist.",
+    "subtitle": "Don't let HR see the magic."
+  }
 }

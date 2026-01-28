@@ -1,5 +1,9 @@
 .container {
-  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-tertiary) 0%,
+    var(--bg-secondary) 100%
+  );
   border: 2px solid var(--border-gold);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
@@ -21,11 +25,25 @@
 }
 
 .amount {
-  font-size: 2.5rem;
   font-weight: bold;
   color: var(--text-gold);
   margin-bottom: var(--spacing-sm);
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  transition: font-size 0.3s ease;
+  white-space: nowrap;
+}
+
+/* 動態縮放 Class */
+.amountLarge {
+  font-size: 2.5rem;
+}
+
+.amountMedium {
+  font-size: 2rem;
+}
+
+.amountSmall {
+  font-size: 1.6rem;
 }
 
 .rate {
@@ -35,7 +53,12 @@
 
 .divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-gold),
+    transparent
+  );
   margin: var(--spacing-md) 0;
 }
 
@@ -44,9 +67,21 @@
 }
 
 .totalAmount {
-  font-size: 1.8rem;
   color: var(--text-gold);
   opacity: 0.8;
+}
+
+/* 累計金額的動態縮放 Class（基於 1.8rem 的比例縮放） */
+.totalAmount.amountLarge {
+  font-size: 1.8rem;
+}
+
+.totalAmount.amountMedium {
+  font-size: 1.44rem; /* 1.8 * 0.8 */
+}
+
+.totalAmount.amountSmall {
+  font-size: 1.15rem; /* 1.8 * 0.64 */
 }
 
 .timeDisplay {
