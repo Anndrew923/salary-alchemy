@@ -4,7 +4,7 @@ import { useAlchemyStore } from '../../stores/alchemyStore';
 import { useSalaryCalculator } from '../../hooks/useSalaryCalculator';
 import { useAlchemyTimer } from '../../hooks/useAlchemyTimer';
 import { useHaptics } from '../../hooks/useHaptics';
-import { getI18n, formatCurrency, formatAlchemyMoney, formatCurrencyPerSecond } from '../../utils/i18n';
+import { getI18n, formatCurrency, formatCurrencyPerSecond } from '../../utils/i18n';
 import ReceiptCard from '../ReceiptCard/ReceiptCard';
 import styles from './SalaryInput.module.css';
 
