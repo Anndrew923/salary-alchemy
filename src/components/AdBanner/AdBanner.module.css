@@ -1,11 +1,13 @@
 .container {
   position: fixed;
-  bottom: 0;
+  /* 讓廣告浮在導覽列上方，並考慮 Safe Area */
+  bottom: var(--safe-area-bottom);
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
   max-width: 480px;
-  height: 80px;
+  /* 基礎高度 + Safe Area，避免被底部導覽列吃掉 */
+  height: calc(80px + var(--safe-area-bottom));
   background-color: var(--bg-tertiary);
   border-top: 1px solid var(--border-gold);
   display: flex;

@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
   getExchangeItem,
   getRandomExchangeMsg,
 } from "../../utils/equivalentExchange";
-import { formatCurrency, getI18n } from "../../utils/i18n";
+import { formatCurrency } from "../../utils/i18n";
 import { getFontSizeClass } from "../../utils/ui";
 import { useUserStore } from "../../stores/userStore";
 import { useHaptics } from "../../hooks/useHaptics";
@@ -18,8 +18,7 @@ interface ReceiptCardProps {
 
 const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
   const { locale } = useUserStore();
-  const { i18n } = useTranslation();
-  const i18nStrings = getI18n(locale);
+  const { t, i18n } = useTranslation();
   const haptics = useHaptics();
 
   // 同步語言設定
@@ -29,7 +28,10 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
 
   const currency = locale === "TW" ? "TWD" : "USD";
   const exchangeResult = getExchangeItem(earned, minutes, currency);
-  const { item, desc } = getRandomExchangeMsg(exchangeResult.key);
+  const { item, desc } = useMemo(
+    () => getRandomExchangeMsg(exchangeResult.key),
+    [exchangeResult.key],
+  );
 
   // 根據 exchangeResult 的級距決定觸覺回饋強度
   useEffect(() => {
@@ -76,10 +78,8 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.receiptCard} onClick={(e) => e.stopPropagation()}>
         <div className={styles.receiptHeader}>
-          <div className={styles.receiptTitle}>{i18nStrings.receiptTitle}</div>
-          <div className={styles.receiptSubtitle}>
-            {i18nStrings.receiptSubtitle}
-          </div>
+          <div className={styles.receiptTitle}>{t("receiptTitle")}</div>
+          <div className={styles.receiptSubtitle}>{t("receiptSubtitle")}</div>
         </div>
 
         <div className={styles.receiptBody}>
@@ -91,9 +91,7 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
 
           <div className={styles.receiptDetails}>
             <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>
-                {i18nStrings.receiptAmount}
-              </span>
+              <span className={styles.detailLabel}>{t("receiptAmount")}</span>
               <span
                 className={`${styles.detailValue} ${styles[fontSizeClass]} monospace`}
               >
@@ -101,21 +99,17 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
               </span>
             </div>
             <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>
-                {i18nStrings.receiptTime}
-              </span>
+              <span className={styles.detailLabel}>{t("receiptTime")}</span>
               <span className={`${styles.detailValue} monospace`}>
                 {Math.floor(minutes)} {locale === "TW" ? "分鐘" : "min"}
               </span>
             </div>
             <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>
-                {i18nStrings.receiptType}
-              </span>
+              <span className={styles.detailLabel}>{t("receiptType")}</span>
               <span className={styles.detailValue}>
                 {exchangeResult.type === "HEALTH"
-                  ? i18nStrings.receiptTypeHealth
-                  : i18nStrings.receiptTypeWealth}
+                  ? t("receiptTypeHealth")
+                  : t("receiptTypeWealth")}
               </span>
             </div>
           </div>
@@ -123,7 +117,7 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
 
         <div className={styles.receiptFooter}>
           <button className={styles.closeButton} onClick={onClose}>
-            {i18nStrings.receiptConfirmButton}
+            {t("receiptConfirmButton")}
           </button>
         </div>
       </div>

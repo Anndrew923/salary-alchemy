@@ -119,7 +119,7 @@ const Leaderboard = () => {
   const handleSaveNickname = async () => {
     await haptics.light();
 
-    const trimmedNickname = editingNickname.trim() || "Anonymous Alchemist";
+    const trimmedNickname = editingNickname.trim() || t("anonymousAlchemist");
     const finalNickname = truncateByWeight(trimmedNickname, MAX_WEIGHT);
     setNickname(finalNickname);
     setIsEditingNickname(false);
@@ -162,7 +162,7 @@ const Leaderboard = () => {
       )}
 
       {hasSeenPrivacyNotice && error && (
-        <div className={styles.error}>{error || t("error")}</div>
+        <div className={styles.error}>{t("error.firebase")}</div>
       )}
 
       {hasSeenPrivacyNotice && !loading && !error && (

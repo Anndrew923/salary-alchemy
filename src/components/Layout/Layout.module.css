@@ -22,7 +22,8 @@
 .main {
   flex: 1;
   padding: var(--spacing-md);
-  padding-bottom: 100px; /* 為 AdBanner 預留空間 */
+  /* 為 AdBanner + Safe Area 預留空間 */
+  padding-bottom: calc(100px + var(--safe-area-bottom));
   overflow-y: auto;
 }
 
@@ -32,6 +33,8 @@
 }
 
 .appWrapper.diamondMode {
-  box-shadow: 0 0 60px rgba(0, 191, 255, 0.4), 0 0 100px rgba(0, 191, 255, 0.2);
+  box-shadow:
+    0 0 60px rgba(0, 191, 255, 0.4),
+    0 0 100px rgba(0, 191, 255, 0.2);
   border: 1px solid rgba(0, 191, 255, 0.3);
 }

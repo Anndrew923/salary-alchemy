@@ -10,6 +10,8 @@
   justify-content: center;
   z-index: 2000;
   padding: var(--spacing-md);
+  /* 避免底部按鈕太靠近系統導覽列 */
+  padding-bottom: calc(var(--spacing-md) + var(--safe-area-bottom));
 }
 
 .receiptCard {
@@ -22,6 +24,9 @@
   box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
   position: relative;
   animation: receiptAppear 0.3s ease-out;
+  /* 避免內容過長時突破螢幕，並考慮 Safe Area */
+  max-height: calc(90vh - var(--safe-area-bottom));
+  overflow-y: auto;
 }
 
 @keyframes receiptAppear {

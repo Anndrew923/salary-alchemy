@@ -25,12 +25,23 @@
 }
 
 .amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
   font-weight: bold;
   color: var(--text-gold);
   margin-bottom: var(--spacing-sm);
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
   transition: font-size 0.3s ease;
   white-space: nowrap;
+}
+
+.currencySymbol {
+  font-size: 0.5em;
+  font-family: var(--font-primary);
+  color: var(--text-secondary);
+  font-weight: normal;
 }
 
 /* 動態縮放 Class */
