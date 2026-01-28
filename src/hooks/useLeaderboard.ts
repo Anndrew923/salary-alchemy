@@ -119,7 +119,7 @@ export const useLeaderboard = ({
         // 更新 lastDoc 和 hasMore
         const lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
         setLastDoc(lastDocument || null);
-        setHasMore(querySnapshot.docs.length === 20);
+        setHasMore(querySnapshot.docs.length === limitCount);
 
         setEntries(leaderboardData);
       } catch (err) {
@@ -182,7 +182,7 @@ export const useLeaderboard = ({
       // 更新 lastDoc 和 hasMore
       const lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
       setLastDoc(lastDocument || null);
-      setHasMore(querySnapshot.docs.length === 20);
+      setHasMore(querySnapshot.docs.length === limitCount);
 
       // 將新數據 concat 到現有 entries，並更新 rank
       setEntries((prevEntries) => {

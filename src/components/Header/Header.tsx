@@ -9,14 +9,19 @@ import styles from "./Header.module.css";
 const Header = () => {
   const { level, isDiamondMode, nextLevelThreshold, currentTier } =
     useRPGLevel();
-  const {
-    locale,
-    hasSeenPrivacyNotice,
-    setLocale,
-    setPrivacyModalOpen,
-    setShouldNavigateToLeaderboard,
-  } = useUserStore();
-  const { totalEarned } = useAlchemyStore();
+  // 使用 selector 模式精準訂閱狀態與動作，降低不必要重渲染
+  const locale = useUserStore((state) => state.locale);
+  const hasSeenPrivacyNotice = useUserStore(
+    (state) => state.hasSeenPrivacyNotice,
+  );
+  const setLocale = useUserStore((state) => state.setLocale);
+  const setPrivacyModalOpen = useUserStore(
+    (state) => state.setPrivacyModalOpen,
+  );
+  const setShouldNavigateToLeaderboard = useUserStore(
+    (state) => state.setShouldNavigateToLeaderboard,
+  );
+  const totalEarned = useAlchemyStore((state) => state.totalEarned);
   const { t } = useTranslation();
   const [showTooltip, setShowTooltip] = useState(false);
 

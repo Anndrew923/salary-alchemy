@@ -10,23 +10,21 @@ import ReceiptCard from "../ReceiptCard/ReceiptCard";
 import styles from "./SalaryInput.module.css";
 
 const SalaryInput = () => {
-  const {
-    monthlySalary,
-    dailyHours,
-    workingDays,
-    locale,
-    setMonthlySalary,
-    setDailyHours,
-    setWorkingDays,
-  } = useUserStore();
-  const {
-    isRunning,
-    start,
-    reset,
-    finishSession,
-    resetTotalEarned,
-    totalEarned,
-  } = useAlchemyStore();
+  // 使用 selector 模式精準訂閱所需狀態與方法，避免非相關欄位變動造成重渲染
+  const monthlySalary = useUserStore((state) => state.monthlySalary);
+  const dailyHours = useUserStore((state) => state.dailyHours);
+  const workingDays = useUserStore((state) => state.workingDays);
+  const locale = useUserStore((state) => state.locale);
+  const setMonthlySalary = useUserStore((state) => state.setMonthlySalary);
+  const setDailyHours = useUserStore((state) => state.setDailyHours);
+  const setWorkingDays = useUserStore((state) => state.setWorkingDays);
+
+  const isRunning = useAlchemyStore((state) => state.isRunning);
+  const start = useAlchemyStore((state) => state.start);
+  const reset = useAlchemyStore((state) => state.reset);
+  const finishSession = useAlchemyStore((state) => state.finishSession);
+  const resetTotalEarned = useAlchemyStore((state) => state.resetTotalEarned);
+  const totalEarned = useAlchemyStore((state) => state.totalEarned);
   const { ratePerSecond, ratePerHour, monthlyHours } = useSalaryCalculator();
   const elapsedSeconds = useAlchemyTimer();
   const haptics = useHaptics();

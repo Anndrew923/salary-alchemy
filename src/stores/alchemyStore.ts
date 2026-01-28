@@ -21,6 +21,10 @@ interface AlchemyState {
   syncToCloud: () => Promise<void>;
 }
 
+// 雲端同步頻率限制（毫秒）
+const SYNC_MIN_INTERVAL_MS = 2000;
+let lastSyncTimestamp = 0;
+
 export const useAlchemyStore = create<AlchemyState>()(
   persist(
     (set, get) => ({
@@ -58,6 +62,13 @@ export const useAlchemyStore = create<AlchemyState>()(
         if (!isFirebaseEnabled() || !db) {
           return;
         }
+
+        // 簡單頻率限制，避免在極短時間內重複打太多 Firestore 寫入
+        const now = Date.now();
+        if (now - lastSyncTimestamp < SYNC_MIN_INTERVAL_MS) {
+          return;
+        }
+        lastSyncTimestamp = now;
 
         try {
           const userState = useUserStore.getState();

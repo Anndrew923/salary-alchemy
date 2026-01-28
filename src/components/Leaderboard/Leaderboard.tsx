@@ -6,7 +6,7 @@ import { auth, isFirebaseEnabled } from "../../config/firebase";
 import { useUserStore } from "../../stores/userStore";
 import { useAlchemyStore } from "../../stores/alchemyStore";
 import { getTierIcon, getTierColor, LEVEL_TITLES } from "../../utils/constants";
-import { formatCurrency } from "../../utils/i18n";
+import { formatCurrencyParts } from "../../utils/i18n";
 import {
   truncateByWeight,
   truncateByWeightWithoutEllipsis,
@@ -101,6 +101,8 @@ const Leaderboard = () => {
     currentTotalEarned,
     locale,
   );
+
+  const currentAmountParts = formatCurrencyParts(currentTotalEarned, locale);
 
   const handleStartEdit = () => {
     setEditingNickname(nickname);
@@ -238,7 +240,8 @@ const Leaderboard = () => {
                   )}
                 </div>
                 <span className={styles.amount}>
-                  {formatCurrency(currentTotalEarned, locale)}
+                  <span>{currentAmountParts.symbol}</span>
+                  <span>{currentAmountParts.value}</span>
                 </span>
                 <span
                   className={styles.tierBadge}
@@ -255,6 +258,15 @@ const Leaderboard = () => {
               const handleEntryClick = async () => {
                 await haptics.light();
               };
+
+              const entryLocale: "TW" | "EN" =
+                entry.locale === "TW" || entry.locale === "EN"
+                  ? entry.locale
+                  : locale;
+              const amountParts = formatCurrencyParts(
+                entry.totalEarned,
+                entryLocale,
+              );
 
               return (
                 <div
@@ -275,12 +287,8 @@ const Leaderboard = () => {
                     </div>
                     <div className={styles.levelTitle}>{entry.levelTitle}</div>
                     <div className={styles.amount}>
-                      {formatCurrency(
-                        entry.totalEarned,
-                        entry.locale === "TW" || entry.locale === "EN"
-                          ? entry.locale
-                          : locale,
-                      )}
+                      <span>{amountParts.symbol}</span>
+                      <span>{amountParts.value}</span>
                     </div>
                   </div>
                 </div>
