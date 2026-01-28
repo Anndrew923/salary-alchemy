@@ -63,6 +63,38 @@ export const DIAMOND_THRESHOLD = DIAMOND_THRESHOLD_TW;
 // 匯率常數：台幣對美金的匯率
 export const EXCHANGE_RATE = 30;
 
+// Tier 圖標映射
+export const TIER_ICONS: Record<number, string> = {
+  1: '🥉',
+  2: '🥉',
+  3: '🥈',
+  4: '🥇',
+  5: '💎',
+};
+
+// Tier 顏色映射
+export const TIER_COLORS: Record<number, string> = {
+  1: '#888',
+  2: '#cd7f32',
+  3: '#c0c0c0',
+  4: '#ffd700',
+  5: '#00bfff',
+};
+
+/**
+ * 根據 tier 獲取對應的圖標
+ */
+export const getTierIcon = (tier: number): string => {
+  return TIER_ICONS[tier] || '🥉';
+};
+
+/**
+ * 根據 tier 獲取對應的顏色
+ */
+export const getTierColor = (tier: number): string => {
+  return TIER_COLORS[tier] || '#888';
+};
+
 // LocalStorage Keys
 export const STORAGE_KEYS = {
   START_TIMESTAMP: 'alchemy_start_timestamp',

@@ -3,6 +3,39 @@ import { useAlchemyStore } from '../stores/alchemyStore';
 import { useUserStore } from '../stores/userStore';
 import { RPG_LEVELS_TW, RPG_LEVELS_EN, DIAMOND_THRESHOLD_TW, DIAMOND_THRESHOLD_EN, LEVEL_TITLES } from '../utils/constants';
 
+/**
+ * 根據 normalizedScore 計算等級（用於排行榜）
+ * normalizedScore 已經標準化為 TW 模式，所以始終使用 TW 門檻
+ */
+export const calculateLevelFromNormalizedScore = (normalizedScore: number) => {
+  for (let i = RPG_LEVELS_TW.length - 1; i >= 0; i--) {
+    if (normalizedScore >= RPG_LEVELS_TW[i].threshold) {
+      return {
+        index: i,
+        tier: RPG_LEVELS_TW[i].tier,
+      };
+    }
+  }
+  return { index: 0, tier: 1 };
+};
+
+/**
+ * 根據 totalEarned 計算等級（用於當前用戶顯示）
+ */
+export const calculateLevel = (totalEarned: number, locale: 'TW' | 'EN' = 'TW') => {
+  const RPG_LEVELS = locale === 'TW' ? RPG_LEVELS_TW : RPG_LEVELS_EN;
+  
+  for (let i = RPG_LEVELS.length - 1; i >= 0; i--) {
+    if (totalEarned >= RPG_LEVELS[i].threshold) {
+      return {
+        index: i,
+        tier: RPG_LEVELS[i].tier,
+      };
+    }
+  }
+  return { index: 0, tier: 1 };
+};
+
 export const useRPGLevel = () => {
   const { totalEarned } = useAlchemyStore();
   const { locale } = useUserStore();
@@ -84,5 +117,6 @@ export const useRPGLevel = () => {
     amountToNextLevel,
     currentTier,
     hasJustLeveledUp,
+    currentLevelIndex,
   };
 };

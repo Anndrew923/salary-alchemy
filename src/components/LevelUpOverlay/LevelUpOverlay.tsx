@@ -1,8 +1,7 @@
-import { useEffect, useMemo } from 'react';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useUserStore } from '../../stores/userStore';
-import zhTW from '../../locales/zh-TW.json';
-import enUS from '../../locales/en-US.json';
+import { useHaptics } from '../../hooks/useHaptics';
 import styles from './LevelUpOverlay.module.css';
 
 interface LevelUpOverlayProps {
@@ -14,33 +13,13 @@ interface LevelUpOverlayProps {
 
 const LevelUpOverlay = ({ onClose, levelTitle, currentTier, levelIndex }: LevelUpOverlayProps) => {
   const { locale } = useUserStore();
+  const { t } = useTranslation();
+  const haptics = useHaptics();
 
   useEffect(() => {
-    // 觸發震動回饋
-    const triggerHaptic = async () => {
-      try {
-        if (currentTier >= 5) {
-          // Tier 5 使用重震動
-          await Haptics.impact({ style: ImpactStyle.Heavy });
-          await new Promise(resolve => setTimeout(resolve, 200));
-          await Haptics.impact({ style: ImpactStyle.Heavy });
-        } else if (currentTier >= 3) {
-          // Tier 3-4 使用中等震動
-          await Haptics.impact({ style: ImpactStyle.Medium });
-        } else {
-          // Tier 1-2 使用輕震動
-          await Haptics.impact({ style: ImpactStyle.Light });
-        }
-      } catch (error) {
-        // 如果 haptics 不可用（例如在 Web 環境），忽略錯誤
-        console.log('Haptics not available:', error);
-      }
-    };
+    haptics.byTier(currentTier);
+  }, [currentTier, haptics]);
 
-    triggerHaptic();
-  }, [currentTier]);
-
-  // 3 秒後自動關閉
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
@@ -49,12 +28,8 @@ const LevelUpOverlay = ({ onClose, levelTitle, currentTier, levelIndex }: LevelU
     return () => clearTimeout(timer);
   }, [onClose]);
 
-  // 從翻譯檔讀取毒舌文案
-  const promotionText = useMemo(() => {
-    const translations = locale === 'TW' ? zhTW : enUS;
-    const levelKey = String(levelIndex + 1); // levelIndex 是 0-based，翻譯檔是 1-based
-    return translations.levelup?.[levelKey as keyof typeof translations.levelup] || '';
-  }, [locale, levelIndex]);
+  const levelKey = String(levelIndex + 1);
+  const promotionText = t(`levelup.${levelKey}`, '');
 
   const getTierTitle = (tier: number) => {
     const titles = {
@@ -80,7 +55,7 @@ const LevelUpOverlay = ({ onClose, levelTitle, currentTier, levelIndex }: LevelU
           <h1 className={styles.title}>✨ {locale === 'TW' ? '晉升！' : 'Level Up!'} ✨</h1>
           <h2 className={styles.levelTitle}>{levelTitle}</h2>
           <p className={styles.tierLabel}>{tierInfo[locale === 'TW' ? 'tw' : 'en']}</p>
-          <p className={styles.promotionText}>{promotionText}</p>
+          {promotionText && <p className={styles.promotionText}>{promotionText}</p>}
         </div>
       </div>
     </div>

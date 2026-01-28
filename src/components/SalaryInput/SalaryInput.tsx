@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { useUserStore } from '../../stores/userStore';
 import { useAlchemyStore } from '../../stores/alchemyStore';
 import { useSalaryCalculator } from '../../hooks/useSalaryCalculator';
 import { useAlchemyTimer } from '../../hooks/useAlchemyTimer';
+import { useHaptics } from '../../hooks/useHaptics';
 import { getI18n, formatCurrency } from '../../utils/i18n';
 import ReceiptCard from '../ReceiptCard/ReceiptCard';
 import styles from './SalaryInput.module.css';
@@ -13,6 +13,7 @@ const SalaryInput = () => {
   const { isRunning, start, reset, finishSession, resetTotalEarned, totalEarned } = useAlchemyStore();
   const { ratePerSecond, ratePerHour, monthlyHours } = useSalaryCalculator();
   const elapsedSeconds = useAlchemyTimer();
+  const haptics = useHaptics();
   const i18n = getI18n(locale);
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -37,71 +38,51 @@ const SalaryInput = () => {
 
   const handleSalaryChange = (value: string) => {
     setLocalSalary(value);
-    const num = parseFloat(value) || 0;
+    const num = Math.max(0, parseFloat(value) || 0);
     setMonthlySalary(num);
   };
 
   const handleDailyHoursChange = (value: string) => {
     setLocalDailyHours(value);
-    const num = parseFloat(value) || 0;
+    const num = Math.max(0, parseFloat(value) || 0);
     setDailyHours(num);
   };
 
   const handleWorkingDaysChange = (value: string) => {
     setLocalWorkingDays(value);
-    const num = parseFloat(value) || 0;
+    const num = Math.max(0, parseFloat(value) || 0);
     setWorkingDays(num);
   };
 
   const handleStart = async () => {
     if (monthlySalary > 0 && monthlyHours > 0) {
-      // 觸覺回饋：開始煉金
-      try {
-        await Haptics.impact({ style: ImpactStyle.Light });
-      } catch (error) {
-        console.log('Haptics not available:', error);
-      }
+      await haptics.light();
       start();
-      setIsExpanded(false); // 開始後自動摺疊
+      setIsExpanded(false);
     }
   };
 
-  // 煉成（結算並顯示收據）
   const handleSettle = async () => {
     const alchemyStore = useAlchemyStore.getState();
     if (alchemyStore.startTimestamp && ratePerSecond > 0) {
       const earned = alchemyStore.calculateEarned(ratePerSecond);
       if (earned > 0) {
-        // 觸覺回饋：煉成結算
-        try {
-          await Haptics.impact({ style: ImpactStyle.Medium });
-        } catch (error) {
-          console.log('Haptics not available:', error);
-        }
-        // 顯示收據卡片
+        await haptics.medium();
         const minutes = elapsedSeconds / 60;
         setReceiptEarned(earned);
         setReceiptMinutes(minutes);
         setShowReceipt(true);
-        // 結算金額入帳並重置計時
         finishSession(earned);
       } else {
-        // 即使沒有收益，也要重置計時
         reset();
       }
     }
   };
 
-  // 放棄（直接重置，不結算）
   const handleDiscard = async () => {
-    // 觸覺回饋：放棄煉金（負面動作）
-    try {
-      await Haptics.vibrate();
-      await new Promise(resolve => setTimeout(resolve, 100));
-      await Haptics.vibrate();
-    } catch (error) {
-      console.log('Haptics not available:', error);
-    }
+    await haptics.vibrate();
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await haptics.vibrate();
     reset();
   };
 
@@ -135,12 +116,7 @@ const SalaryInput = () => {
   };
 
   const handleLongPressComplete = async () => {
-    // 觸覺回饋：重置實驗室（重大動作）
-    try {
-      await Haptics.impact({ style: ImpactStyle.Heavy });
-    } catch (error) {
-      console.log('Haptics not available:', error);
-    }
+    await haptics.heavy();
     handleLongPressEnd();
     setShowConfirmDialog(true);
   };
@@ -192,6 +168,7 @@ const SalaryInput = () => {
               <label className={styles.label}>{i18n.monthlySalary}</label>
               <input
                 type="number"
+                inputMode="decimal"
                 className={styles.input}
                 value={localSalary}
                 onChange={(e) => handleSalaryChange(e.target.value)}
@@ -204,6 +181,7 @@ const SalaryInput = () => {
               <label className={styles.label}>{i18n.dailyHours}</label>
               <input
                 type="number"
+                inputMode="decimal"
                 className={styles.input}
                 value={localDailyHours}
                 onChange={(e) => handleDailyHoursChange(e.target.value)}
@@ -216,6 +194,7 @@ const SalaryInput = () => {
               <label className={styles.label}>{i18n.workingDays}</label>
               <input
                 type="number"
+                inputMode="decimal"
                 className={styles.input}
                 value={localWorkingDays}
                 onChange={(e) => handleWorkingDaysChange(e.target.value)}
