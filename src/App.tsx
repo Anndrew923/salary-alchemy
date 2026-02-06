@@ -80,13 +80,18 @@ function App() {
       
       backButtonListener = CapacitorApp.addListener('backButton', () => {
         const currentHash = window.location.hash;
-        // 如果在排行榜，返回主頁
-        if (currentHash === '#leaderboard' || currentHash.includes('leaderboard')) {
-          window.location.hash = '#/';
-        } else {
-          // 如果已在主頁，執行退出 App
-          CapacitorApp.exitApp();
+        // 如果在隱私權頁面，返回設定或上一頁
+        if (currentHash === '#/privacy' || currentHash === '#privacy') {
+          window.location.hash = '#/settings';
+          return;
         }
+        // 如果在設定或排行榜，返回主頁
+        if (currentHash === '#/settings' || currentHash === '#settings' || currentHash === '#leaderboard' || currentHash.includes('leaderboard')) {
+          window.location.hash = '#/';
+          return;
+        }
+        // 如果已在主頁，執行退出 App
+        CapacitorApp.exitApp();
       });
     };
 

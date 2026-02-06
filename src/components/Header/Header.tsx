@@ -9,12 +9,10 @@ import styles from "./Header.module.css";
 const Header = () => {
   const { level, isDiamondMode, nextLevelThreshold, currentTier } =
     useRPGLevel();
-  // 使用 selector 模式精準訂閱狀態與動作，降低不必要重渲染
-  const locale = useUserStore((state) => state.locale);
   const hasSeenPrivacyNotice = useUserStore(
     (state) => state.hasSeenPrivacyNotice,
   );
-  const setLocale = useUserStore((state) => state.setLocale);
+  const locale = useUserStore((state) => state.locale);
   const setPrivacyModalOpen = useUserStore(
     (state) => state.setPrivacyModalOpen,
   );
@@ -25,23 +23,17 @@ const Header = () => {
   const { t } = useTranslation();
   const [showTooltip, setShowTooltip] = useState(false);
 
-  const toggleLocale = () => {
-    setLocale(locale === "TW" ? "EN" : "TW");
-  };
-
   const tooltipText = nextLevelThreshold
     ? `${t("header.nextLevel")} ${formatCurrency(totalEarned, locale)} / ${formatCurrency(nextLevelThreshold, locale)}`
     : t("header.maxLevelReached");
 
   const navigateToLeaderboard = () => {
-    // 如果 hasSeenPrivacyNotice 為 false，則調用 setPrivacyModalOpen(true) 彈出協議，暫緩導航
     if (!hasSeenPrivacyNotice) {
-      setShouldNavigateToLeaderboard(true); // 標記簽署後應該導向排行榜
+      setShouldNavigateToLeaderboard(true);
       setPrivacyModalOpen(true);
       return;
     }
-    // 已簽署，直接導航
-    window.location.hash = "#leaderboard";
+    window.location.hash = "#/leaderboard";
   };
 
   return (
@@ -50,18 +42,27 @@ const Header = () => {
     >
       <div className={styles.topNav}>
         <button
-          className={styles.leaderboardButton}
+          type="button"
+          className={styles.navButton}
+          onClick={() => { window.location.hash = "#/"; }}
+          aria-label={t("home")}
+        >
+          🏠 {t("home")}
+        </button>
+        <button
+          className={styles.navButton}
           onClick={navigateToLeaderboard}
           aria-label={t("header.goLeaderboard")}
         >
           🏆 {t("leaderboard")}
         </button>
         <button
-          className={styles.localeButton}
-          onClick={toggleLocale}
-          aria-label={t("header.toggleLanguage")}
+          type="button"
+          className={styles.navButton}
+          onClick={() => { window.location.hash = "#/settings"; }}
+          aria-label={t("settings")}
         >
-          {locale}
+          ⚙️ {t("settings")}
         </button>
       </div>
       <h1 className={styles.title}>{t("appName")}</h1>

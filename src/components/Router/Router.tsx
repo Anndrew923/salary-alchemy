@@ -3,8 +3,11 @@ import Layout from '../Layout/Layout';
 import AlchemyDisplay from '../AlchemyDisplay/AlchemyDisplay';
 import SalaryInput from '../SalaryInput/SalaryInput';
 import Leaderboard from '../Leaderboard/Leaderboard';
+import PrivacyPolicy from '../../pages/PrivacyPolicy';
+import Settings from '../../pages/Settings';
+import styles from './Router.module.css';
 
-type Route = '/' | '/settings' | '/leaderboard';
+type Route = '/' | '/settings' | '/leaderboard' | '/privacy';
 
 const Router = () => {
   const [currentRoute, setCurrentRoute] = useState<Route>('/');
@@ -12,22 +15,14 @@ const Router = () => {
   useEffect(() => {
     const handleHashChange = () => {
       let hash = window.location.hash.slice(1) || '/';
-      // 確保 hash 以 / 開頭，以匹配 Route 類型
-      // 例如：#leaderboard -> /leaderboard
       if (hash && !hash.startsWith('/')) {
         hash = '/' + hash;
       }
-      // 確保能正確偵測到 #leaderboard 並渲染組件
       setCurrentRoute(hash as Route);
     };
 
-    // 初始載入時檢查 hash
     handleHashChange();
-
-    // 監聽 hash 變化
     window.addEventListener('hashchange', handleHashChange);
-    
-    // 也監聽 popstate 事件（瀏覽器前進/後退）
     window.addEventListener('popstate', handleHashChange);
 
     return () => {
@@ -46,12 +41,9 @@ const Router = () => {
           </>
         );
       case '/settings':
-        return (
-          <div>
-            <h2>Settings</h2>
-            {/* 設定頁面內容 */}
-          </div>
-        );
+        return <Settings />;
+      case '/privacy':
+        return <PrivacyPolicy />;
       case '/leaderboard':
         return <Leaderboard />;
       default:
@@ -64,7 +56,13 @@ const Router = () => {
     }
   };
 
-  return <Layout>{renderRoute()}</Layout>;
+  return (
+    <Layout>
+      <div key={currentRoute} className={styles.routeContent}>
+        {renderRoute()}
+      </div>
+    </Layout>
+  );
 };
 
 export default Router;

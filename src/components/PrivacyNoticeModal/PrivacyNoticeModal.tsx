@@ -43,7 +43,7 @@ const PrivacyNoticeModal = ({ onAgree }: PrivacyNoticeModalProps) => {
       setShouldNavigateToLeaderboard(false); // 清除標記
       // 使用 setTimeout 確保 Modal 關閉動畫完成後再導航
       setTimeout(() => {
-        window.location.hash = '#leaderboard';
+        window.location.hash = '#/leaderboard';
       }, 100);
     }
     

@@ -1,0 +1,79 @@
+.container {
+  padding: var(--spacing-lg);
+  max-width: 36rem;
+  margin: 0 auto;
+  color: var(--text-primary);
+  line-height: 1.7;
+  padding-bottom: 8rem; /* pb-32 等效：避免被廣告位遮擋 */
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+}
+
+.updated {
+  margin-bottom: var(--spacing-md);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+
+.section p {
+  margin-bottom: 0.5em;
+}
+
+.list {
+  list-style: disc;
+  margin-left: 1.25rem;
+  margin-top: var(--spacing-sm);
+}
+
+.list li {
+  margin-bottom: 0.25rem;
+}
+
+.link {
+  color: var(--rpg-gold);
+  margin-left: 0.25rem;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link:focus {
+  outline: 1px solid var(--rpg-gold);
+}
+
+.backButton {
+  margin-top: var(--spacing-md);
+  padding: 0.75rem 1.5rem;
+  background: var(--rpg-gold);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s;
+}
+
+.backButton:active {
+  transform: scale(0.98);
+}
+
+.backButton:hover {
+  filter: brightness(1.05);
+}

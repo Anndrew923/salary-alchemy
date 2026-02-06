@@ -1,0 +1,12 @@
+.routeContent {
+  animation: routeFadeIn 0.2s ease-out;
+}
+
+@keyframes routeFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -22,8 +22,50 @@
 .topNav {
   display: flex;
   justify-content: space-between;
-  width: 100%;
   align-items: center;
+  width: 100%;
+  gap: var(--spacing-xs);
+}
+
+.navButton {
+  flex: 1;
+  min-width: 0;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--text-gold);
+  color: var(--text-gold);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: bold;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
+}
+
+.navButton:hover {
+  background-color: var(--text-gold);
+  color: var(--bg-primary);
+}
+
+.diamondMode .navButton {
+  border-color: var(--text-diamond);
+  color: var(--text-diamond);
+}
+
+.diamondMode .navButton:hover {
+  background-color: var(--text-diamond);
+  color: var(--bg-primary);
+}
+
+@media (max-width: 360px) {
+  .navButton {
+    font-size: 0.65rem;
+    padding: var(--spacing-xs);
+  }
 }
 
 .title {

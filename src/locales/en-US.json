@@ -1,10 +1,12 @@
 {
   "appName": "Salary Alchemy",
+  "home": "Home",
   "leaderboard": "Leaderboard",
   "start": "Start Alchemy",
   "pause": "Pause",
   "reset": "Reset",
   "settings": "Settings",
+  "privacyPolicy": "Privacy Policy",
   "settle": "Settle",
   "finish": "Finish",
   "discard": "Discard",
