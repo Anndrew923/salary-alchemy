@@ -68,10 +68,8 @@ export class AdService {
         adId,
         adSize: BannerAdSize.ADAPTIVE_BANNER, // 使用自適應橫幅以獲得最佳收益與適配
         position: BannerAdPosition.BOTTOM_CENTER,
-        // Android 15 底部導覽列 (手勢列) 會吃掉一部分 Banner，
-        // 利用 margin 將橫幅往上「頂」出安全區域。
-        // 實測範圍約 24dp ~ 48dp，這裡取中間值 30px，之後可依實機再微調。
-        margin: 30,
+        // 修正：從 30 增加到 50，徹底避開 Android 15 的手勢列與按鈕區
+        margin: 50,
         // isTesting 建議也走環境變數控制，Boss 測試階段一律使用測試流量
         isTesting: true,
       });
