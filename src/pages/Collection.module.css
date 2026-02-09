@@ -1,0 +1,218 @@
+.page {
+  padding: 0;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 1.35rem;
+  color: var(--text-gold);
+  font-weight: bold;
+  text-align: center;
+}
+
+.progressBarWrap {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+}
+
+.progressText {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.progressPercent {
+  color: var(--text-gold);
+  font-weight: bold;
+}
+
+.bar {
+  height: 10px;
+  background: var(--bg-secondary);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rpg-gold), var(--rpg-diamond));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.sectionTitle {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: 0.9rem;
+  color: var(--text-gold);
+  font-weight: 600;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-gold);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.card {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s;
+  min-height: 0;
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+.cardUnlocked {
+  color: var(--text-primary);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+}
+
+.cardUnlocked:hover {
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.35);
+}
+
+.cardLocked {
+  color: var(--text-secondary);
+  opacity: 0.7;
+  cursor: default;
+}
+
+.cardLocked:hover {
+  opacity: 0.85;
+}
+
+.cardIcon {
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.cardName {
+  font-size: 0.7rem;
+  text-align: center;
+  line-height: 1.2;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+}
+
+.cardLocked .cardName {
+  color: var(--text-secondary);
+  font-size: 0.65rem;
+}
+
+/* 詳情 Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: var(--spacing-md);
+}
+
+.modalCard {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border: 3px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+}
+
+.modalHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  border-bottom: 2px solid var(--border-gold);
+  padding-bottom: var(--spacing-md);
+}
+
+.modalTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--text-gold);
+  margin-bottom: 2px;
+}
+
+.modalSubtitle {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.modalBody {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.modalIcon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.modalItemName {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--text-gold);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.4;
+}
+
+.modalDesc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.modalFooter {
+  text-align: center;
+}
+
+.modalClose {
+  width: 100%;
+  padding: var(--spacing-md);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  color: var(--text-gold);
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modalClose:hover {
+  background: var(--text-gold);
+  color: var(--bg-primary);
+}

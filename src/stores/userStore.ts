@@ -4,6 +4,12 @@ import type { Locale } from '../utils/i18n';
 import { EXCHANGE_RATE, STORAGE_KEYS } from '../utils/constants';
 import { useAlchemyStore } from './alchemyStore';
 
+/** 單一物品蒐集記錄 */
+export interface UnlockedItemRecord {
+  count: number;
+  unlockedAt: number;
+}
+
 interface UserState {
   monthlySalary: number;
   dailyHours: number;
@@ -15,6 +21,8 @@ interface UserState {
   anonymousId: string | null;
   isPrivacyModalOpen: boolean;
   shouldNavigateToLeaderboard: boolean;
+  /** 鍊金手札：已解鎖物品 itemId -> { 獲得次數, 首次解鎖時間 } */
+  unlockedItems: Record<string, UnlockedItemRecord>;
   setMonthlySalary: (salary: number) => void;
   setDailyHours: (hours: number) => void;
   setWorkingDays: (days: number) => void;
@@ -25,14 +33,19 @@ interface UserState {
   setAnonymousId: (id: string) => void;
   setPrivacyModalOpen: (open: boolean) => void;
   setShouldNavigateToLeaderboard: (should: boolean) => void;
+  /** 蒐集物品：若已存在則 count++，否則新增記錄 */
+  collectItem: (itemId: string) => void;
+  /** 累計解鎖里程碑：已發放到的 totalEarned 門檻（TWD），用於每 N TWD 解鎖一項高階物品 */
+  lastMilestoneTotalEarned: number;
+  setLastMilestoneTotalEarned: (value: number) => void;
 }
 
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       monthlySalary: 0,
-      dailyHours: 8, // 預設每日 8 小時
-      workingDays: 20, // 預設每月 20 個工作天
+      dailyHours: 8,
+      workingDays: 20,
       locale: 'TW',
       uid: null,
       nickname: 'Anonymous Alchemist',
@@ -40,6 +53,25 @@ export const useUserStore = create<UserState>()(
       anonymousId: null,
       isPrivacyModalOpen: false,
       shouldNavigateToLeaderboard: false,
+      unlockedItems: {},
+      lastMilestoneTotalEarned: 0,
+      setLastMilestoneTotalEarned: (value) => set({ lastMilestoneTotalEarned: value }),
+      collectItem: (itemId) => {
+        const id = typeof itemId === "string" ? itemId.trim() : "";
+        if (!id) return;
+        set((state) => {
+          const now = Date.now();
+          const prev = state.unlockedItems[id];
+          return {
+            unlockedItems: {
+              ...state.unlockedItems,
+              [id]: prev
+                ? { count: prev.count + 1, unlockedAt: prev.unlockedAt }
+                : { count: 1, unlockedAt: now },
+            },
+          };
+        });
+      },
       setMonthlySalary: (salary) => set({ monthlySalary: salary }),
       setDailyHours: (hours) => set({ dailyHours: hours }),
       setWorkingDays: (days) => set({ workingDays: days }),
@@ -91,6 +123,8 @@ export const useUserStore = create<UserState>()(
         nickname: state.nickname,
         hasSeenPrivacyNotice: state.hasSeenPrivacyNotice,
         anonymousId: state.anonymousId,
+        unlockedItems: state.unlockedItems,
+        lastMilestoneTotalEarned: state.lastMilestoneTotalEarned,
       }),
     }
   )

@@ -2,7 +2,13 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { signInAnonymously } from "firebase/auth";
-import { STORAGE_KEYS, EXCHANGE_RATE, LEVEL_TITLES } from "../utils/constants";
+import {
+  STORAGE_KEYS,
+  EXCHANGE_RATE,
+  LEVEL_TITLES,
+  MILESTONE_TWD,
+} from "../utils/constants";
+import { getRandomHighTierUnownedItemId } from "../utils/equivalentExchange";
 import { db, auth, isFirebaseEnabled } from "../config/firebase";
 import { useUserStore } from "./userStore";
 import { calculateLevelFromNormalizedScore } from "../hooks/useRPGLevel";
@@ -151,6 +157,23 @@ export const useAlchemyStore = create<AlchemyState>()(
             normalizedScore,
             levelTitle,
           });
+
+          // 累計解鎖 (Milestone Bonus)：每達到 MILESTONE_TWD 自動解鎖一個高階未獲得物品
+          const userStore = useUserStore.getState();
+          const lastMilestone = userStore.lastMilestoneTotalEarned;
+          const milestonesPassed = Math.floor(normalizedScore / MILESTONE_TWD);
+          const prevMilestones = Math.floor(lastMilestone / MILESTONE_TWD);
+          if (milestonesPassed > prevMilestones) {
+            let unlockedSet = new Set(Object.keys(userStore.unlockedItems));
+            for (let m = prevMilestones + 1; m <= milestonesPassed; m++) {
+              const itemId = getRandomHighTierUnownedItemId(unlockedSet);
+              userStore.collectItem(itemId);
+              unlockedSet.add(itemId);
+            }
+            userStore.setLastMilestoneTotalEarned(
+              milestonesPassed * MILESTONE_TWD,
+            );
+          }
         } catch (error) {
           console.error("Failed to sync to Firestore:", error);
         }

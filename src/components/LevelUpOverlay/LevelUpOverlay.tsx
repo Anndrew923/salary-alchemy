@@ -18,8 +18,12 @@ const LevelUpOverlay = ({
   levelIndex,
 }: LevelUpOverlayProps) => {
   const { locale } = useUserStore();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const haptics = useHaptics();
+
+  useEffect(() => {
+    i18n.changeLanguage(locale === "TW" ? "zh-TW" : "en-US");
+  }, [locale, i18n]);
 
   useEffect(() => {
     haptics.byTier(currentTier);
@@ -36,26 +40,10 @@ const LevelUpOverlay = ({
   const levelKey = String(levelIndex + 1);
   const promotionText = t(`levelup.${levelKey}`, "");
 
-  const getTierTitle = (tier: number) => {
-    const titles = {
-      1: { tw: "菜鳥階級", en: "Rookie Tier" },
-      2: { tw: "古銅階級", en: "Bronze Tier" },
-      3: { tw: "白銀階級", en: "Silver Tier" },
-      4: { tw: "黃金階級", en: "Gold Tier" },
-      5: { tw: "鑽石階級", en: "Diamond Tier" },
-      6: { tw: "神秘階級", en: "Mystic Tier" },
-      7: { tw: "電漿階級", en: "Plasma Tier" },
-      8: { tw: "星耀階級", en: "Stellar Tier" },
-      9: { tw: "火箭階級", en: "Rocket Tier" },
-      10: { tw: "星系階級", en: "Galactic Tier" },
-    };
-    return titles[tier as keyof typeof titles] || titles[1];
-  };
-
   // 判斷是否為 40 級以上（跨星系特效）
   const isGalacticLevel = levelIndex >= 40;
 
-  const tierInfo = getTierTitle(currentTier);
+  const tierLabel = t(`header.tier${currentTier}`, { defaultValue: "" }) || t("header.tier1");
 
   return (
     <div
@@ -75,11 +63,11 @@ const LevelUpOverlay = ({
         </div>
         <div className={styles.textContainer}>
           <h1 className={styles.title}>
-            ✨ {locale === "TW" ? "晉升！" : "Level Up!"} ✨
+            ✨ {t("levelUpTitle")} ✨
           </h1>
           <h2 className={styles.levelTitle}>{levelTitle}</h2>
           <p className={styles.tierLabel}>
-            {tierInfo[locale === "TW" ? "tw" : "en"]}
+            {tierLabel}
           </p>
           {promotionText && (
             <p className={styles.promotionText}>{promotionText}</p>

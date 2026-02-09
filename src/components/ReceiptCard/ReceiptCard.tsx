@@ -1,9 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   getExchangeItem,
   getRandomExchangeMsg,
+  getIconForCategoryKey,
+  type ExchangeMsgResult,
 } from "../../utils/equivalentExchange";
+import { LUCKY_DROP_CHANCE } from "../../utils/constants";
 import { formatCurrency } from "../../utils/i18n";
 import { getFontSizeClass } from "../../utils/ui";
 import { useUserStore } from "../../stores/userStore";
@@ -18,61 +21,84 @@ interface ReceiptCardProps {
   onClose: () => void;
 }
 
+const HIGH_TIER_KEYS = ["wealth_legendary", "wealth_overlord"] as const;
+
 const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
-  const { locale } = useUserStore();
+  const { locale, collectItem } = useUserStore();
   const { t, i18n } = useTranslation();
   const haptics = useHaptics();
   const { isAdRewardPending, setAdRewardPending } = useAlchemyStore();
   const [isAdLoading, setIsAdLoading] = useState(false);
+  const [msgResult, setMsgResult] = useState<ExchangeMsgResult | null>(null);
 
-  // 同步語言設定
   useEffect(() => {
     i18n.changeLanguage(locale === "TW" ? "zh-TW" : "en-US");
   }, [locale, i18n]);
 
   const currency = locale === "TW" ? "TWD" : "USD";
   const exchangeResult = getExchangeItem(earned, minutes, currency);
-  const { item, desc } = useMemo(
-    () => getRandomExchangeMsg(exchangeResult.key, isAdRewardPending),
-    [exchangeResult.key, isAdRewardPending],
-  );
 
-  // 根據 exchangeResult 的級距決定觸覺回饋強度
+  // 幸運越級 + 廣告必定未擁有：只跑一次，決定本張收據的物品（不依賴 unlockedItems 以免重開收據時重抽）
+  useEffect(() => {
+    const effectiveKey =
+      !isAdRewardPending && Math.random() < LUCKY_DROP_CHANCE
+        ? HIGH_TIER_KEYS[Math.floor(Math.random() * HIGH_TIER_KEYS.length)]
+        : exchangeResult.key;
+    const unlockedItems = useUserStore.getState().unlockedItems;
+    const excludeIds = isAdRewardPending
+      ? new Set(
+          Object.keys(unlockedItems).filter((id) =>
+            id.startsWith("ad_legendary_"),
+          ),
+        )
+      : undefined;
+    setMsgResult(
+      getRandomExchangeMsg(effectiveKey, isAdRewardPending, { excludeIds }),
+    );
+  }, [exchangeResult.key, isAdRewardPending]);
+
+  const { item, desc } = msgResult ?? {
+    item: "...",
+    desc: "",
+    itemId: "",
+  };
+
+  const effectiveKey = msgResult
+    ? msgResult.itemId.replace(/_\d+$/, "")
+    : exchangeResult.key;
+
   useEffect(() => {
     const triggerHaptics = async () => {
-      if (exchangeResult.key === "wealth_overlord") {
-        // wealth_overlord 必須有最震撼的振動效果
+      if (effectiveKey === "wealth_overlord") {
         await haptics.heavy();
         await new Promise((resolve) => setTimeout(resolve, 200));
         await haptics.heavy();
         await new Promise((resolve) => setTimeout(resolve, 100));
         await haptics.heavy();
-      } else if (exchangeResult.key === "wealth_legendary") {
+      } else if (effectiveKey === "wealth_legendary" || effectiveKey === "ad_legendary") {
         await haptics.heavy();
         await new Promise((resolve) => setTimeout(resolve, 150));
         await haptics.medium();
       } else if (
-        exchangeResult.key === "wealth_ultra" ||
-        exchangeResult.key === "wealth_high"
+        effectiveKey === "wealth_ultra" ||
+        effectiveKey === "wealth_high"
       ) {
         await haptics.medium();
         await new Promise((resolve) => setTimeout(resolve, 100));
         await haptics.light();
       } else if (
-        exchangeResult.key === "wealth_mid" ||
-        exchangeResult.key === "wealth_mid_low"
+        effectiveKey === "wealth_mid" ||
+        effectiveKey === "wealth_mid_low"
       ) {
         await haptics.medium();
-      } else if (exchangeResult.type === "HEALTH") {
-        // 健康警告也需要較強的回饋
+      } else if (effectiveKey === "health_critical" || effectiveKey === "health_warning") {
         await haptics.medium();
       } else {
         await haptics.light();
       }
     };
-
     triggerHaptics();
-  }, [exchangeResult.key, exchangeResult.type, haptics]);
+  }, [effectiveKey, haptics]);
 
   // 格式化金額字串，用於動態字體縮放
   const earnedFormatted = formatCurrency(earned, locale);
@@ -105,10 +131,8 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
   };
 
   const handleClose = () => {
-    if (isAdRewardPending) {
-      // 關閉收據時消耗掉這次的廣告傳說獎勵
-      setAdRewardPending(false);
-    }
+    if (msgResult?.itemId) collectItem(msgResult.itemId);
+    if (isAdRewardPending) setAdRewardPending(false);
     onClose();
   };
 
@@ -121,10 +145,12 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
         </div>
 
         <div className={styles.receiptBody}>
-          <div className={styles.exchangeIcon}>{exchangeResult.icon}</div>
+          <div className={styles.exchangeIcon}>
+            {msgResult ? getIconForCategoryKey(msgResult.itemId) : exchangeResult.icon}
+          </div>
           <div className={styles.itemName}>
             {isAdRewardPending && (
-              <span className={styles.legendaryBadge}>LEGENDARY</span>
+              <span className={styles.legendaryBadge}>{t("receiptLegendaryBadge")}</span>
             )}
             {item}
           </div>
@@ -136,11 +162,7 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
               onClick={handleWatchAd}
               disabled={isAdLoading}
             >
-              {isAdLoading
-                ? locale === "TW"
-                  ? "召喚中..."
-                  : t("adLoading")
-                : t("adRewardButton")}
+              {isAdLoading ? t("adLoading") : t("adRewardButton")}
             </button>
           )}
 
@@ -158,13 +180,13 @@ const ReceiptCard = ({ earned, minutes, onClose }: ReceiptCardProps) => {
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>{t("receiptTime")}</span>
               <span className={`${styles.detailValue} monospace`}>
-                {Math.floor(minutes)} {locale === "TW" ? "分鐘" : "min"}
+                {Math.floor(minutes)} {t("receiptTimeUnit")}
               </span>
             </div>
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>{t("receiptType")}</span>
               <span className={styles.detailValue}>
-                {exchangeResult.type === "HEALTH"
+                {effectiveKey === "health_critical" || effectiveKey === "health_warning"
                   ? t("receiptTypeHealth")
                   : t("receiptTypeWealth")}
               </span>

@@ -232,6 +232,11 @@ export const getTierColor = (tier: number): string => {
   return TIER_COLORS[tier] || "#888";
 };
 
+/** 累計解鎖里程碑：每達到此額度 (TWD) 自動解鎖一個高階未獲得物品 */
+export const MILESTONE_TWD = 10000;
+/** 幸運越級機率：低門檻時仍有機率抽到傳說/霸主級物品 */
+export const LUCKY_DROP_CHANCE = 0.08;
+
 // LocalStorage Keys
 export const STORAGE_KEYS = {
   START_TIMESTAMP: "alchemy_start_timestamp",

@@ -5,9 +5,10 @@ import SalaryInput from '../SalaryInput/SalaryInput';
 import Leaderboard from '../Leaderboard/Leaderboard';
 import PrivacyPolicy from '../../pages/PrivacyPolicy';
 import Settings from '../../pages/Settings';
+import Collection from '../../pages/Collection';
 import styles from './Router.module.css';
 
-type Route = '/' | '/settings' | '/leaderboard' | '/privacy';
+type Route = '/' | '/settings' | '/leaderboard' | '/privacy' | '/collection';
 
 const Router = () => {
   const [currentRoute, setCurrentRoute] = useState<Route>('/');
@@ -46,6 +47,8 @@ const Router = () => {
         return <PrivacyPolicy />;
       case '/leaderboard':
         return <Leaderboard />;
+      case '/collection':
+        return <Collection />;
       default:
         return (
           <>

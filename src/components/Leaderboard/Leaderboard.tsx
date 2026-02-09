@@ -225,7 +225,7 @@ const Leaderboard = () => {
                     <>
                       <span className={styles.nickname}>
                         {truncateByWeight(
-                          nickname || (locale === "TW" ? "你" : "You"),
+                          nickname || t("you"),
                           MAX_WEIGHT,
                         )}
                       </span>

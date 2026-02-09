@@ -1,70 +1,78 @@
-import styles from './PrivacyPolicy.module.css';
+import { useEffect } from "react";
+import { useTranslation, Trans } from "react-i18next";
+import { useUserStore } from "../stores/userStore";
+import styles from "./PrivacyPolicy.module.css";
 
 const PrivacyPolicy = () => {
+  const { t, i18n } = useTranslation();
+  const locale = useUserStore((s) => s.locale);
+
+  useEffect(() => {
+    i18n.changeLanguage(locale === "TW" ? "zh-TW" : "en-US");
+  }, [locale, i18n]);
+
   const handleBack = () => {
     if (window.history.length > 1) {
       window.history.back();
     } else {
-      window.location.hash = '#/settings';
+      window.location.hash = "#/settings";
     }
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>《帶薪煉金術》隱私權政策</h1>
-      <p className={styles.updated}>最近更新日期：2026年2月6日</p>
+      <h1 className={styles.title}>{t("privacyPolicyPage.title")}</h1>
+      <p className={styles.updated}>{t("privacyPolicyPage.updated")}</p>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>1. 資料收集與使用</h2>
+        <h2 className={styles.sectionTitle}>{t("privacyPolicyPage.section1Title")}</h2>
         <p>
-          本 App 致力於保護您的隱私。我們<strong>不會</strong>
-          收集、存取或儲存您的任何個人識別資訊（如姓名、Email 或聯絡電話）。所有煉金數據均儲存於您的本地設備或以匿名方式處理。
+          <Trans
+            i18nKey="privacyPolicyPage.section1Content"
+            components={{ 1: <strong /> }}
+          />
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>2. 第三方服務供應商</h2>
-        <p>
-          為了維持營運與提供功能，我們使用了以下服務。您可以點擊連結查看其隱私權政策：
-        </p>
+        <h2 className={styles.sectionTitle}>{t("privacyPolicyPage.section2Title")}</h2>
+        <p>{t("privacyPolicyPage.section2Intro")}</p>
         <ul className={styles.list}>
           <li>
-            <strong>Google AdMob：</strong> 用於投放廣告。
+            <strong>{t("privacyPolicyPage.section2Admob")}</strong>{" "}
             <a
               href="https://policies.google.com/privacy"
               className={styles.link}
               target="_blank"
               rel="noopener noreferrer"
             >
-              隱私權條款
+              {t("privacyPolicyPage.privacyLink")}
             </a>
           </li>
           <li>
-            <strong>Firebase (Google)：</strong> 用於運行數據統計與全球排行榜。
+            <strong>{t("privacyPolicyPage.section2Firebase")}</strong>{" "}
             <a
               href="https://firebase.google.com/support/privacy"
               className={styles.link}
               target="_blank"
               rel="noopener noreferrer"
             >
-              隱私權條款
+              {t("privacyPolicyPage.privacyLink")}
             </a>
           </li>
         </ul>
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>3. 兒童隱私</h2>
-        <p>
-          本服務不針對 13 歲（或所在地法律規定年齡）以下之兒童。我們不會蓄意收集兒童的個人資訊。
-        </p>
+        <h2 className={styles.sectionTitle}>{t("privacyPolicyPage.section3Title")}</h2>
+        <p>{t("privacyPolicyPage.section3Content")}</p>
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>4. 聯絡我們</h2>
+        <h2 className={styles.sectionTitle}>{t("privacyPolicyPage.section4Title")}</h2>
         <p>
-          若您對本政策有任何疑問，請透過以下電子郵件聯繫：
-          <strong>topaj01@gmail.com</strong>
+          {t("privacyPolicyPage.section4Content")}{" "}
+          <strong>{t("privacyPolicyPage.section4Email")}</strong>
         </p>
       </section>
 
@@ -73,7 +81,7 @@ const PrivacyPolicy = () => {
         onClick={handleBack}
         className={styles.backButton}
       >
-        返回
+        {t("privacyPolicyPage.backButton")}
       </button>
     </div>
   );

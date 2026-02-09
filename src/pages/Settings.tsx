@@ -23,7 +23,7 @@ const Settings = () => {
           onClick={toggleLocale}
           aria-label={t("header.toggleLanguage")}
         >
-          {locale === "TW" ? "繁體中文" : "English"} → {locale === "TW" ? "EN" : "TW"}
+          {locale === "TW" ? t("settingsPage.localeZhTw") : t("settingsPage.localeEnUs")} {locale === "TW" ? t("settingsPage.switchToEn") : t("settingsPage.switchToTw")}
         </button>
       </section>
 

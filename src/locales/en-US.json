@@ -27,17 +27,30 @@
   "yourRank": "Your Rank",
   "loading": "Loading...",
   "error": {
-    "firebase": "Firebase connection failed. Please check your network."
+    "firebase": "Firebase connection failed. Please check your network.",
+    "unknown": "Unknown",
+    "keepPooping": "Keep pooping."
   },
   "empty": "Leaderboard is currently empty",
   "privacyNoticeRequired": "Please accept the privacy notice to view the leaderboard...",
   "globalCount": "Global Participants: {{count}} Alchemists",
   "anonymousAlchemist": "Anonymous Alchemist",
+  "you": "You",
   "header": {
     "nextLevel": "Next:",
     "maxLevelReached": "Max Level Reached",
     "toggleLanguage": "Toggle Language",
-    "goLeaderboard": "Go to Leaderboard"
+    "goLeaderboard": "Go to Leaderboard",
+    "tier1": "Rookie Tier",
+    "tier2": "Bronze Tier",
+    "tier3": "Silver Tier",
+    "tier4": "Gold Tier",
+    "tier5": "Diamond Tier",
+    "tier6": "Mystic Tier",
+    "tier7": "Plasma Tier",
+    "tier8": "Stellar Tier",
+    "tier9": "Rocket Tier",
+    "tier10": "Galactic Tier"
   },
   "editNickname": "Edit Nickname",
   "save": "Save",
@@ -70,6 +83,8 @@
   "receiptTypeWealth": "Wealth Accumulation",
   "receiptConfirm": "Confirm",
   "receiptConfirmButton": "Confirm",
+  "receiptTimeUnit": "min",
+  "receiptLegendaryBadge": "LEGENDARY",
   "adRewardButton": "Summon Legendary",
   "adLoading": "Casting Spell...",
   "privacy": {
@@ -425,8 +440,54 @@
       "The True Philosopher's Stone | You've reached the pinnacle of alchemy: turning waste into pure gold."
     ]
   },
+  "collectionButton": "Alchemy Codex ({{count}}/{{total}})",
+  "collection": {
+    "title": "Alchemy Codex",
+    "progress": "{{count}} / {{total}} collected",
+    "percentage": "{{percent}}% complete",
+    "category_wealth_micro": "Micro",
+    "category_wealth_tiny": "Tiny",
+    "category_wealth_low": "Low",
+    "category_wealth_mid_low": "Mid-Low",
+    "category_wealth_mid": "Mid",
+    "category_wealth_high": "High",
+    "category_wealth_ultra": "Ultra",
+    "category_wealth_legendary": "Legendary",
+    "category_wealth_overlord": "Overlord",
+    "category_health_warning": "Health Warning",
+    "category_health_critical": "Health Critical",
+    "category_ad_legendary": "Ad Legendary",
+    "locked": "Locked",
+    "receiptTitle": "Equivalent Exchange Receipt",
+    "receiptSubtitle": "EQUIVALENT EXCHANGE RECEIPT",
+    "close": "Close"
+  },
   "landing": {
     "title": "Welcome back, Alchemist.",
     "subtitle": "Don't let HR see the magic."
+  },
+  "levelUpTitle": "Level Up!",
+  "settingsPage": {
+    "localeZhTw": "繁體中文",
+    "localeEnUs": "English",
+    "switchToEn": "→ EN",
+    "switchToTw": "→ TW"
+  },
+  "privacyPolicyPage": {
+    "title": "Salary Alchemy Privacy Policy",
+    "updated": "Last updated: February 6, 2026",
+    "section1Title": "1. Data Collection and Use",
+    "section1Content": "This app is committed to protecting your privacy. We do <1>not</1> collect, access, or store any personally identifiable information (such as name, email, or phone number). All alchemy data is stored on your device or processed anonymously.",
+    "section2Title": "2. Third-Party Service Providers",
+    "section2Intro": "To maintain operations and provide features, we use the following services. You may view their privacy policies via the links below:",
+    "section2Admob": "Google AdMob: Used for serving ads.",
+    "section2Firebase": "Firebase (Google): Used for analytics and the global leaderboard.",
+    "privacyLink": "Privacy Policy",
+    "section3Title": "3. Children's Privacy",
+    "section3Content": "This service is not directed at children under 13 (or the age required by local law). We do not knowingly collect personal information from children.",
+    "section4Title": "4. Contact Us",
+    "section4Content": "If you have any questions about this policy, please contact us at:",
+    "section4Email": "topaj01@gmail.com",
+    "backButton": "Back"
   }
 }

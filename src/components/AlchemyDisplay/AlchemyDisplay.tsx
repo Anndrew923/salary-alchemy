@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useAlchemyStore } from "../../stores/alchemyStore";
 import { useSalaryCalculator } from "../../hooks/useSalaryCalculator";
@@ -11,14 +11,22 @@ import {
   formatTime,
 } from "../../utils/i18n";
 import { getFontSizeClass } from "../../utils/ui";
+import { getCollectionStats } from "../../utils/equivalentExchange";
 import styles from "./AlchemyDisplay.module.css";
 
 const AlchemyDisplay = () => {
   const { ratePerSecond } = useSalaryCalculator();
   const { isRunning, calculateEarned, totalEarned } = useAlchemyStore();
-  const { locale } = useUserStore();
+  const { locale, unlockedItems } = useUserStore();
   const { t, i18n } = useTranslation();
   const elapsedSeconds = useAlchemyTimer();
+
+  const stats = useMemo(() => getCollectionStats(), []);
+  const collectionCount = useMemo(
+    () => Object.keys(unlockedItems).length,
+    [unlockedItems],
+  );
+  const collectionTotal = stats.total;
 
   // 同步 react-i18next 語言
   useEffect(() => {
@@ -75,6 +83,17 @@ const AlchemyDisplay = () => {
           </div>
         </div>
       )}
+
+      <div className={styles.collectionEntry}>
+        <button
+          type="button"
+          className={styles.collectionButton}
+          onClick={() => { window.location.hash = "#/collection"; }}
+          aria-label={t("collection.progress", { count: collectionCount, total: collectionTotal })}
+        >
+          📜 {t("collectionButton", { count: collectionCount, total: collectionTotal })}
+        </button>
+      </div>
     </div>
   );
 };

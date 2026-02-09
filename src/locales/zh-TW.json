@@ -27,17 +27,30 @@
   "yourRank": "你的排名",
   "loading": "載入中...",
   "error": {
-    "firebase": "雲端實驗室連線失敗，請檢查網路環境。"
+    "firebase": "雲端實驗室連線失敗，請檢查網路環境。",
+    "unknown": "未知",
+    "keepPooping": "繼續煉金。"
   },
   "empty": "排行榜目前為空",
   "privacyNoticeRequired": "請先接受隱私協議以查看排行榜...",
   "globalCount": "全球已加入：{{count}} 位煉金術士",
   "anonymousAlchemist": "神秘煉金術士",
+  "you": "你",
   "header": {
     "nextLevel": "距離下級：",
     "maxLevelReached": "已達最高等級",
     "toggleLanguage": "切換語言",
-    "goLeaderboard": "前往排行榜"
+    "goLeaderboard": "前往排行榜",
+    "tier1": "菜鳥階級",
+    "tier2": "古銅階級",
+    "tier3": "白銀階級",
+    "tier4": "黃金階級",
+    "tier5": "鑽石階級",
+    "tier6": "神秘階級",
+    "tier7": "電漿階級",
+    "tier8": "星耀階級",
+    "tier9": "火箭階級",
+    "tier10": "星系階級"
   },
   "editNickname": "編輯暱稱",
   "save": "儲存",
@@ -70,6 +83,8 @@
   "receiptTypeWealth": "財富累積",
   "receiptConfirm": "確認",
   "receiptConfirmButton": "收入口袋",
+  "receiptTimeUnit": "分鐘",
+  "receiptLegendaryBadge": "傳說",
   "adRewardButton": "召喚傳說：逆轉術",
   "adLoading": "正在啟動傳說陣...",
   "privacy": {
@@ -425,8 +440,54 @@
       "賢者之石 (真正的) | 恭喜，你已經達到了煉金術的最高境界：點屎成金。"
     ]
   },
+  "collectionButton": "鍊金手札 ({{count}}/{{total}})",
+  "collection": {
+    "title": "鍊金手札",
+    "progress": "已收集 {{count}} / {{total}}",
+    "percentage": "達成率 {{percent}}%",
+    "category_wealth_micro": "微小",
+    "category_wealth_tiny": "小物",
+    "category_wealth_low": "低階",
+    "category_wealth_mid_low": "中低",
+    "category_wealth_mid": "中階",
+    "category_wealth_high": "高階",
+    "category_wealth_ultra": "超高",
+    "category_wealth_legendary": "傳說",
+    "category_wealth_overlord": "霸主",
+    "category_health_warning": "健康警示",
+    "category_health_critical": "健康危機",
+    "category_ad_legendary": "廣告傳說",
+    "locked": "未獲得",
+    "receiptTitle": "等價交換收據",
+    "receiptSubtitle": "EQUIVALENT EXCHANGE RECEIPT",
+    "close": "關閉"
+  },
   "landing": {
     "title": "歡迎回來，鍊金術師。",
     "subtitle": "別讓 HR 看見魔法。"
+  },
+  "levelUpTitle": "晉升！",
+  "settingsPage": {
+    "localeZhTw": "繁體中文",
+    "localeEnUs": "English",
+    "switchToEn": "→ EN",
+    "switchToTw": "→ TW"
+  },
+  "privacyPolicyPage": {
+    "title": "《帶薪煉金術》隱私權政策",
+    "updated": "最近更新日期：2026年2月6日",
+    "section1Title": "1. 資料收集與使用",
+    "section1Content": "本 App 致力於保護您的隱私。我們<1>不會</1>收集、存取或儲存您的任何個人識別資訊（如姓名、Email 或聯絡電話）。所有煉金數據均儲存於您的本地設備或以匿名方式處理。",
+    "section2Title": "2. 第三方服務供應商",
+    "section2Intro": "為了維持營運與提供功能，我們使用了以下服務。您可以點擊連結查看其隱私權政策：",
+    "section2Admob": "Google AdMob：用於投放廣告。",
+    "section2Firebase": "Firebase (Google)：用於運行數據統計與全球排行榜。",
+    "privacyLink": "隱私權條款",
+    "section3Title": "3. 兒童隱私",
+    "section3Content": "本服務不針對 13 歲（或所在地法律規定年齡）以下之兒童。我們不會蓄意收集兒童的個人資訊。",
+    "section4Title": "4. 聯絡我們",
+    "section4Content": "若您對本政策有任何疑問，請透過以下電子郵件聯繫：",
+    "section4Email": "topaj01@gmail.com",
+    "backButton": "返回"
   }
 }
