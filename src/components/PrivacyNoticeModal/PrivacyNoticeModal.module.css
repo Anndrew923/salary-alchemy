@@ -6,11 +6,21 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.9);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 20000;
   animation: fadeIn 0.3s ease-in;
   backdrop-filter: blur(4px);
+}
+
+/* 隱形佔位：將視覺中心上推，避開底部廣告區（與 ReceiptCard 一致） */
+.overlay::after {
+  content: "";
+  display: block;
+  height: var(--visual-blocked-height);
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
 @keyframes fadeIn {
@@ -26,6 +36,8 @@
   position: relative;
   width: 90%;
   max-width: 400px;
+  max-height: 70vh;
+  min-height: 0;
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
   border: 3px solid var(--text-gold);
   border-radius: var(--radius-lg);
@@ -35,6 +47,8 @@
   padding: var(--spacing-xl);
   animation: slideUp 0.4s ease-out;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes slideUp {
@@ -76,12 +90,15 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
+  min-height: 0;
+  flex: 1;
 }
 
 .header {
   text-align: center;
   border-bottom: 2px solid var(--text-gold);
   padding-bottom: var(--spacing-md);
+  flex-shrink: 0;
 }
 
 .title {
@@ -105,9 +122,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  max-height: 60vh;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding-right: var(--spacing-xs);
+  -webkit-overflow-scrolling: touch;
 }
 
 .body::-webkit-scrollbar {
@@ -160,7 +179,9 @@
   display: flex;
   justify-content: center;
   padding-top: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
   border-top: 1px solid rgba(255, 215, 0, 0.3);
+  flex-shrink: 0;
 }
 
 .agreeButton {

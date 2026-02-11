@@ -12,6 +12,11 @@
   box-shadow: var(--shadow-glow);
 }
 
+.displayContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .currentSection {
   text-align: center;
   margin-bottom: var(--spacing-md);
@@ -115,6 +120,133 @@
   font-weight: bold;
 }
 
+/* 採用垂直堆疊佈局優化行動端閱讀體驗，並透過視覺降級確保主控台（Dashboard）的唯一視覺重心 */
+.parameterStatus {
+  margin-top: var(--spacing-md);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.parameterRows {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.parameterRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.parameterLabel {
+  opacity: 0.8;
+}
+
+.parameterValue {
+  color: var(--text-gold);
+  font-weight: 500;
+}
+
+.parameterModifyButton {
+  margin-top: 1rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px dashed var(--border-gold);
+  background: transparent;
+  color: var(--text-gold);
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.parameterModifyButton:hover,
+.parameterModifyButton:focus-visible {
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--text-gold);
+  border-color: var(--text-gold);
+  box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.35);
+}
+
+.parameterModifyButton:focus-visible {
+  outline: none;
+}
+
+.parameterModifyButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+  box-shadow: none;
+}
+
+.mainActionSection {
+  margin-top: var(--spacing-md);
+}
+
+.mainActionButton {
+  width: 100%;
+  padding: 1.5rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-glow);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.08s ease,
+    filter 0.08s ease;
+}
+
+.mainActionButtonStart {
+  background: linear-gradient(135deg, #3fd58f 0%, #14b8a6 50%, #22c55e 100%);
+  color: var(--bg-primary);
+}
+
+.mainActionButtonStop {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 40%, #ef4444 100%);
+  color: var(--bg-primary);
+}
+
+.mainActionButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.4);
+  filter: brightness(1.03);
+}
+
+.mainActionButton:active {
+  transform: translateY(0);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  filter: brightness(0.97);
+}
+
+.mainActionButton:focus-visible {
+  outline: 2px solid var(--border-gold);
+  outline-offset: 2px;
+}
+
+.mainActionButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+  box-shadow: none;
+}
+
 .collectionEntry {
   margin-top: 1.5rem;
 }
@@ -142,4 +274,18 @@
 .collectionButton:focus-visible {
   outline: 2px solid var(--border-gold);
   outline-offset: 2px;
+}
+
+@media (max-height: 700px) {
+  .container {
+    padding-bottom: 4rem;
+  }
+
+  .mainActionButton {
+    padding: 1.1rem 1.25rem;
+  }
+
+  .parameterStatus {
+    padding: 0.6rem 0.75rem;
+  }
 }

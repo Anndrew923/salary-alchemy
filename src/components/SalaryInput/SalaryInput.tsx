@@ -3,10 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useUserStore } from "../../stores/userStore";
 import { useAlchemyStore } from "../../stores/alchemyStore";
 import { useSalaryCalculator } from "../../hooks/useSalaryCalculator";
-import { useAlchemyTimer } from "../../hooks/useAlchemyTimer";
 import { useHaptics } from "../../hooks/useHaptics";
 import { formatCurrency, formatCurrencyPerSecond } from "../../utils/i18n";
-import ReceiptCard from "../ReceiptCard/ReceiptCard";
 import styles from "./SalaryInput.module.css";
 
 const SalaryInput = () => {
@@ -20,13 +18,9 @@ const SalaryInput = () => {
   const setWorkingDays = useUserStore((state) => state.setWorkingDays);
 
   const isRunning = useAlchemyStore((state) => state.isRunning);
-  const start = useAlchemyStore((state) => state.start);
-  const reset = useAlchemyStore((state) => state.reset);
-  const finishSession = useAlchemyStore((state) => state.finishSession);
   const resetTotalEarned = useAlchemyStore((state) => state.resetTotalEarned);
   const totalEarned = useAlchemyStore((state) => state.totalEarned);
-  const { ratePerSecond, ratePerHour, monthlyHours } = useSalaryCalculator();
-  const elapsedSeconds = useAlchemyTimer();
+  const { ratePerSecond, ratePerHour } = useSalaryCalculator();
   const haptics = useHaptics();
   const { t, i18n } = useTranslation();
 
@@ -37,9 +31,6 @@ const SalaryInput = () => {
     workingDays.toString(),
   );
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [showReceipt, setShowReceipt] = useState(false);
-  const [receiptEarned, setReceiptEarned] = useState(0);
-  const [receiptMinutes, setReceiptMinutes] = useState(0);
   const [longPressProgress, setLongPressProgress] = useState(0);
   const [randomConfirmMessage, setRandomConfirmMessage] = useState<string>("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -75,38 +66,6 @@ const SalaryInput = () => {
     setLocalWorkingDays(value);
     const num = Math.max(0, parseFloat(value) || 0);
     setWorkingDays(num);
-  };
-
-  const handleStart = async () => {
-    if (monthlySalary > 0 && monthlyHours > 0) {
-      await haptics.light();
-      start();
-      setIsExpanded(false);
-    }
-  };
-
-  const handleSettle = async () => {
-    const alchemyStore = useAlchemyStore.getState();
-    if (alchemyStore.startTimestamp && ratePerSecond > 0) {
-      const earned = alchemyStore.calculateEarned(ratePerSecond);
-      if (earned > 0) {
-        await haptics.medium();
-        const minutes = elapsedSeconds / 60;
-        setReceiptEarned(earned);
-        setReceiptMinutes(minutes);
-        setShowReceipt(true);
-        finishSession(earned);
-      } else {
-        reset();
-      }
-    }
-  };
-
-  const handleDiscard = async () => {
-    await haptics.vibrate();
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    await haptics.vibrate();
-    reset();
   };
 
   // 長按處理邏輯
@@ -181,13 +140,15 @@ const SalaryInput = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} id="salary-input-panel">
       {/* 摺疊/展開切換按鈕 */}
       {!isExpanded && (
         <button
+          type="button"
           className={styles.expandButton}
           onClick={() => setIsExpanded(true)}
           disabled={isRunning}
+          aria-label={t("modifyParams")}
         >
           {t("modifyParams")}
         </button>
@@ -351,43 +312,6 @@ const SalaryInput = () => {
           </div>
         </div>
       )}
-
-      {/* 等價交換收據卡片 */}
-      {showReceipt && (
-        <ReceiptCard
-          earned={receiptEarned}
-          minutes={receiptMinutes}
-          onClose={() => setShowReceipt(false)}
-        />
-      )}
-
-      {/* 控制按鈕組（始終顯示） */}
-      <div className={styles.buttonGroup}>
-        {!isRunning ? (
-          <button
-            className={`${styles.button} ${styles.startButton}`}
-            onClick={handleStart}
-            disabled={monthlySalary <= 0 || monthlyHours <= 0}
-          >
-            {t("start")}
-          </button>
-        ) : (
-          <>
-            <button
-              className={`${styles.button} ${styles.settleButton}`}
-              onClick={handleSettle}
-            >
-              {t("finish")}
-            </button>
-            <button
-              className={`${styles.button} ${styles.discardButton}`}
-              onClick={handleDiscard}
-            >
-              {t("giveUp")}
-            </button>
-          </>
-        )}
-      </div>
     </div>
   );
 };
