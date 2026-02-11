@@ -1,0 +1,29 @@
+/* 煉金風格 Toast：深色半透明、圓角、白字，浮於廣告區上方並避讓 --visual-blocked-height */
+.toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--visual-blocked-height) + var(--spacing-md));
+  z-index: 9999;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(26, 26, 26, 0.92);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  box-shadow: var(--shadow-glow);
+  max-width: calc(100vw - 2 * var(--spacing-lg));
+  text-align: center;
+  animation: toastIn 0.25s ease-out;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

@@ -6,11 +6,21 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.95);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 10000;
   animation: fadeIn 0.3s ease-in;
   cursor: pointer;
+}
+
+/* 隱形佔位：等級圖示與描述避開底部廣告區 */
+.overlay::after {
+  content: "";
+  display: block;
+  height: var(--visual-blocked-height);
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
 @keyframes fadeIn {
@@ -31,6 +41,7 @@
   gap: var(--spacing-lg);
   padding: var(--spacing-xl);
   text-align: center;
+  min-height: 0; /* Flex 子項可縮小，極短螢幕時不溢出 */
 }
 
 /* 旋轉煉金陣 */

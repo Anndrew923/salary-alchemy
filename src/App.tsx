@@ -1,17 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { signInAnonymously } from 'firebase/auth';
-import { Capacitor } from '@capacitor/core';
 import Router from './components/Router/Router';
 import PrivacyNoticeModal from './components/PrivacyNoticeModal/PrivacyNoticeModal';
 import LandingPage from './components/LandingPage/LandingPage';
+import Toast from './components/Toast/Toast';
 import { STORAGE_KEYS } from './utils/constants';
 import { auth, isFirebaseEnabled } from './config/firebase';
 import { useUserStore } from './stores/userStore';
+import { useBackButton } from './hooks/useBackButton';
 
 function App() {
-  // 控制是否顯示啟動頁面的狀態
   const [isLoading, setIsLoading] = useState(true);
+  const [toastMessage, setToastMessage] = useState('');
   const { uid, hasSeenPrivacyNotice, isPrivacyModalOpen, setUid, setAnonymousId } = useUserStore();
+
+  const showToast = useCallback((message: string) => {
+    setToastMessage(message);
+  }, []);
+
+  const dismissToast = useCallback(() => {
+    setToastMessage('');
+  }, []);
+
+  const { register: registerBackButton } = useBackButton(showToast);
+
+  useEffect(() => {
+    const remove = registerBackButton();
+    return remove;
+  }, [registerBackButton]);
 
   // 監聽 hasSeenPrivacyNotice 的變化，一旦該值轉為 true，立即啟動匿名登入流程
   // 確保資料能即時同步，且這輩子只要簽這一次就好
@@ -67,60 +83,28 @@ function App() {
     }
   }, []);
 
-  // 監聽手機原生返回按鈕（僅在 Native 環境）
-  useEffect(() => {
-    if (!Capacitor.isNativePlatform()) {
-      return;
-    }
-
-    let backButtonListener: any = null;
-
-    const setupBackButton = async () => {
-      const { App: CapacitorApp } = await import('@capacitor/app');
-      
-      backButtonListener = CapacitorApp.addListener('backButton', () => {
-        const currentHash = window.location.hash;
-        // 如果在隱私權頁面，返回設定或上一頁
-        if (currentHash === '#/privacy' || currentHash === '#privacy') {
-          window.location.hash = '#/settings';
-          return;
-        }
-        // 如果在設定或排行榜，返回主頁
-        if (currentHash === '#/settings' || currentHash === '#settings' || currentHash === '#leaderboard' || currentHash.includes('leaderboard')) {
-          window.location.hash = '#/';
-          return;
-        }
-        // 如果已在主頁，執行退出 App
-        CapacitorApp.exitApp();
-      });
-    };
-
-    setupBackButton();
-
-    return () => {
-      if (backButtonListener) {
-        backButtonListener.then((l: any) => l.remove());
-      }
-    };
-  }, []);
-
-  // 如果正在載入，顯示 LandingPage
-  if (isLoading) {
-    return <LandingPage onFinish={() => setIsLoading(false)} />;
-  }
-
-  // 載入完成，顯示主應用
+  // Toast 與返回鍵邏輯全域生效，故與 Loading / 主應用同層渲染，避免在 Landing 時按返回有提示但無 UI
   return (
     <>
-      <Router />
-      {/* 全局隱私協議 Modal，由 isPrivacyModalOpen 控制顯示 */}
-      {isPrivacyModalOpen && (
-        <PrivacyNoticeModal 
-          onAgree={() => {
-            // Modal 關閉邏輯在 PrivacyNoticeModal 內部處理
-          }}
-        />
+      {isLoading ? (
+        <LandingPage onFinish={() => setIsLoading(false)} />
+      ) : (
+        <>
+          <Router />
+          {isPrivacyModalOpen && (
+            <PrivacyNoticeModal
+              onAgree={() => {
+                // Modal 關閉邏輯在 PrivacyNoticeModal 內部處理
+              }}
+            />
+          )}
+        </>
       )}
+      <Toast
+        message={toastMessage}
+        visible={!!toastMessage}
+        onDismiss={dismissToast}
+      />
     </>
   );
 }

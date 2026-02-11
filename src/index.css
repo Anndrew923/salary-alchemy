@@ -43,6 +43,11 @@
 
   /* Android 15 / iOS Safe Area 邊距 */
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* 動態視域置中：不可視區域計算（適配 Android 15 Edge-to-Edge / Android 14 傳統佈局） */
+  --ad-height: 50px;
+  --safe-bottom: var(--safe-area-bottom);
+  --visual-blocked-height: calc(var(--ad-height) + var(--safe-bottom));
 }
 
 * {

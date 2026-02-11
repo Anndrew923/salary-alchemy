@@ -6,12 +6,20 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.85);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 2000;
   padding: var(--spacing-md);
-  /* 避免底部按鈕太靠近系統導覽列 */
-  padding-bottom: calc(var(--spacing-md) + var(--safe-area-bottom));
+}
+
+/* 隱形佔位：將卡片推向剩餘可用空間的物理中心，避開底部廣告區 */
+.overlay::after {
+  content: "";
+  display: block;
+  height: var(--visual-blocked-height);
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
 .receiptCard {
@@ -24,9 +32,10 @@
   box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
   position: relative;
   animation: receiptAppear 0.3s ease-out;
-  /* 避免內容過長時突破螢幕，並考慮 Safe Area */
-  max-height: calc(90vh - var(--safe-area-bottom));
+  max-height: 70vh;
+  min-height: 0; /* Flex 子項可縮小，與 overflow-y: auto 搭配避免衝破視域 */
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* iOS 慣性捲動 */
 }
 
 @keyframes receiptAppear {
