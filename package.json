@@ -11,7 +11,10 @@
     "cap:open:ios": "cap open ios",
     "cap:open:android": "cap open android",
     "generate:icon-background": "node scripts/generate-icon-background.mjs",
-    "cap:assets": "capacitor-assets generate"
+    "cap:assets": "capacitor-assets generate",
+    "build:android": "npm run build && npx cap sync android",
+    "release:aab": "npm run build:android && cd android && gradlew.bat bundleRelease",
+    "release:apk": "npm run build:android && cd android && gradlew.bat assembleRelease"
   },
   "dependencies": {
     "@capacitor-community/admob": "^6.0.0",
